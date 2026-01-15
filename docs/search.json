@@ -1,0 +1,172 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Data-210-Book",
+    "section": "",
+    "text": "Welcome\nWelcome to Exploratory Data Analysis!\nThis online book is designed to guide you step by step as you build both the technical skills and the critical thinking needed to work with data. Along the way, you’ll learn how to ask good questions, organize and analyze information in R, and communicate your findings clearly to others.\nThe chapters are filled with examples, practice problems, and short stories about Emmit — a character you’ll get to know as you apply your skills in fun and practical ways. Each section is scaffolded to help you practice, reflect, and gain confidence as you progress. Additionally, there are downloadable reading guides and activities to assist you in your learning journey.\nWhether you’re brand new to programming, statistics, or data science, or you’ve had some experience before, this book is meant to meet you where you are and help you grow. By the end, you’ll not only understand the concepts but also feel confident using them in real-world situations.\n\nNote\nThis textbook was written by Dr. Jon McCurdy for Mount St. Mary’s University’s Exploratory Data Analysis course. Special Thanks to student Luke Papayoanou for his input along with developing the MSMU package in R to go along with this book.\n\n\n\n\n Dr. Jon McCurdy\n\n\n Luke Papayoanou",
+    "crumbs": [
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "Lecture-1-R-Fundamentals-Review.html",
+    "href": "Lecture-1-R-Fundamentals-Review.html",
+    "title": "1  R Fundamentals Review",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>R Fundamentals Review</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-2-Strings-and-Text-Processing.html",
+    "href": "Lecture-2-Strings-and-Text-Processing.html",
+    "title": "2  Strings and Text Processing",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Strings and Text Processing</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-3-Factors-and-Dates.html",
+    "href": "Lecture-3-Factors-and-Dates.html",
+    "title": "3  Factors and Dates",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Factors and Dates</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-4-Data-Structures-in-R.html",
+    "href": "Lecture-4-Data-Structures-in-R.html",
+    "title": "4  Data Structures in R",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Structures in R</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-5-Control-Flow-and-Functions.html",
+    "href": "Lecture-5-Control-Flow-and-Functions.html",
+    "title": "5  Control Flow and Functions",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Control Flow and Functions</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-6-Data-Visualization-with-ggplot.html",
+    "href": "Lecture-6-Data-Visualization-with-ggplot.html",
+    "title": "6  Data Visualization with ggplot",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Data Visualization with ggplot</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-7-Data-Wrangling-with-dplyr.html",
+    "href": "Lecture-7-Data-Wrangling-with-dplyr.html",
+    "title": "7  Data Wrangling with dplyr",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Data Wrangling with dplyr</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-8-Grouped-and-Bivariate-Analysis.html",
+    "href": "Lecture-8-Grouped-and-Bivariate-Analysis.html",
+    "title": "8  Grouped and Bivariate Analysis",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Grouped and Bivariate Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-9-Handling-Missing-Data.html",
+    "href": "Lecture-9-Handling-Missing-Data.html",
+    "title": "9  Handling Missing Data",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Handling Missing Data</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-10-Tidy-Data-Principles.html",
+    "href": "Lecture-10-Tidy-Data-Principles.html",
+    "title": "10  Tidy Data Principles",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Tidy Data Principles</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-11-Distributions-Across-Groups.html",
+    "href": "Lecture-11-Distributions-Across-Groups.html",
+    "title": "11  Distributions Across Groups",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Distributions Across Groups</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-12-Sampling-and-CLT.html",
+    "href": "Lecture-12-Sampling-and-CLT.html",
+    "title": "12  Sampling and CLT",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sampling and CLT</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-13-Confidence-Intervals-and-Comparisons.html",
+    "href": "Lecture-13-Confidence-Intervals-and-Comparisons.html",
+    "title": "13  Confidence Intervals and Comparisons",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Confidence Intervals and Comparisons</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-14-Hypothesis-Testing-Foundations.html",
+    "href": "Lecture-14-Hypothesis-Testing-Foundations.html",
+    "title": "14  Hypothesis Testing Foundations",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Hypothesis Testing Foundations</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-15-Comparing-Means-and-Groups.html",
+    "href": "Lecture-15-Comparing-Means-and-Groups.html",
+    "title": "15  Comparing Means and Groups",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Comparing Means and Groups</span>"
+    ]
+  },
+  {
+    "objectID": "Lecture-16-Categorical-Data-Inference.html",
+    "href": "Lecture-16-Categorical-Data-Inference.html",
+    "title": "16  Categorical Data Inference",
+    "section": "",
+    "text": "Under Construction",
+    "crumbs": [
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Categorical Data Inference</span>"
+    ]
+  }
+]

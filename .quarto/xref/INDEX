@@ -1,0 +1,62 @@
+{
+  "index.qmd": {
+    "index.html": "49e24dca"
+  },
+  "intro.qmd": {
+    "intro.html": "696a2705"
+  },
+  "summary.qmd": {
+    "summary.html": "5f8f1e82"
+  },
+  "references.qmd": {
+    "references.html": "487e81ce"
+  },
+  "Lecture-1-R-Fundamentals-Review.qmd": {
+    "Lecture-1-R-Fundamentals-Review.html": "24b799e9"
+  },
+  "Lecture-2-Strings-and-Text-Processing.qmd": {
+    "Lecture-2-Strings-and-Text-Processing.html": "4b2e1238"
+  },
+  "Lecture-3-Factors-and-Dates.qmd": {
+    "Lecture-3-Factors-and-Dates.html": "ab90367c"
+  },
+  "Lecture-4-Data-Structures-in-R.qmd": {
+    "Lecture-4-Data-Structures-in-R.html": "7bbe1c78"
+  },
+  "Lecture-5-Control-Flow-and-Functions.qmd": {
+    "Lecture-5-Control-Flow-and-Functions.html": "287b2693"
+  },
+  "Lecture-6-Data-Visualization-with-ggplot.qmd": {
+    "Lecture-6-Data-Visualization-with-ggplot.html": "134aeed0"
+  },
+  "Lecture-7-Data-Wrangling-with-dplyr.qmd": {
+    "Lecture-7-Data-Wrangling-with-dplyr.html": "95b00392"
+  },
+  "Lecture-8-Grouped-and-Bivariate-Analysis.qmd": {
+    "Lecture-8-Grouped-and-Bivariate-Analysis.html": "4dcbb529"
+  },
+  "Lecture-9-Handling-Missing-Data.qmd": {
+    "Lecture-9-Handling-Missing-Data.html": "28b33868"
+  },
+  "Lecture-10-Tidy-Data-Principles.qmd": {
+    "Lecture-10-Tidy-Data-Principles.html": "91c2af52"
+  },
+  "Lecture-11-Distributions-Across-Groups.qmd": {
+    "Lecture-11-Distributions-Across-Groups.html": "4f253249"
+  },
+  "Lecture-12-Sampling-and-CLT.qmd": {
+    "Lecture-12-Sampling-and-CLT.html": "5e9986c1"
+  },
+  "Lecture-13-Confidence-Intervals-and-Comparisons.qmd": {
+    "Lecture-13-Confidence-Intervals-and-Comparisons.html": "95b92623"
+  },
+  "Lecture-14-Hypothesis-Testing-Foundations.qmd": {
+    "Lecture-14-Hypothesis-Testing-Foundations.html": "87ccd2f0"
+  },
+  "Lecture-15-Comparing-Means-and-Groups.qmd": {
+    "Lecture-15-Comparing-Means-and-Groups.html": "df9052e4"
+  },
+  "Lecture-16-Categorical-Data-Inference.qmd": {
+    "Lecture-16-Categorical-Data-Inference.html": "4ec9d418"
+  }
+}

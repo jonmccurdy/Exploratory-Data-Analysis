@@ -1,0 +1,42 @@
+project:
+  type: book
+  output-dir: docs  # <-- Add this line
+  resources:
+    - images/
+
+book:
+  title: "Data-210-Book"
+  author: "Jon McCurdy"
+  date: "12/13/2025"
+  chapters:
+    - index.qmd
+    - Lecture-1-R-Fundamentals-Review.qmd
+    - Lecture-2-Strings-and-Text-Processing.qmd
+    - Lecture-3-Factors-and-Dates.qmd
+    - Lecture-4-Data-Structures-in-R.qmd
+    - Lecture-5-Control-Flow-and-Functions.qmd
+    - Lecture-6-Data-Visualization-with-ggplot.qmd
+    - Lecture-7-Data-Wrangling-with-dplyr.qmd
+    - Lecture-8-Grouped-and-Bivariate-Analysis.qmd
+    - Lecture-9-Handling-Missing-Data.qmd
+    - Lecture-10-Tidy-Data-Principles.qmd
+    - Lecture-11-Distributions-Across-Groups.qmd
+    - Lecture-12-Sampling-and-CLT.qmd
+    - Lecture-13-Confidence-Intervals-and-Comparisons.qmd
+    - Lecture-14-Hypothesis-Testing-Foundations.qmd
+    - Lecture-15-Comparing-Means-and-Groups.qmd
+    - Lecture-16-Categorical-Data-Inference.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+    math: mathjax
+    css: 
+      - callout_custom.css
+      - style.css
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
