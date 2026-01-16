@@ -1,3 +1,259 @@
 # R Fundamentals Review
 
-Under Construction
+The aim of this lecture is to provide a review of R along with RMarkdown. While you should have seen most of this material before, it will be beneficial to have a refresher. As you go through this lecture write-up, I encourage you to run the code in your own R Console. Once you are comfortable with the material try and make slight change to the code and see how that effects the results. This will help you truly understand what is going on.
+
+::: learning-goals
+
+- Use R as a calculator to correctly evaluate mathematical expressions, including applying the proper order of operations.
+- Create and manipulate vectors in R, including performing vectorized arithmetic and understanding vector recycling.
+- Identify common data types in R and explain how type coercion affects computations.
+- Apply built-in functions and logical operators to summarize data and select values that meet specified criteria.
+:::
+
+::: {.callout-tip}
+## Supplemental Material
+<a href="Reading-Guide/L1-Reading-Guide.pdf" download>
+📄 Download the lecture's Reading Guide
+</a>
+:::
+
+## Using R as a Computer
+
+When we first started using R, we emphasized thinking of R as a calculator. Any mathematical operation we want to do can most likely be done in R. The code below shows how we can do addition, subtraction, multiplication, and division. 
+
+```{r}
+13 + 29
+(4 + 145*2)/(5 + 2^(3 + 1))
+```
+
+R also supports exponents, modular division using the \%\% operator (which returns the remainder), and integer division using the \%/\% operator (which can be thought of as the floor of the division). Below, we can see how these operations are related.
+
+```{r}
+27/5
+27 %/% 5 # This gives how many times 5 goes into 27
+27 %% 5 # This gives us the remainder after dividing 27 by 5
+(27 %/% 5) + (27 %% 5)/5 # This shows how we can carry out division
+```
+
+As you type expressions into R, it is important to think carefully about the order of operations. R follows the standard PEMDAS rules, but it is still easy to enter an expression in a way that produces unintended results. For this reason, you should always use parentheses whenever you are performing calculations in the numerator, denominator, or exponent to ensure the expression is evaluated as intended. Keep in mind that R ignores spaces in code, so placing numbers close together does not change the order in which operations are performed. R will always follow PEMDAS unless parentheses explicitly tell it otherwise. The examples below illustrate why parentheses are so important.
+
+```{r}
+3+4 / 2
+(3+4) / 2
+
+2^ 6/3
+2^ (6/3)
+```
+
+::: {.callout-tip title="Try it Out"}
+Emmit is planning his weekly expenses and wants to calculate how much money he has left after buying groceries, gas, and coffee. He typically has \$100 to spend each week. So far, he has paid \$30 for gas, split a \$72 grocery bill with two other friends, and bought a \$4 coffee three times. Teach Emmit how he can determine how much money he has left for the week using R.
+
+<details>
+
+<summary>Click to see the solution</summary>
+
+{{< video https://www.youtube.com/embed/K2gFMw5MoOI?modestbranding=1&rel=0 >}}
+
+</details>
+:::
+
+## Vectors
+
+It is important to remember that everything in R is vectorized. This includes single elements along with what we would traditionally call a vector (a combination of elements into a single group). To make a vector, we can use the `c()` function. To save a vector to a variable for later use, you will need to use the assignment operator ($<$--), which assigns the value on the right to the variable name on the left (the value is pointing to the name).
+
+```{r}
+is.vector(3)
+
+test_vector <- c(7, 2, 6, 9, 3, 6.43, -3, 3/2)
+test_vector
+is.vector(test_vector)
+```
+
+When doing math on vectors, R performs the operation element by element (meaning the math is done on the first element of each vector, then the second element of each vector, and so on). If the vectors are of different lengths, R recycles the shorter vector until the operation has been performed on all elements of the longer vector. If the vector lengths are not multiples of each other, the operation will still be performed until the longer vector is fully "used", but R will issue a warning message letting you know about the issue.
+
+```{r}
+a <- c(0,5,10)
+b <- c(3,7,-2)
+a * 2
+a+b # Does 3+0, 5+7, 10+(-2)
+
+a <- c(0, 5, 10)
+b <- c(20, 30)
+a+b # Does 0+20, 5+30, 10+20
+```
+
+We can also create vectors containing character elements (as long as they are in quotes) as well as vectors containing logical elements. For the logical elements, we can either type it in all capital letters or abbreviate it using the first letter. 
+
+```{r}
+char_vector <- c("This is", "also", "a", "vector", "of characters")
+char_vector
+c(T, T, FALSE, TRUE, F)
+```
+
+::: {.callout-tip title="Try it Out"}
+Emmit tracks his number of steps each day for one week, which were: 4,552, 7,324, 9,642, 5,304, 2,049, 6,424, and 13,284. Teach Emmit how to save these step counts as a vector in R. If he believes he can increase his steps by 15%, how can he determine the number of steps he would need to take each day?
+
+<details>
+
+<summary>Click to see the solution</summary>
+
+{{< video https://www.youtube.com/embed/AXefnK0DUOE?modestbranding=1&rel=0 >}}
+
+</details>
+:::
+
+## Data Types
+
+Another important idea to remember is that all objects in R have a data type. We will mainly encounter doubles (numbers), logicals (TRUE/FALSE), and characters (anything in quotes). We can determine the type of data we are working with by using the `typeof()` function. This will be important for us when we start trying to analyze/troubleshoot our code, as we cannot perform mathematical operations on a character vector, even if all of the characters themselves are numbers.
+
+```{r}
+typeof(4.25) # Shows 4.25 is a double
+typeof(FALSE) # Shows FALSE is a logical
+typeof("4.25") # Shows "4.25" is a character because it is in quotes
+```
+
+Another reason it is important to think about data types is because a vector will automatically be coerced to the “lowest” common type present (character $<$ double $<$ logical). That is to say, if a vector has a single character element all of the values will be turned into characters. Likewise, if a vector consists of doubles and logicals then the vector will be presented as doubles. We can explicitly coerce a vector to a specific type using functions such as `as.numeric()` or `as.character()`. This process can be seen below. 
+
+```{r}
+c(1, 2, 3, 4, 5)
+typeof(c(1, 2, 3, 4, 5))
+
+x <- c(1, 2, 3, 4, "5")
+x
+typeof(x)
+
+is.numeric(x)
+is.character(x)
+as.numeric(x) # Converting the character vector to be numeric
+```
+
+::: {.callout-warning}
+When coercing a vector to numeric using `as.numeric()`, any values that cannot be converted will become `NA`
+:::
+
+::: {.callout-tip title="Try it Out"}
+Emmit’s fitness tracker recorded several pieces of information for a single day. His step count was 6,424 steps, the tracker recorded that he worked out that day (`TRUE`), and he added the note "Leg day" to describe his workout. Teach Emmit how to check the data type of each of these values in R. Then, combine the step count and the note into a single vector and determine the data type of the resulting vector. Explain to him why this data type occurs.
+
+<details>
+
+<summary>Click to see the solution</summary>
+
+{{< video https://www.youtube.com/embed/Jyo-qkS_h6o?modestbranding=1&rel=0 >}}
+
+</details>
+:::
+
+## Built-in Functions in R
+
+There are several built-in functions in base R that are useful for working with numeric data. These include `mean()`, `median()`, `sd()`, `min()`, `max()`, `sqrt()`, `length()`, and many more. All of these functions require an input, which is typically provided as a vector. If we forget to pass the values as a vector, the function may still run, but not in the way you would expect. In the example below, `mean(4, 36, 25, 9, 16)` returns 4 because `mean()` treats the first value as the data and interprets the remaining values as additional arguments, which are ignored.
+
+```{r}
+y <- c(4,36, 25, 9, 16)
+mean(y)
+mean(4,36, 25, 9, 16)
+```
+
+As you look at the following functions, note that different functions return different types of output. Some functions return a single value:
+
+```{r}
+sum(y)
+length(y)
+median(y)
+sd(y)
+```
+
+We can also combine functions to compute new values, such as the mean:
+```{r}
+sum(y)/length(y)
+```
+
+Other functions return a vector with the same number of elements as the input:
+
+```{r}
+sort(y)
+sqrt(y)
+```
+
+Finally, some functions return multiple values:
+```{r}
+min(y)
+max(y)
+range(y)
+```
+
+Finally, we can apply function to the results of functions as well:
+```{r}
+diff(range(y))
+```
+
+::: {.callout-note}
+If a vector contains missing values (`NA`), many built-in functions will return `NA` by default. You can remove missing values from the calculation by including `na.rm = TRUE` inside the function.
+:::
+
+::: {.callout-tip title="Try it Out"}
+Emmit recorded his daily step counts for one week as the values 4,552, 7,324, 9,642, 5,304, 2,049, 6,424, and 13,284. Using built-in R functions, teach Emmit how to calculate the total number of steps he took during the week, his average number of steps per day, his minimum and maximum daily step counts, and a measure of how spread out his step counts are. 
+
+<details>
+
+<summary>Click to see the solution</summary>
+
+{{< video https://www.youtube.com/embed/mtY3Yl_E9C8?modestbranding=1&rel=0 >}}
+
+</details>
+:::
+
+## Logical Operators and Index Selection
+
+Besides just carrying out mathematical operations, it is also useful to use logical operators to select only certain values or determine how many values meet certain criteria. These logical operators include less than $(<)$, greater than $(>)$, equal to $(==)$, and not equal to $(!=)$. We can also use less than or equal to $(<=)$ and greater than or equal to $(>=)$.
+
+Sometimes it is helpful to display only the values that meet certain criteria, which can be done using index selection. To do this, we call the vector and then use index selection brackets to specify which elements we want to display. Logical operators are especially useful here because their output is a logical vector, which can be passed directly into the index selection brackets.
+
+```{r}
+x <- c(2, 5, 7, 3, 1, 5, 8, 3)
+x
+```
+
+```{r}
+x == 3
+sum(x == 3) # Cunts the number of TRUEs
+
+x[x == 3]
+length(x[x == 3]) # Counts the number of values meeting the criteria
+
+x < 5
+x[x < 5] # Displaying only the values that are less than 5
+```
+
+Using a negative sign indicates that we want all elements *except* the specified indices.
+
+```{r}
+x[c(1,4,6)]
+x[-c(1,4,6)]
+```
+
+::: {.callout-tip title="Try it Out"}
+Using Emmit’s weekly step counts of 4,552, 7,324, 9,642, 5,304, 2,049, 6,424, and 13,284, Emmit decides that a day counts as a “good workout day” if he takes more than 7,000 steps. Teach Emmit how to use logical operators and index selection in R to identify which days meet this criterion, count how many good workout days he had during the week, and display only the step counts from those days.
+
+<details>
+
+<summary>Click to see the solution</summary>
+
+{{< video https://www.youtube.com/embed/nCvbMedD45w?modestbranding=1&rel=0 >}}
+
+</details>
+:::
+
+
+## R Markdown
+
+As we progress as data scientists, it is important to organize our code in a cohesive way that supports reproducibility. One of the best ways to do this is by writing our work in an R Markdown document. R Markdown allows us to keep our code, output, and written explanations all in one place. When we are finished, we can “knit” the document into a final report that displays both the code we wrote and the output directly beneath it. This approach makes it easy to update results by changing the code, without needing to copy and paste output manually.
+
+To create an R Markdown document, open RStudio and select **File -$>$ New File -$>$ R Markdown**. You will be prompted to enter a document title and choose an output format. For this class, you should knit your documents as PDFs, so you will select that option. The first time you knit a PDF, RStudio may ask you to install a TeX distribution; this can be done directly through R and only needs to be installed once. To do so, you may need to install `TinyTeX` by running `install.packages("tinytex")`, loading it with `library(tinytex)`, and then installing the TeX distribution using `tinytex::install_tinytex()`, after which you should be able to knit the file as a PDF.
+
+At the top of the document, you will see a header (the content between the --- lines). This header contains information such as the title, author, date, and output format. You generally do not need to edit the output format manually, as knitting the document will automatically update it depending on whether you knit to PDF, HTML, or Word. Near the top of the file, you will also see an R setup chunk. This chunk should remain at the top of the document and is commonly used for code that should run but not appear in the final output, such as loading libraries or importing data. This behavior occurs because the chunk includes the argument `include = FALSE`.
+
+Everything below the setup chunk can be deleted before you begin working, as the default content is not needed for this course. When you are ready to write code, you will create an R chunk. This can be done manually or by clicking the green C button near the top of the editor and selecting R. All code should be written inside these chunks (not the output). While working, you can run the code in a chunk by clicking the green play button in the top-right corner of the chunk. If this button is missing, make sure the chunk’s triple backticks have not been accidentally deleted.
+
+Any written explanations or comments describing what you are doing should be placed outside of code chunks in the white space of the document. This is where you should describe the problem and explain your results. Avoid placing long comments inside R chunks, as they can make the code difficult to read. You can also organize your document using headers by starting a line with the pound sign (\#). Using multiple pound signs creates subheaders. Be sure to leave a blank line before and after each header.
+
+Once you are satisfied with your document, you can knit it to a PDF by clicking the "Knit" button near the top of the editor. If an error is present, the document will not knit successfully, and RStudio will indicate which chunk caused the issue and why. These errors are usually straightforward to fix—just be sure to carefully read the error message.
