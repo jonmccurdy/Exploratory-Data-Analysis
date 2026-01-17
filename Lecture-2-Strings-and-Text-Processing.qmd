@@ -1,3 +1,307 @@
-# Strings and Text Processing
+# Text Processing and Useful R Tools
 
-Under Construction
+This lecture will continue our review of R while also introducing some new functions and commands that you may not have seen before. As we go through the examples, it is important to run the code in your own R console in order to truly understand what the code is doing. Additionally, as you type the code, you should think about what the output will be before running the command. This will help you develop the critical thinking and programming skills needed to continue improving as a programmer. Finally, if you are unsure what the code is doing, try breaking it down into smaller sections (if applicable) or creating a simpler example.
+
+::: learning-goals
+
+- Use compound logical operators (&, |, !) to create more complex conditions and perform index selection.
+- Identify patterns in character vectors using `grep()` and `grepl()` and interpret their different outputs.
+- Clean and modify text data by substituting patterns with `sub()` and `gsub()`.
+- Apply common utility functions and operators to select, locate, and validate values in vectors.
+:::
+
+::: {.callout-tip}
+## Supplemental Material
+<a href="Reading-Guide/L2-Reading-Guide.pdf" download>
+📄 Download the lecture's Reading Guide
+</a>
+:::
+
+## More Complex Logical Selections
+
+We previously saw how logical operators can be used for index selection to identify values that meet certain criteria. We can expand this idea by creating more complex conditions using multiple logical comparisons. In particular, we can use the ampersand $(\&)$ to represent an "AND" condition, the pipe $(|)$ to represent an "OR" condition, and the exclamation mark (!) to represent "NOT". The ! operator flips logical values, turning TRUE into FALSE and FALSE into TRUE.
+
+Below are a few examples showing how these logical operators work. As a reminder, we can do "math" on logical vectors because FALSE is treated as 0 and TRUE is treated as 1. This allows us to count how many values meet a condition using the `sum()` function.
+
+```{r}
+x <- 1:11
+x
+
+x < 6
+sum(x < 6)
+x[x < 6]
+```
+
+In the example below, we use logical operators to create compound statements. For example, we can display all values that are less than 5 OR greater than 9, as well as all values that are greater than 3 AND less than or equal to 8.
+
+```{r}
+x < 5 | x > 9
+x[x < 5 | x > 9]
+x > 3 & x <= 8
+x[x > 3 & x <= 8]
+```
+
+The last major logical operator is the NOT operator, which flips a logical condition. This is useful when we want to select all values that do not meet a certain requirement, such as displaying all values that are not greater than or equal to 7.
+
+```{r}
+c(!TRUE, !FALSE)
+
+!(x >= 7)
+x[!(x >= 7)]
+```
+
+::: {.callout-tip title="Try it Out"}
+Emmit tracked how many minutes he exercised each day for 11 days using the vector below. He considers a day “good” if his workout was more than 35 minutes AND less than or equal to 80 minutes. Teach Emmit how he can display the values meeting that criteria. He also wants to display the days where he exercised less than 20 minutes OR more than 90 minutes. Finally, he wants to display all days that are NOT greater than or equal to 60 minutes.
+
+```{r}
+#| eval: false
+mins <- c(12, 40, 75, 95, 18, 62, 35, 81, 0, 90, 55)
+```
+
+<details>
+
+<summary>Click to see the solution</summary>
+
+{{< video https://www.youtube.com/embed/0sO1D_VwCwU?modestbranding=1&rel=0 >}}
+
+</details>
+:::
+
+
+## Identifying patterns using `grep()` and `grepl()`
+
+Another powerful way to identify values meeting certain criteria is to use the `grep()` or `grepl()` function. These functions allow us to identify patterns within character vectors. Both functions work in the same way, but they return different types of output: `grep()` returns the indices that match the pattern, while `grepl()` returns a logical vector indicating which values match. The function works by passing in a pattern that we wish to search for along with the vector that we are searching through, such as `grep("pattern", x)`.
+
+It should be noted that patterns are case sensitive, meaning `"H"` will only identify elements containing a capital H, not a lowercase h. If we wish to search at the beginning of a string, we can use the caret $\wedge$. For example, the pattern `$^Happy` will identify all elements that start with `"Happy"` and will not match it if it appears later in the string.
+
+```{r}
+greetings <- c("Happy Birthday", "Merry Christmas", "Trick or Treat", 
+              "Happy Holidays","That makes me Happy")
+greetings
+
+grep("Happy", greetings)
+greetings[grep("Happy", greetings)]
+
+grepl("Happy", greetings)
+greetings[grepl("Happy", greetings)]
+
+grep("^Happy", greetings)
+greetings[grep("^Happy", greetings)]
+```
+
+We can also identify elements that end with a certain pattern using the dollar sign (`$`). For example, the pattern `s$` will identify all elements that end with the letter `"s"`. Additionally, we can use brackets to indicate that we want to match any one of the characters inside the brackets. For instance, the pattern `[ioa]n` will match `"in"`, `"on"`, or `"an"` anywhere in the string. If we want to match any character, we can use a period (`.`). For example, the pattern `t.` will match the letter `"t"` followed by any single character.
+
+```{r}
+greetings
+
+grep("s$", greetings)
+greetings[grep("s$", greetings)]
+
+grep("[sa]t", greetings)
+greetings[grep("[sa]t", greetings)]
+
+grep("t.", greetings)
+greetings[grep("t.", greetings)]
+```
+
+While these patterns may seem confusing or even a little intimidating at first, they are very powerful tools that we should become familiar with. A good way to practice is to create small examples and give yourself a simple goal. Since the example is small, it will be easy to check whether the output matches what you expected. Practicing like this will help you understand the function while also reinforcing an important troubleshooting skill: simplifying the problem.
+
+::: {.callout-tip title="Try it Out"}
+Emmit wrote workout notes in the character vector below. Teach Emmit how to use `grep()` to find the indices of the notes that contain the pattern `"Run"`, and then display only those matching notes. Also, teach Emmit how to use `grepl()` to produce a logical vector for the same pattern and to display the values. Finally, have Emmit identify which notes start with `"Rest"`.
+
+```{r}
+#| eval: false
+notes <- c("Run 2 miles", "Rest day", "Leg day", "Walk 30 min then Rest", "Run intervals", 
+           "Upper body", "Rest and stretch", "Bike 10 miles", "run 1 mile", "Run fast")
+```
+
+<details>
+
+<summary>Click to see the solution</summary>
+
+{{< video https://www.youtube.com/embed/atk1cDxK5zY?modestbranding=1&rel=0 >}}
+
+</details>
+:::
+
+## Substituting patterns using `sub()` and `gsub()`
+
+Two functions related to `grep()` is `sub()` and `gsub()`. These functions search for a pattern (like `grep()`) and then replace it with another specified pattern. This is especially helpful when cleaning data and preparing it to be analyzed. To use these functions, we provide three inputs: the pattern we want to identify, the replacement pattern, and the vector we want to modify. Both `sub()` and `gsub()` work the same way, but `sub()` only replaces the first occurrence of the pattern in each element, while `gsub()` replaces every occurrence.
+
+We can also use some of the same pattern commands we learned with `grep()`, such as using `^` to represent the beginning of a string and `$` to represent the end of a string. The function works as follows: `sub("pattern to identify", "replacement pattern", x)`. Note that `sub()` and `gsub()` do not permanently change the original vector unless you save the result to a variable.
+
+```{r}
+greetings <- c("Happy Birthday", "Merry Christmas", "Trick or Treat", 
+               "Happy Holidays","That makes me Happy")
+greetings
+```
+
+In the code below, we identify the `"H"` pattern and replace it with a lowercase version. You can see that `sub()` will only make the replacement on the first occurrence within each element while `gsub()` will carry out the replacement for every occurrence within each element.
+
+```{r}
+sub("H", "h", greetings)
+gsub("H", "h", greetings)
+```
+
+This might be beneficial if we need to replace a word or substring. The code below shows how we replace the pattern `"Birthday"` with `"New Year!"`. 
+
+```{r}
+sub("Birthday", "New Year!", greetings)
+```
+
+We can get creative with the way we identify patterns and make alterations. In one of the lines of code below, we identify the end of the pattern and replace the ending with an exclamation mark. In another line we identify the beginning of the pattern and replace it with the phrase `"Hi, "`. Finally, on the last line we identify any spaces and replace them with nothing (essentially removing the spaces).
+
+```{r}
+sub("$", "!", greetings)
+
+sub("^", "Hi, ", greetings)
+
+gsub(" ", "", greetings)
+```
+
+::: {.callout-tip title="Try it Out"}
+Emmit’s workout notes are inconsistent, so he stored them in the vector below. Teach Emmit how to use `sub()` to replace the first occurrence of `"Workout"` with `"Session"` in each element of the vector. Then teach Emmit how to use `gsub()` to replace every occurrence of `"min"` with `"minutes"`. 
+
+```{r}
+#| eval: false
+messy <- c("Workout: Run 2 miles", "Workout: Run 10 min Walk 30 min", 
+           "Workout: Leg day", "Workout: Rest day", "Workout: Run 25 min")
+```
+
+<details>
+
+<summary>Click to see the solution</summary>
+
+{{< video https://www.youtube.com/embed/NKFXG6zOwEk?modestbranding=1&rel=0 >}}
+
+</details>
+:::
+
+## Special Functions in R
+
+There are a few additional special functions that we will continue to use throughout this course. The first one we should discuss is the `sample()` function. This function takes an input vector and randomly samples values from it. If more values are requested than are in the original vector, then an error message will appear (for example, we cannot select 15 items if there are only 10 available). In order to sample more values than the vector contains, we need to sample with replacement by using `replace = TRUE`. If we want to get the same results every time we run `sample()`, we need to set the random seed using the `set.seed()` function. This ensures that the pseudo-random number generator produces the same sequence of results each time.
+
+In the code below, we can see that running `sample()` multiple times produces different results.
+```{r}
+abc <- letters[1:10]
+abc
+
+sample(abc, 5)
+sample(abc, 5)
+```
+
+If we try to sample more values than are present, we get an error. To fix this, we specify `replace = TRUE` to allow sampling to be done with replacement (which allows duplicate values).
+
+```{r}
+#| eval: false
+sample(abc, 15)
+```
+<span style="color: red;font-size: 80%; font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;">Error in sample.int(length(x), size, replace, prob) : 
+  cannot take a sample larger than the population when &#39;replace = FALSE&#39;</span>
+
+```{r}
+sample(abc, 15, replace=TRUE)
+```
+
+If we want reproducible values, then we need to set the seed. If you want to think about it like a book filled with random numbers, setting the seed makes sure you start reading the numbers off the same page. We can see an example of this below.
+
+```{r}
+set.seed(123)
+sample(abc, 5)
+
+set.seed(123)
+sample(abc, 5)
+sample(abc, 5)
+```
+
+Another function that is important for us to have experience with is the `which()` function. This function (much like `grep()`) tells us which indices meet a logical condition. This can be helpful when we want the output to be indices instead of a vector of TRUE and FALSE values. Examples of using the `which()` function can be seen below, including one example that identifies which values are even by checking which elements have a remainder of 0 when divided by 2.
+
+```{r}
+num <- sample(1:15, size=10, replace=TRUE)
+num
+
+which(num > 10)
+num[which(num > 10)]
+
+which(num %% 2 == 0)
+num[which(num %% 2 == 0)]
+```
+
+::: {.callout-tip title="Try it Out"}
+Emmit wants to randomly choose 7 workouts from the vector below to build a weekly plan. Teach Emmit how to use `sample()` to select 7 workouts so he gets the same random results each time he runs the code. After that, Emmit tracks his workout minutes for the week using the vector below and wants to know which days were longer than 60 minutes. Teach Emmit how this can be done in R.
+
+```{r}
+#| eval: false
+workouts <- c("Run", "Walk", "Bike", "Swim")
+daily_mins <- c(25, 70, 45, 10, 65, 80, 35)
+```
+
+<details>
+
+<summary>Click to see the solution</summary>
+
+{{< video https://www.youtube.com/embed/LJXeTEXZDpE?modestbranding=1&rel=0 >}}
+
+</details>
+:::
+
+The `match()` function may also be of some use to us throughout the semester. It returns the index position of each value in the first vector within the second vector (and returns `NA` if a value is not found). Looking at the example below, this process should make a little more sense. For example, the output tells us where each value from `1:15` appears in the vector `num`.
+
+```{r}
+num
+1:15
+
+match(1:15, num)
+```
+
+The `duplicated()` function helps us determine if we have seen a value before, while the `unique()` function returns all values without any duplicated elements.
+
+```{r}
+num
+duplicated(num)
+num[!duplicated(num)]
+unique(num)
+```
+
+The `any()` and `all()` functions check whether a logical condition has been met and then output a single logical value. The `any()` function checks if at least one element meets the criteria, while the `all()` function checks if every element meets the criteria.
+
+```{r}
+num
+
+any(num > 10)
+any(num >= 15)
+
+all(num < 10)
+all(num <= 15)
+```
+
+The last thing we will discuss in this lecture is the `%in%` operator. This operator is useful when we want to check whether values in a vector match any value from a list of possible options. The example below shows why it is beneficial. If we use `== c(1, 2)`, R performs an element-by-element comparison and recycles the shorter vector, which produces incorrect results. Using `%in%` fixes this by checking whether each element is in the set `{1, 2}`. This is especially helpful when we want to test for membership in multiple possible values without writing long logical expressions.
+
+```{r}
+x <- c(1, 1, 1, 1, 2, 2, 2, 3, 3, 4)
+x
+
+x[ x == c(1,2)]
+x == c(1,2)
+
+x %in% c(1,2)
+x[ x %in% c(1,2)]
+```
+
+::: {.callout-tip title="Try it Out"}
+Emmit copied his workout log into the vector below and wants to check for repeats. Teach Emmit how to identify any duplicated values. Then using the log vector, show Emmit how he could identify any entries showing `"Walk"` or `"Bike"`. Finally, using the vector below describing the lengths of his workout, teach Emmit how to determine if any workouts were longer than 45 minutes and if all the workouts were less than 1 hour.
+
+```{r}
+#| eval: false
+log <- c("Run", "Walk", "Walk", "Bike", "Yoga", "Run", "Rest", "Swim", "Swim", "Bike")
+goal_mins <- c(30, 25, 25, 45, 20, 35, 0, 50, 40)
+```
+
+<details>
+
+<summary>Click to see the solution</summary>
+
+{{< video https://www.youtube.com/embed/dLG0DYeZERs?modestbranding=1&rel=0 >}}
+
+</details>
+:::
