@@ -599,11 +599,11 @@ Click to see the solution
 </div>
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(abc, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "a" "j" "b" "d" "e"</code></pre>
+<pre><code>[1] "g" "i" "j" "c" "a"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(abc, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "h" "j" "a" "c" "f"</code></pre>
+<pre><code>[1] "i" "b" "d" "c" "f"</code></pre>
 </div>
 </div>
 <p>If we try to sample more values than are present, we get an error. To fix this, we specify <code>replace = TRUE</code> to allow sampling to be done with replacement (which allows duplicate values).</p>
@@ -614,7 +614,7 @@ Click to see the solution
 <div class="cell">
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(abc, <span class="dv">15</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "f" "g" "b" "a" "i" "f" "f" "c" "b" "b" "f" "g" "b" "g" "a"</code></pre>
+<pre><code> [1] "e" "g" "a" "h" "h" "c" "e" "f" "c" "j" "a" "g" "j" "a" "i"</code></pre>
 </div>
 </div>
 <p>If we want reproducible values, then we need to set the seed. If you want to think about it like a book filled with random numbers, setting the seed makes sure you start reading the numbers off the same page. We can see an example of this below.</p>
@@ -783,6 +783,22 @@ Click to see the solution
 </summary>
 <div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/dLG0DYeZERs?modestbranding=1&amp;rel=0" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
 </details>
+</div>
+</div>
+<div class="chapter-resources">
+<div class="chapter-resources-header">
+<p><a href="https://youtu.be/OkZzy6xHx40" target="_blank">Lecture Video</a></p>
+</div>
+<div class="chapter-resources-grid">
+<div>
+<a href="Assignments/L2-Inclass-Assignment.pdf" target="_blank">In-Class Exercises</a>
+</div>
+<div>
+<a href="https://youtu.be/eJwL5lWvsiY" target="_blank">In-Class Exercises Video Solutions</a>
+</div>
+</div>
+<div class="chapter-resources-footer">
+<p><a href="Assignments/L2-Problem-Set.pdf" target="_blank">Problem Set Questions</a></p>
 </div>
 </div>
 

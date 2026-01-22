@@ -305,3 +305,21 @@ goal_mins <- c(30, 25, 25, 45, 20, 35, 0, 50, 40)
 
 </details>
 :::
+
+
+::: {.chapter-resources}
+
+<div class="chapter-resources-header">
+  <a href="https://youtu.be/OkZzy6xHx40" target="_blank">Lecture Video</a>
+</div>
+
+<div class="chapter-resources-grid">
+  <div><a href="Assignments/L2-Inclass-Assignment.pdf" target="_blank">In-Class Exercises</a></div>
+  <div><a href="https://youtu.be/eJwL5lWvsiY" target="_blank">In-Class Exercises Video Solutions</a></div>
+</div>
+
+<div class="chapter-resources-footer">
+  <a href="Assignments/L2-Problem-Set.pdf" target="_blank">Problem Set Questions</a>
+</div>
+
+:::
