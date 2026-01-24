@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Factors and Dates – Data-210-Book</title>
+<title>3&nbsp; Factors, Dates, and Special Values – Data-210-Book</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -113,7 +148,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Lecture-3-Factors-and-Dates.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors and Dates</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Lecture-3-Factors-and-Dates.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors, Dates, and Special Values</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -153,13 +188,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-2-Strings-and-Text-Processing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strings and Text Processing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Text Processing and Useful R Tools</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-3-Factors-and-Dates.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors and Dates</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors, Dates, and Special Values</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -245,15 +280,24 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#special-values" id="toc-special-values" class="nav-link active" data-scroll-target="#special-values"><span class="header-section-number">3.1</span> Special Values</a></li>
+  <li><a href="#datestimes" id="toc-datestimes" class="nav-link" data-scroll-target="#datestimes"><span class="header-section-number">3.2</span> Dates/Times</a></li>
+  <li><a href="#date-math" id="toc-date-math" class="nav-link" data-scroll-target="#date-math"><span class="header-section-number">3.3</span> Date Math</a></li>
+  <li><a href="#factors" id="toc-factors" class="nav-link" data-scroll-target="#factors"><span class="header-section-number">3.4</span> Factors</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors and Dates</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors, Dates, and Special Values</span></h1>
 </div>
 
 
@@ -270,10 +314,646 @@ window.Quarto = {
 </header>
 
 
-<p>Under Construction</p>
+<p>As we go further in our journey to becoming Data Scientists, we will come across some special values which may occasionally cause a headache or two. In this lecture, we aim to give you a crash course on some of the special values you may encounter. This includes values you may see after running functions, along with working with dates and times. Finally, we will conclude this lecture by looking at factors and how we can use them to store and work with categorical data more efficiently.</p>
+<div class="learning-goals">
+<ul>
+<li>Identify and handle special values in R (<code>NA</code>, <code>NaN</code>, and <span class="math inline">\(\pm\)</span> <code>Inf</code>) using <code>is.na()</code>, <code>is.nan()</code>, and <code>is.infinite()</code>, and explain how they affect calculations.</li>
+<li>Convert character strings into valid date/time objects in R using <code>strptime()</code>, <code>as.Date()</code>, <code>as.POSIXct()</code>, and <code>as.POSIXlt()</code>, and recognize the differences between these storage formats.</li>
+<li>Perform basic date/time computations by subtracting dates/times and using <code>difftime()</code> to measure differences in different units.</li>
+<li>Create and work with factors for categorical data, including converting to factors, setting correct ordered levels, and renaming factor levels.</li>
+</ul>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supplemental Material
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="Reading-Guide/L3-Reading-Guide.pdf" download=""> 📄 Download the lecture’s Reading Guide </a></p>
+</div>
+</div>
+<section id="special-values" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="special-values"><span class="header-section-number">3.1</span> Special Values</h2>
+<p>As we work in R, we may occasionally come across a few different special values. These include missing values (<code>NA</code>), values which are Not a Number (<code>NaN</code>), and infinite values (<span class="math inline">\(\pm\)</span> Inf). It is important to understand why each value occurs, because these are often the source of confusing results in our code. The first special value we will look at is <code>NA</code>. This represents a missing value, and it can be identified using the <code>is.na()</code> function. It should be noted that <code>is.na()</code> will also identify <code>NaN</code> values. Likewise, if we try to do math on a vector which contains a missing value, then the output will also become missing. We can correct for this by using the argument <code>na.rm=TRUE</code> to specify that we want <code>NA</code> values removed before running the calculations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="cn">NA</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  1  2  3 NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE FALSE FALSE  TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+<p>The next special values that we might encounter are <code>NaN</code> and <code>Inf</code>. These values are produced whenever the math is either not possible (such as taking the square root of a negative number), or when the result is too large to store in the computer. If we divide by 0, we may get <code>NaN</code> or <code>Inf</code> due to IEEE standards, even though mathematically we know the expression is undefined. So, do not worry about harming the USS Yorktown if you accidentally divide by zero. We can use the <code>is.nan()</code> and <code>is.infinite()</code> functions to identify these values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span><span class="sc">/</span><span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NaN</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>(<span class="sc">-</span><span class="dv">1</span>)<span class="sc">^</span><span class="fl">0.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NaN</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">^</span><span class="dv">478385</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] Inf</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span><span class="sc">/</span><span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] Inf</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="dv">5</span><span class="sc">/</span><span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -Inf</code></pre>
+</div>
+</div>
+<p>We can now put all of our skills together and look at an example containing all of the special values we have discussed so far. To begin, we use the <code>sample()</code> function to procure a random sample of values. You will get a different sample than me if you do not set the seed to the same value. Notice how we can incorporate the <code>which()</code> function to determine the indices of the elements that meet each condition. Also, notice that the <code>is.na()</code> function flags both <code>NA</code> and <code>NaN</code> values, while the <code>is.nan()</code> function only identifies NaN values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8675309</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="cn">NA</span>, <span class="cn">NaN</span>, <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>), <span class="dv">13</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] -Inf  NaN   NA  NaN  Inf  NaN    5  Inf  NaN    5 -Inf  Inf   NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(y, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>y
+-Inf    5  Inf  NaN &lt;NA&gt; 
+   2    2    3    4    2 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(<span class="fu">is.na</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  2  3  4  6  9 13</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.nan</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(<span class="fu">is.nan</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2 4 6 9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.infinite</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(<span class="fu">is.infinite</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  1  5  8 11 12</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Try it Out">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Try it Out
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Emmit is cleaning up some data from a sensor that tracks how many steps he takes each day. When he prints the vector, he notices that some values are missing, some values are not real numbers, and some values look infinite. Using the vector below, teach Emmit how he can use R to count how many missing and infinite values are present and report their indices. Then show him how he can compute the mean number of steps Emmit took without the missing values present.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>steps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">6200</span>, <span class="dv">7500</span>, <span class="cn">NA</span>, <span class="dv">5800</span>, <span class="cn">NaN</span>, <span class="dv">8100</span>, <span class="cn">Inf</span>, <span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">6600</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<details>
+<summary>
+Click to see the solution
+</summary>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/a0VZHb2WIj8?modestbranding=1&amp;rel=0" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</details>
+</div>
+</div>
+</section>
+<section id="datestimes" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="datestimes"><span class="header-section-number">3.2</span> Dates/Times</h2>
+<p>Dealing with dates and times in R can sometimes be a tricky task because there are multiple different representations they can take. For instance, some formats store dates as the number of days since January 1st, 1970, while others store date/time as the number of seconds since January 1st, 1970. Still others store the date/time as a list describing the seconds, minutes, hours, month, year, etc. Therefore, this section aims to give you insight into how we can manage dates and times in R.</p>
+<p>Let’s first take a look at the following example. Here, I have a date saved as a character string. I can then use the <code>strptime()</code> function (which stands for string parsed time) to convert the string into a time object. The function works by passing the string into the function and then specifying the format that the string follows. For example, you must specify that the month comes first, then the day, and then the year. To do this, you need to use formatting abbreviations (which can be found in the table directly beneath this code), and the format must match the string exactly. If it does not match, an <code>NA</code> value will be returned.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>tuesday_class <span class="ot">&lt;-</span> <span class="st">"January 27th, 2026"</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(tuesday_class, <span class="st">"%B %dth, %Y"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-01-27 EST"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>tuesday_class <span class="ot">&lt;-</span> <span class="st">"Jan. 27, 26"</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(tuesday_class, <span class="st">"%B %dth, %Y"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(tuesday_class, <span class="st">"%b. %d, %y"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>) <span class="co"># Does not match</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-01-27 EST"</code></pre>
+</div>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>%d</code></td>
+<td>day as a number</td>
+<td>1-31</td>
+</tr>
+<tr class="even">
+<td><code>%a</code></td>
+<td>abbreviated weekday</td>
+<td>Mon</td>
+</tr>
+<tr class="odd">
+<td><code>%A</code></td>
+<td>unabbreviated weekday</td>
+<td>Monday</td>
+</tr>
+<tr class="even">
+<td><code>%m</code></td>
+<td>month as a number</td>
+<td>1-12</td>
+</tr>
+<tr class="odd">
+<td><code>%b</code></td>
+<td>abbreviated month</td>
+<td>Jan</td>
+</tr>
+<tr class="even">
+<td><code>%B</code></td>
+<td>unabbreviated month</td>
+<td>January</td>
+</tr>
+<tr class="odd">
+<td><code>%y</code></td>
+<td>2-digit year</td>
+<td>26</td>
+</tr>
+<tr class="even">
+<td><code>%Y</code></td>
+<td>4-digit year</td>
+<td>2026</td>
+</tr>
+<tr class="odd">
+<td><code>%S</code></td>
+<td>seconds as a number</td>
+<td>0-59</td>
+</tr>
+<tr class="even">
+<td><code>%M</code></td>
+<td>minutes as a number</td>
+<td>0-59</td>
+</tr>
+<tr class="odd">
+<td><code>%I</code></td>
+<td>hours from 12-hour clock</td>
+<td>1-12</td>
+</tr>
+<tr class="even">
+<td><code>%H</code></td>
+<td>hours from 24-hour clock</td>
+<td>0-23</td>
+</tr>
+<tr class="odd">
+<td><code>%p</code></td>
+<td>am/pm indicator</td>
+<td>AM/PM</td>
+</tr>
+</tbody>
+</table>
+<p>The first date/time type that we will discuss is the Date type. This type does not include any time component, and instead only stores the calendar date. It stores the date as the number of days since January 1st, 1970. This type is helpful when the difference between dates should be measured in days, since it does not include increments smaller than a day. To create a Date object, we can use the <code>as.Date()</code> function as shown below. Using the <code>unclass()</code> function, we can see how the data is stored. For example, January 27th, 2026 is stored as 20480 days since January 1st, 1970.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>tuesday_class <span class="ot">&lt;-</span> <span class="st">"January 27th, 2026"</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>tuesday_class_date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(tuesday_class, <span class="st">"%B %dth, %Y"</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">unclass</span>(tuesday_class_date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20480</code></pre>
+</div>
+</div>
+<p>Notice how no aspect of the time is stored using this method.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>superbowl <span class="ot">&lt;-</span> <span class="st">"February 8th, 2026 at 6:30 PM"</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(superbowl, <span class="st">"%B %dth, %Y at %I:%M %p"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-02-08 18:30:00 EST"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>sb_date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(superbowl, <span class="st">"%B %dth, %Y at %I:%M %p"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>sb_date</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-02-08"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(sb_date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Date"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unclass</span>(sb_date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20492</code></pre>
+</div>
+</div>
+<p>Another way we may wish to store the date/time is as the number of seconds since January 1st, 1970. This is beneficial if we are interested in calculating precise differences between dates and times. To do this, we use the <code>as.POSIXct()</code> function (the <code>"ct"</code> can be thought of as calendar time or continuous time). Using the <code>class()</code> function, we can see that the variable is no longer stored as a Date, but instead as a POSIX time object (note: POSIX stands for the Portable Operating System Interface, which is a standard set by the IEEE). Notice how the time component is now stored, along with the specified time zone. When we use the <code>unclass()</code> function, we can see that the value is stored as a number of seconds rather than a number of days.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>superbowl <span class="ot">&lt;-</span> <span class="st">"February 8th, 2026 at 6:30 PM"</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>sb_ct <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(superbowl, <span class="st">"%B %dth, %Y at %I:%M %p"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>sb_ct</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-02-08 18:30:00 EST"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(sb_ct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "POSIXct" "POSIXt" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unclass</span>(sb_ct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1770593400
+attr(,"tzone")
+[1] "EST"</code></pre>
+</div>
+</div>
+<p>The final format we will discuss stores date/time as a list of components corresponding with the given date/time. To do this we will use the <code>as.POSIXlt()</code> function (the <code>"lt"</code> can be thought of as local time or list time). It stores the seconds, minutes, and hours (on a 24-hour clock) along with the day of the month, the month (with January being 0), the year since 1900, and additional useful information. This can all be seen below using the <code>unclass()</code> function. (Note: the output format may vary depending on your system.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>superbowl <span class="ot">&lt;-</span> <span class="st">"February 8th, 2026 at 6:30 PM"</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>sb_lt <span class="ot">&lt;-</span> <span class="fu">as.POSIXlt</span>(superbowl, <span class="st">"%B %dth, %Y at %I:%M %p"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>sb_lt </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-02-08 18:30:00 EST"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(sb_lt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "POSIXlt" "POSIXt" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unclass</span>(sb_lt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sec
+[1] 0
+
+$min
+[1] 30
+
+$hour
+[1] 18
+
+$mday
+[1] 8
+
+$mon
+[1] 1
+
+$year
+[1] 126
+
+$wday
+[1] 0
+
+$yday
+[1] 38
+
+$isdst
+[1] 0
+
+$zone
+[1] "EST"
+
+$gmtoff
+[1] NA
+
+attr(,"tzone")
+[1] "EST"
+attr(,"balanced")
+[1] TRUE</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Try it Out">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Try it Out
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Emmit is scheduling study sessions for his Data Science class, but he wrote the dates in different formats in his notes. He has the following four entries: “January 27th, 2026”, “Feb.&nbsp;3, 26”, “Tuesday the 10th of February 2026”, and “02-17-26”. Teach Emmit how he can convert each entry into a date object.</p>
+<details>
+<summary>
+Click to see the solution
+</summary>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/pjusfSOeAIc?modestbranding=1&amp;rel=0" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</details>
+</div>
+</div>
+<p>While the three formats above are important, it can be hard to remember them all in practice. A recent package that makes working with dates and times easier is the <code>lubridate</code> library. This library allows us to use functions like <code>mdy_hm()</code> if our string is in Month-Day-Year Hour-Minute form. There are similar functions for other common formats (like <code>ymd()</code>, <code>ymd_hms()</code>, <code>dmy_h()</code>, etc.). The output of these functions is typically a POSIXct object (which stores the number of seconds since January 1st, 1970).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># if it is your first time using it you may need to install it first</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(lubridate)</span></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>superbowl <span class="ot">&lt;-</span> <span class="st">"February 8th, 2026 at 6:30 PM"</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>sb_lubridate <span class="ot">&lt;-</span> <span class="fu">mdy_hm</span>(superbowl, <span class="at">tz=</span><span class="st">"EST"</span>)</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>sb_lubridate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-02-08 18:30:00 EST"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(sb_lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "POSIXct" "POSIXt" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unclass</span>(sb_lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1770593400
+attr(,"tzone")
+[1] "EST"</code></pre>
+</div>
+</div>
+<p>The <code>lubridate</code> library is very powerful, because it often does not require us to specify the exact structure of the string like we needed to do earlier. Below, we show four different ways of writing February 4th, 2026, and as long as we specify that they are in Day-Month-Year form, <code>lubridate</code> will correctly convert each one. We can even pass in strings with different formats into the <code>parse_date_time()</code> function as long as we list the possible formats.</p>
+<p>However, we do need to be careful, because some date formats are ambiguous. For example, one of the entries below is interpreted incorrectly because 26-02-04 could represent multiple formats depending on the convention. The last example clears this up by writing the year as 2026 instead of just 26.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>dates <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"4th of February 2026"</span>, <span class="st">"4/Feb/26"</span>, <span class="st">"04-02-2026"</span>, <span class="st">"040226"</span>)</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dmy</span>(dates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-02-04" "2026-02-04" "2026-02-04" "2026-02-04"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>dates <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"4th of February 2026"</span>, <span class="st">"26-02-04"</span>, <span class="st">"04-02-2026"</span>)</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_date_time</span>(dates, <span class="fu">c</span>(<span class="st">"dmy"</span>, <span class="st">"ymd"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-02-04 UTC" "2004-02-26 UTC" "2026-02-04 UTC"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>dates <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"4th of February 2026"</span>, <span class="st">"2026-02-04"</span>, <span class="st">"04-02-2026"</span>)</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_date_time</span>(dates, <span class="fu">c</span>(<span class="st">"dmy"</span>, <span class="st">"ymd"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-02-04 UTC" "2026-02-04 UTC" "2026-02-04 UTC"</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Try it Out">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Try it Out
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Emmit decided that manually typing formatting strings is too annoying, so he wants to use <code>lubridate</code> instead. He has the following entries: “2/04/2026 6:15 PM”, “2026 2-11”, “18th of February 2026 5 PM”, and “Wed. 2/25/2026”. Teach Emmit how he can use the <code>lubridate</code> package to convert these values into date/times.</p>
+<details>
+<summary>
+Click to see the solution
+</summary>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/qWQZooOwvQs?modestbranding=1&amp;rel=0" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</details>
+</div>
+</div>
+</section>
+<section id="date-math" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="date-math"><span class="header-section-number">3.3</span> Date Math</h2>
+<p>One of the reasons it is important to talk about the different ways dates and times are stored in R is because we often find ourselves wanting to do “math” with them. For instance, maybe we are interested in seeing how many seconds it took for a function to run, how many days old we are, or the time differences between purchases or incidents at a large company. To do those things, we first need to convert values into an actual date/time type, and then we need to compute differences between those date/time values. Both are shown below.</p>
+<p>If we are dealing with dates/times saved as POSIXct (the number of seconds since January 1st, 1970), then we can subtract the two variables and R will return a time difference (by default displayed in days, often with decimals). The variables need to be compatible date/time types in order to subtract them. Storing time in seconds allows us to be fairly precise in determining time differences. We will also see how to request results in units other than days a little later on.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>mlk_day <span class="ot">&lt;-</span> <span class="st">"January 19th, 2026"</span></span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a><span class="fu">as.POSIXct</span>(mlk_day, <span class="st">"%B %dth, %Y"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-01-19 EST"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>mlk_ct <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(mlk_day, <span class="st">"%B %dth, %Y"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>)</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unclass</span>(mlk_ct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1768798800
+attr(,"tzone")
+[1] "EST"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>valentines_day_dinner <span class="ot">&lt;-</span> <span class="st">"February 14th, 2026 at 6:47 PM"</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>valentines_ct <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(valentines_day_dinner, <span class="st">"%B %dth, %Y at %I:%M %p"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>)</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="fu">unclass</span>(valentines_ct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1771112820
+attr(,"tzone")
+[1] "EST"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>valentines_ct <span class="sc">-</span> mlk_ct</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of 26.78264 days</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">1771112820</span><span class="sc">-</span> <span class="dv">1768798800</span>)<span class="sc">/</span>(<span class="dv">60</span><span class="sc">*</span><span class="dv">60</span><span class="sc">*</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 26.78264</code></pre>
+</div>
+</div>
+<p>We can do something similar if our data is saved as a Date (the number of days since January 1st, 1970). This will return differences in whole days only, and it does not allow for any measurement smaller than a day.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>mlk_date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(mlk_day, <span class="st">"%B %dth, %Y"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>)</span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unclass</span>(mlk_date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20472</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>valentines_date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(valentines_day_dinner, <span class="st">"%B %dth, %Y at %I:%M %p"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>)</span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unclass</span>(valentines_date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20498</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>valentines_date <span class="sc">-</span> mlk_date</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of 26 days</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">20498</span> <span class="sc">-</span> <span class="dv">20472</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 26</code></pre>
+</div>
+</div>
+<p>Before discussing another method for calculating differences, it helps to know how to get “right now” and “today” in R. In <code>lubridate</code>, <code>now()</code> gives the current date/time and <code>today()</code> gives the current date. (These results will depend on when and where you run the code.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">now</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-01-24 11:42:50 EST"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">today</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2026-01-24"</code></pre>
+</div>
+</div>
+<p>If you want the time difference in a unit other than days, you can use the <code>difftime()</code> function. This function allows you to pass in two date/times along with the units you want the difference in. The default units are days.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(valentines_ct, mlk_ct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of 26.78264 days</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(valentines_ct, mlk_ct, <span class="at">units=</span><span class="st">"sec"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of 2314020 secs</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(valentines_ct, mlk_ct, <span class="at">units=</span><span class="st">"mins"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of 38567 mins</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(valentines_ct, mlk_ct, <span class="at">units=</span><span class="st">"hours"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of 642.7833 hours</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(valentines_ct, mlk_ct, <span class="at">units=</span><span class="st">"days"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of 26.78264 days</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(valentines_ct, mlk_ct, <span class="at">units=</span><span class="st">"weeks"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of 3.826091 weeks</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Try it Out">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Try it Out
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Emmit is trying to see how long he actually spends working on homework (he says “2-3 hours”, but the data might disagree). He recorded the start time as “February 13th, 2026 at 6:47 PM” and the end time as “February 13th, 2026 at 8:05 PM”. Teach him how he can determine the time he spent using both the POSIXct format and using the <code>difftime()</code> function, while reporting the length of time in both hours and minutes.</p>
+<details>
+<summary>
+Click to see the solution
+</summary>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/dOQgwiQbqpg?modestbranding=1&amp;rel=0" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</details>
+</div>
+</div>
+</section>
+<section id="factors" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="factors"><span class="header-section-number">3.4</span> Factors</h2>
+<p>If we are dealing with categorical values, then it will often make sense to store the data as a factor. This is because categorical data usually has a relatively small number of possible values, and factors allow R to store those repeated categories efficiently “behind the scenes” by keeping a set of levels and referencing them. We do not need to be too concerned about exactly how the storage works, but we should know how to convert a vector to a factor when we have categorical data with finitely many repeated values.</p>
+<p>To convert a vector to a factor, we can use the <code>factor()</code> function. An example is shown below. Notice how the elements are converted from a character vector to a factor. Also notice that it does not make sense to do a logical comparison like &lt; for an unordered factor, since one category is not inherently greater than another (so we get a warning message).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>medals <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"gold"</span>, <span class="st">"silver"</span>, <span class="st">"bronze"</span>, <span class="st">"none"</span>)</span>
+<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb113-3"><a href="#cb113-3" aria-hidden="true" tabindex="-1"></a>medals_won <span class="ot">&lt;-</span> <span class="fu">sample</span>(medals, <span class="dv">20</span>, <span class="at">replace=</span><span class="cn">TRUE</span>, <span class="at">prob=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.4</span>))</span>
+<span id="cb113-4"><a href="#cb113-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-5"><a href="#cb113-5" aria-hidden="true" tabindex="-1"></a>medals_won</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "none"   "silver" "bronze" "silver" "gold"   "none"   "bronze" "silver"
+ [9] "bronze" "bronze" "gold"   "bronze" "bronze" "bronze" "none"   "silver"
+[17] "none"   "none"   "none"   "gold"  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>medals_factor <span class="ot">&lt;-</span> <span class="fu">factor</span>(medals_won)</span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>medals_factor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] none   silver bronze silver gold   none   bronze silver bronze bronze
+[11] gold   bronze bronze bronze none   silver none   none   none   gold  
+Levels: bronze gold none silver</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>medals_factor[<span class="dv">1</span>] <span class="sc">&lt;</span> medals_factor[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in Ops.factor(medals_factor[1], medals_factor[2]): '&lt;' not meaningful
+for factors</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
+<p>In the example above we created a nominal (unordered) factor. We can create an ordinal (ordered) factor by using the argument <code>ordered=TRUE</code>. We should be careful with this, though, because while it creates an ordered factor, the levels may not be in the correct order. By default, R places the levels in alphabetical order, which is usually not the order we want for something like medals.</p>
+<p>To fix this, we can specify the order of the levels using the <code>levels</code> argument. The levels must be spelled exactly the same as the values in the vector, or else missing values will be inserted into the factor.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a>medals_ordered <span class="ot">&lt;-</span> <span class="fu">factor</span>(medals_won, <span class="at">ordered=</span><span class="cn">TRUE</span>)</span>
+<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a>medals_ordered</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] none   silver bronze silver gold   none   bronze silver bronze bronze
+[11] gold   bronze bronze bronze none   silver none   none   none   gold  
+Levels: bronze &lt; gold &lt; none &lt; silver</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a>medals_ordered <span class="ot">&lt;-</span> <span class="fu">factor</span>(medals_won, <span class="at">ordered=</span><span class="cn">TRUE</span>, </span>
+<span id="cb122-2"><a href="#cb122-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"none"</span>, <span class="st">"bronze"</span>, <span class="st">"silver"</span>, <span class="st">"GOLD"</span>))</span>
+<span id="cb122-3"><a href="#cb122-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb122-4"><a href="#cb122-4" aria-hidden="true" tabindex="-1"></a>medals_ordered <span class="ot">&lt;-</span> <span class="fu">factor</span>(medals_won, <span class="at">ordered=</span><span class="cn">TRUE</span>, </span>
+<span id="cb122-5"><a href="#cb122-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"none"</span>, <span class="st">"bronze"</span>, <span class="st">"silver"</span>, <span class="st">"gold"</span>))</span>
+<span id="cb122-6"><a href="#cb122-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb122-7"><a href="#cb122-7" aria-hidden="true" tabindex="-1"></a>medals_ordered</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] none   silver bronze silver gold   none   bronze silver bronze bronze
+[11] gold   bronze bronze bronze none   silver none   none   none   gold  
+Levels: none &lt; bronze &lt; silver &lt; gold</code></pre>
+</div>
+</div>
+<p>Looking at the example above, we can see that a mislabeled level (like “GOLD” instead of “gold”) results in missing values. Once the ordering is set correctly, logical comparisons are now meaningful. For example, it makes sense to say that receiving no medal is “less than” receiving a silver medal.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a>medals_ordered[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] none
+Levels: none &lt; bronze &lt; silver &lt; gold</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a>medals_ordered[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] silver
+Levels: none &lt; bronze &lt; silver &lt; gold</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb128"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a>medals_ordered[<span class="dv">1</span>] <span class="sc">&lt;</span> medals_ordered[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>One more useful skill with factors is renaming the level labels. This can be done by using <code>levels()</code> to view the current levels and then assigning a new character vector of level names (in the same order). This will rename all factor values according to the updated level labels.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb130"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(medals_ordered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "none"   "bronze" "silver" "gold"  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(medals_ordered) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"other"</span>, <span class="st">"3rd"</span>, <span class="st">"2nd"</span>, <span class="st">"1st"</span>)</span>
+<span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>medals_ordered</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] other 2nd   3rd   2nd   1st   other 3rd   2nd   3rd   3rd   1st   3rd  
+[13] 3rd   3rd   other 2nd   other other other 1st  
+Levels: other &lt; 3rd &lt; 2nd &lt; 1st</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb134"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(medals_ordered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "other" "3rd"   "2nd"   "1st"  </code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Try it Out">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Try it Out
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Emmit is tracking the outcome of his weekly quiz grades, but instead of using numbers he labels each attempt as “Proficient”, “Developing”, or “Not-Yet”. Teach Emmit how he can create a vector called quiz_status containing 24 randomly sampled values from those three categories. Explain how he can then convert the vector into a factor and determine how many times each category appears. Finally, show him how to convert it into an ordered factor.</p>
+<details>
+<summary>
+Click to see the solution
+</summary>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/BGhjR8jymyA?modestbranding=1&amp;rel=0" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+</details>
+</div>
+</div>
 
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -677,8 +1357,8 @@ window.Quarto = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./Lecture-2-Strings-and-Text-Processing.html" class="pagination-link" aria-label="Strings and Text Processing">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strings and Text Processing</span></span>
+      <a href="./Lecture-2-Strings-and-Text-Processing.html" class="pagination-link" aria-label="Text Processing and Useful R Tools">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Text Processing and Useful R Tools</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
