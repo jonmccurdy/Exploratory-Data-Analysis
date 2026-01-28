@@ -458,11 +458,11 @@ Click to see the solution
 <pre><code>[1] "2026-01-27 EST"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>tuesday_class <span class="ot">&lt;-</span> <span class="st">"Jan. 27, 26"</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(tuesday_class, <span class="st">"%B %dth, %Y"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(tuesday_class, <span class="st">"%B %dth, %Y"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>) <span class="co"># Does not match </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(tuesday_class, <span class="st">"%b. %d, %y"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>) <span class="co"># Does not match</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(tuesday_class, <span class="st">"%b. %d, %y"</span>, <span class="at">tz =</span> <span class="st">"EST"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "2026-01-27 EST"</code></pre>
 </div>
@@ -786,11 +786,11 @@ attr(,"tzone")
 <div class="cell">
 <div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">now</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2026-01-24 11:42:50 EST"</code></pre>
+<pre><code>[1] "2026-01-27 21:09:57 EST"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">today</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2026-01-24"</code></pre>
+<pre><code>[1] "2026-01-27"</code></pre>
 </div>
 </div>
 <p>If you want the time difference in a unit other than days, you can use the <code>difftime()</code> function. This function allows you to pass in two date/times along with the units you want the difference in. The default units are days.</p>

@@ -87,8 +87,8 @@ tuesday_class <- "January 27th, 2026"
 strptime(tuesday_class, "%B %dth, %Y", tz = "EST")
 
 tuesday_class <- "Jan. 27, 26"
-strptime(tuesday_class, "%B %dth, %Y", tz = "EST") 
-strptime(tuesday_class, "%b. %d, %y", tz = "EST") # Does not match
+strptime(tuesday_class, "%B %dth, %Y", tz = "EST") # Does not match 
+strptime(tuesday_class, "%b. %d, %y", tz = "EST") 
 ```
 
 | Symbol | Meaning | Example |

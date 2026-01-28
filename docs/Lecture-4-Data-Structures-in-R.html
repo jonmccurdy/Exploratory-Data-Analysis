@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -153,13 +188,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-2-Strings-and-Text-Processing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strings and Text Processing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Text Processing and Useful R Tools</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-3-Factors-and-Dates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors and Dates</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors, Dates, and Special Values</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -245,8 +280,17 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#matrices" id="toc-matrices" class="nav-link active" data-scroll-target="#matrices"><span class="header-section-number">4.1</span> Matrices</a></li>
+  <li><a href="#dataframes" id="toc-dataframes" class="nav-link" data-scroll-target="#dataframes"><span class="header-section-number">4.2</span> Dataframes</a></li>
+  <li><a href="#dataframe-index-selections" id="toc-dataframe-index-selections" class="nav-link" data-scroll-target="#dataframe-index-selections"><span class="header-section-number">4.3</span> Dataframe Index Selections</a></li>
+  <li><a href="#lists" id="toc-lists" class="nav-link" data-scroll-target="#lists"><span class="header-section-number">4.4</span> Lists</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -270,10 +314,453 @@ window.Quarto = {
 </header>
 
 
-<p>Under Construction</p>
+<p>One of the most prevalent data types that we will encounter in R are dataframes. We can think of these as a combination of vectors arranged so that the first elements of one vector is associated with the first element of all of the other vectors, with the same being said for the second, third, etc. elements. Additionally, most of the data that we work with will be structured as a dataframe, so it is important for us to review these before jumping into more advanced data manipulation techniques. Additionally, some of the data we may encounter will be as a list, which essentially is a collection of data grouped together that is not necessarily of the same data type, but more will be discussed on this topic later in this write-up.</p>
+<div class="learning-goals">
+<ul>
+<li>Distinguish between matrices, dataframes, and lists in R and describe when each is appropriate.</li>
+<li>Create and index two-dimensional data structures using row–column notation in addition to extracting, adding, and removing columns or rows from a dataframe.</li>
+<li>Filter dataframes using logical conditions.</li>
+<li>Access elements of a list using indices and names.</li>
+</ul>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supplemental Material
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="Reading-Guide/L4-Reading-Guide.pdf" download=""> 📄 Download the lecture’s Reading Guide </a></p>
+</div>
+</div>
+<section id="matrices" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="matrices"><span class="header-section-number">4.1</span> Matrices</h2>
+<p>Before diving into dataframes, I wanted to give a quick run-down of matrices, as they occasionally make appearances in R (especially when doing mathematical simulations!). To create a matrix, we will first pass a vector in the <code>matrix()</code> function and specify the number of rows or columns using the <code>nrow</code> or <code>ncol</code> argument. It will fill in the matrix down each column (unless specified) until all of the elements in the vector are used. If additional elements are needed to complete the rectangular matrix then the values will be recycled from the beginning of the vector. It should be noted that all of the elements in a matrix must be of the same type, and the values are not necessarily related to each other across rows or columns as they would be for a dataframe. Examples of how the matrix will work can be seen below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  1  2  3  4  5  6  7  8  9 10 11 12</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">matrix</span>(x, <span class="at">nrow=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3] [,4]
+[1,]    1    4    7   10
+[2,]    2    5    8   11
+[3,]    3    6    9   12</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">matrix</span>(x, <span class="at">nrow=</span><span class="dv">3</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3] [,4]
+[1,]    1    2    3    4
+[2,]    5    6    7    8
+[3,]    9   10   11   12</code></pre>
+</div>
+</div>
+<p>We saw previously that vectors were an example of one-dimensional data. When we deal with matrix we are dealing with two-dimensional data, since we have rows and columns. It is important to know that R indexes two-dimensional data “Row, Column”. So, if we want to look at just the first row then we can use the index selection brackets and type <code>"x[1,]"</code> while the fourth column could be found with <code>"x[,4]"</code>. Examples of this can be seen below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>x_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(x, <span class="at">nrow=</span><span class="dv">3</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>x_mat[,<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 5 9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>x_mat[<span class="dv">1</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x_mat[<span class="dv">2</span>,<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+</div>
+</section>
+<section id="dataframes" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="dataframes"><span class="header-section-number">4.2</span> Dataframes</h2>
+<p>Dataframes are a lot like matrices but differ in that the data does not have to be all of the same type and that every column will describe the same thing while every row will describe an observation. While we will rarely make our own dataframe in R, we can see an example of how this can be done below using the <code>data.frame()</code> function, where we pass vectors of all the same length into the function. In the example we see that the character vector and numeric vector are related to each other, so we decided to put them in a dataframe. Using the <code>str()</code> function, we can identify the structure of the dataframe and see that we have 5 observations (rows) and 2 variables (columns). Likewise, we can see that the “number” vector is a character vector and the “digit” vector is a numeric vector.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>number <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"one"</span>, <span class="st">"two"</span>, <span class="st">"three"</span>, <span class="st">"four"</span>, <span class="st">"five"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>digit <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">typeof</span>(number), <span class="fu">typeof</span>(digit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character" "double"   </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(number, digit)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  number digit
+1    one     1
+2    two     2
+3  three     3
+4   four     4
+5   five     5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   5 obs. of  2 variables:
+ $ number: chr  "one" "two" "three" "four" ...
+ $ digit : num  1 2 3 4 5</code></pre>
+</div>
+</div>
+<p>We can see another example of creating a dataframe below. In this example, we use the <code>sample()</code> function to randomly select different names and majors. The <code>rnorm()</code> function is also used to randomly generate the grade using a normal distribution, with the <code>round()</code> function giving us a whole number. We can then see the structure of the dataframe is what we would expect it to be. If we wanted to convert all of the strings to factors then we could use the <code>stringsAsFactors</code>. Notice how with this dataframe the first row describes Claire, who is a Computer Science student, who got a 71 in the course. Meanwhile, the first column describes all of the student’s names, the second column describes all of the student’s majors, and the third column describes all of the student’s grades.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>students <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Adam"</span>, <span class="st">"Bianca"</span>, <span class="st">"Claire"</span>, <span class="st">"Dalton"</span>, <span class="st">"Emmanuel"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>majors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Data Science"</span>, <span class="st">"Math"</span>, <span class="st">"Cyber"</span>, <span class="st">"Computer Science"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>student_sample <span class="ot">&lt;-</span> <span class="fu">sample</span>(students, <span class="dv">10</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>major_sample <span class="ot">&lt;-</span> <span class="fu">sample</span>(majors, <span class="dv">10</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>grade_in_class <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">10</span>, <span class="at">mean=</span><span class="dv">70</span>, <span class="at">sd=</span><span class="dv">10</span>))</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(student_sample, major_sample, grade_in_class)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   student_sample     major_sample grade_in_class
+1          Claire Computer Science             71
+2          Claire     Data Science             64
+3          Bianca            Cyber             88
+4          Bianca            Cyber             75
+5          Claire     Data Science             50
+6        Emmanuel Computer Science             77
+7          Dalton     Data Science             65
+8            Adam     Data Science             59
+9          Bianca     Data Science             68
+10         Claire            Cyber             60</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   10 obs. of  3 variables:
+ $ student_sample: chr  "Claire" "Claire" "Bianca" "Bianca" ...
+ $ major_sample  : chr  "Computer Science" "Data Science" "Cyber" "Cyber" ...
+ $ grade_in_class: num  71 64 88 75 50 77 65 59 68 60</code></pre>
+</div>
+</div>
+<p>We can use the dollar sign (<span class="math inline">\(\$\)</span>) in order to reference a specific column within the dataframe. The referenced column has to be spelled exactly the same way as the column name in the data frame. Note that this result is actually a vector. We will see other methods, later on, to select certain columns and filter the dataframe based on different criteria.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>student_sample</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Claire"   "Claire"   "Bianca"   "Bianca"   "Claire"   "Emmanuel"
+ [7] "Dalton"   "Adam"     "Bianca"   "Claire"  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>grade_in_class</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 71 64 88 75 50 77 65 59 68 60</code></pre>
+</div>
+</div>
+<p>If we wish to add on an observation then we can do so with the <code>rbind()</code> function (this stands for row bind). There are two examples below which show this being done. The first one puts all of the values in a vector and then binds it to the bottom of the dataframe. We should be cautious about doing this though, as putting all of the values into a vector first will cause the values to be coerced into a character vector, and then adding it onto the dataframe causes all of the columns to then be coerced into character vectors. This can be seen when we look at the structure of the dataframe. To get around this, we can create a new dataframe with the observation to be added using the same column names. Then we can bind this onto the end of the dataframe. This preserves all of the datatypes currently in the dataframe. Either way will work, it is just something to think about and be cautious of, and you can always use the <code>as.double()</code> or a similar function to coerce the data to be the type you need it to be.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(student_sample, major_sample, grade_in_class)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df, <span class="fu">c</span>(<span class="st">"Franklin"</span>, <span class="st">"Politics"</span>, <span class="dv">93</span>))</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   11 obs. of  3 variables:
+ $ student_sample: chr  "Claire" "Claire" "Bianca" "Bianca" ...
+ $ major_sample  : chr  "Computer Science" "Data Science" "Cyber" "Cyber" ...
+ $ grade_in_class: chr  "71" "64" "88" "75" ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>student_added <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">student_sample =</span> <span class="st">"Franklin"</span>, </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">major_sample =</span> <span class="st">"Politics"</span>, </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">grade_in_class =</span> <span class="dv">93</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df, student_added)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   11 obs. of  3 variables:
+ $ student_sample: chr  "Claire" "Claire" "Bianca" "Bianca" ...
+ $ major_sample  : chr  "Computer Science" "Data Science" "Cyber" "Cyber" ...
+ $ grade_in_class: num  71 64 88 75 50 77 65 59 68 60 ...</code></pre>
+</div>
+</div>
+<p>Additionally, we can add a column to the dataframe using the <code>cbind()</code> function in a similar way to the <code>rbind()</code> function. Or, we could use a dollar sign to reference the “new” column and then assign values to it. We can see how this happens below, with the <code>tail()</code> function being used to show the last 6 observations in the dataframe. The <code>head()</code> function could be used to show the first few observations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df2<span class="sc">$</span>is_athlete <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(T, F), <span class="dv">11</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   student_sample     major_sample grade_in_class is_athlete
+6        Emmanuel Computer Science             77       TRUE
+7          Dalton     Data Science             65       TRUE
+8            Adam     Data Science             59       TRUE
+9          Bianca     Data Science             68       TRUE
+10         Claire            Cyber             60      FALSE
+11       Franklin         Politics             93      FALSE</code></pre>
+</div>
+</div>
+<p>There are a few other properties and functions relating to dataframes that we should discuss. The first is that we can quickly identify the dimensions (rows and columns) of the dataset using the <code>dim()</code> function. If we want just the number of rows or columns then the <code>nrow()</code> and <code>ncol()</code> functions would be useful. If we wish to alter the column names of the dataframe then the <code>names()</code> function can be used by assigning a new character vector of the same length to it. An example of this can be seen below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 11  4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 11</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "student_sample" "major_sample"   "grade_in_class" "is_athlete"    </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"major"</span>, <span class="st">"grade"</span>, <span class="st">"athlete"</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      name            major grade athlete
+1   Claire Computer Science    71    TRUE
+2   Claire     Data Science    64   FALSE
+3   Bianca            Cyber    88    TRUE
+4   Bianca            Cyber    75    TRUE
+5   Claire     Data Science    50   FALSE
+6 Emmanuel Computer Science    77    TRUE</code></pre>
+</div>
+</div>
+</section>
+<section id="dataframe-index-selections" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="dataframe-index-selections"><span class="header-section-number">4.3</span> Dataframe Index Selections</h2>
+<p>Being able to filter your data and look at observations or values that only meet certain criteria is a powerful tool. We previously saw how to do this with one-dimensional vectors. Doing this with two-dimensional dataframes will work the exact same way, with the only difference being that we will need to specify the row and the columns. We must specify the row before the comma and the column after the comma. If no value is provided before or after the comma then it will indicate all rows and all columns being displayed. Additionally, we are also able to pass a vector into the index-selection brackets and display a number of columns or rows at a time. The negative sign (<span class="math inline">\(-\)</span>) will indicate that we should <strong>not</strong> display those rows/columns.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df, <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  student_sample     major_sample grade_in_class
+1         Claire Computer Science             71
+2         Claire     Data Science             64
+3         Bianca            Cyber             88
+4         Bianca            Cyber             75
+5         Claire     Data Science             50
+6       Emmanuel Computer Science             77
+7         Dalton     Data Science             65
+8           Adam     Data Science             59</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">1</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  student_sample     major_sample grade_in_class
+1         Claire Computer Science             71</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>df[,<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 71 64 88 75 50 77 65 59 68 60</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">2</span>,<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 64</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">7</span>),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  student_sample     major_sample grade_in_class
+1         Claire Computer Science             71
+4         Bianca            Cyber             75
+7         Dalton     Data Science             65</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">3</span>), <span class="sc">-</span><span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  student_sample grade_in_class
+5         Claire             50
+3         Bianca             88</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>grade</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 71 64 88 75 50 77 65 59 68 60</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>grade[<span class="sc">-</span><span class="dv">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 71 64 88 50 77 65 59 68 60</code></pre>
+</div>
+</div>
+<p>In addition to manually selecting the observations/columns we want to display, we can also use logical vectors to display certain values. Remember before how we were able to use logical operators to obtain a logical vector. So, essentially what we are doing in the examples below is displaying only the observations that meet the given criteria. Notice that we are passing these logical vectors in the “row” index since we only want to display certain rows (observations). Finally, in the second example, we are looking to either have a grade above 70 or be a cyber major. The logical vectors show that in order to be TRUE, either one condition or the other condition has to be met, not both.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>grade <span class="sc">&gt;</span> <span class="dv">70</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>df[df<span class="sc">$</span>grade <span class="sc">&gt;</span> <span class="dv">70</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  student_sample     major_sample grade_in_class
+1         Claire Computer Science             71
+3         Bianca            Cyber             88
+4         Bianca            Cyber             75
+6       Emmanuel Computer Science             77</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>grade <span class="sc">&gt;</span> <span class="dv">70</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>major <span class="sc">==</span> <span class="st">"Cyber"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE  TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>grade <span class="sc">&gt;</span> <span class="dv">70</span> <span class="sc">|</span> df<span class="sc">$</span>major <span class="sc">==</span> <span class="st">"Cyber"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>df[df<span class="sc">$</span>grade <span class="sc">&gt;</span> <span class="dv">70</span> <span class="sc">|</span> df<span class="sc">$</span>major <span class="sc">==</span> <span class="st">"Cyber"</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   student_sample     major_sample grade_in_class
+1          Claire Computer Science             71
+3          Bianca            Cyber             88
+4          Bianca            Cyber             75
+6        Emmanuel Computer Science             77
+10         Claire            Cyber             60</code></pre>
+</div>
+</div>
+<p>If we wish to remove a row then we can either use the negative sign to select everything but the given row, or we could call the column using the dollar sign and assign the value NULL to it. An example of this can be seen below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>major <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df,<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  student_sample     major_sample grade_in_class
+1         Claire Computer Science             71
+2         Claire     Data Science             64
+3         Bianca            Cyber             88
+4         Bianca            Cyber             75</code></pre>
+</div>
+</div>
+</section>
+<section id="lists" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="lists"><span class="header-section-number">4.4</span> Lists</h2>
+<p>The last way we discuss how the data may look will be a list. This allows us to put related variables (matrices, vectors, dataframes, other lists, etc.) into one place even though they don’t “fit together nicely”. In the example below I have put three of the variables we made throughout this lecture into a list using the <code>list()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>list_example <span class="ot">&lt;-</span> <span class="fu">list</span>(x_mat, major_sample, df)</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>list_example</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+     [,1] [,2] [,3] [,4]
+[1,]    1    2    3    4
+[2,]    5    6    7    8
+[3,]    9   10   11   12
+
+[[2]]
+ [1] "Computer Science" "Data Science"     "Cyber"            "Cyber"           
+ [5] "Data Science"     "Computer Science" "Data Science"     "Data Science"    
+ [9] "Data Science"     "Cyber"           
+
+[[3]]
+   student_sample     major_sample grade_in_class
+1          Claire Computer Science             71
+2          Claire     Data Science             64
+3          Bianca            Cyber             88
+4          Bianca            Cyber             75
+5          Claire     Data Science             50
+6        Emmanuel Computer Science             77
+7          Dalton     Data Science             65
+8            Adam     Data Science             59
+9          Bianca     Data Science             68
+10         Claire            Cyber             60</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(list_example)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 3
+ $ : int [1:3, 1:4] 1 5 9 2 6 10 3 7 11 4 ...
+ $ : chr [1:10] "Computer Science" "Data Science" "Cyber" "Cyber" ...
+ $ :'data.frame':   10 obs. of  3 variables:
+  ..$ student_sample: chr [1:10] "Claire" "Claire" "Bianca" "Bianca" ...
+  ..$ major_sample  : chr [1:10] "Computer Science" "Data Science" "Cyber" "Cyber" ...
+  ..$ grade_in_class: num [1:10] 71 64 88 75 50 77 65 59 68 60</code></pre>
+</div>
+</div>
+<p>Looking at the last command above, we can see that the structure of the list is in fact a list. It shows us that we have an integer matrix, a character vector, and a dataframe. If we want to reference an item in the list then we can use the index selection brackets. Using 1 bracket as seen below does not actually give us the item, rather it still gives us a list of the item. We can see this based on the “[[1]]” at the top of the output, indicating that we are still dealing with a list. Looking at the structure also shows us that this is going on. To avoid this issue, we can use double brackets to output the item from the list. The outputs below have been slightly altered for space reasons.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>list_example[<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+   student_sample     major_sample grade_in_class
+1          Claire Computer Science             71
+2          Claire     Data Science             64
+3          Bianca            Cyber             88
+4          Bianca            Cyber             75
+5          Claire     Data Science             50
+6        Emmanuel Computer Science             77
+7          Dalton     Data Science             65
+8            Adam     Data Science             59
+9          Bianca     Data Science             68
+10         Claire            Cyber             60</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(list_example[<span class="dv">3</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 1
+ $ :'data.frame':   10 obs. of  3 variables:
+  ..$ student_sample: chr [1:10] "Claire" "Claire" "Bianca" "Bianca" ...
+  ..$ major_sample  : chr [1:10] "Computer Science" "Data Science" "Cyber" "Cyber" ...
+  ..$ grade_in_class: num [1:10] 71 64 88 75 50 77 65 59 68 60</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>list_example[[<span class="dv">3</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   student_sample     major_sample grade_in_class
+1          Claire Computer Science             71
+2          Claire     Data Science             64
+3          Bianca            Cyber             88
+4          Bianca            Cyber             75
+5          Claire     Data Science             50
+6        Emmanuel Computer Science             77
+7          Dalton     Data Science             65
+8            Adam     Data Science             59
+9          Bianca     Data Science             68
+10         Claire            Cyber             60</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(list_example[[<span class="dv">3</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   10 obs. of  3 variables:
+ $ student_sample: chr  "Claire" "Claire" "Bianca" "Bianca" ...
+ $ major_sample  : chr  "Computer Science" "Data Science" "Cyber" "Cyber" ...
+ $ grade_in_class: num  71 64 88 75 50 77 65 59 68 60</code></pre>
+</div>
+</div>
+<p>Finally, if we are dealing with lists then we may want to have the items be called something. To give the items names or even change the names we can use the <code>names()</code> function and pass a character vector to it. This is beneficial as we will know what each item is along with being able to reference the item by name instead of using the double index selection brackets. Again, the output has been slightly altered for space reasons.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(list_example)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(list_example) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"x_matrix"</span>, <span class="st">"majors"</span>, <span class="st">"class_df"</span>)</span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>list_example</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$x_matrix
+     [,1] [,2] [,3] [,4]
+[1,]    1    2    3    4
+[2,]    5    6    7    8
+[3,]    9   10   11   12
+
+$majors
+ [1] "Computer Science" "Data Science"     "Cyber"            "Cyber"           
+ [5] "Data Science"     "Computer Science" "Data Science"     "Data Science"    
+ [9] "Data Science"     "Cyber"           
+
+$class_df
+   student_sample     major_sample grade_in_class
+1          Claire Computer Science             71
+2          Claire     Data Science             64
+3          Bianca            Cyber             88
+4          Bianca            Cyber             75
+5          Claire     Data Science             50
+6        Emmanuel Computer Science             77
+7          Dalton     Data Science             65
+8            Adam     Data Science             59
+9          Bianca     Data Science             68
+10         Claire            Cyber             60</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>list_example<span class="sc">$</span>class_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   student_sample     major_sample grade_in_class
+1          Claire Computer Science             71
+2          Claire     Data Science             64
+3          Bianca            Cyber             88
+4          Bianca            Cyber             75
+5          Claire     Data Science             50
+6        Emmanuel Computer Science             77
+7          Dalton     Data Science             65
+8            Adam     Data Science             59
+9          Bianca     Data Science             68
+10         Claire            Cyber             60</code></pre>
+</div>
+</div>
 
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -677,8 +1164,8 @@ window.Quarto = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./Lecture-3-Factors-and-Dates.html" class="pagination-link" aria-label="Factors and Dates">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors and Dates</span></span>
+      <a href="./Lecture-3-Factors-and-Dates.html" class="pagination-link" aria-label="Factors, Dates, and Special Values">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors, Dates, and Special Values</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

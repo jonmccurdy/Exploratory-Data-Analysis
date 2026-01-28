@@ -1,3 +1,181 @@
 # Data Structures in R
 
-Under Construction
+One of the most prevalent data types that we will encounter in R are dataframes. We can think of these as a combination of vectors arranged so that the first elements of one vector is associated with the first element of all of the other vectors, with the same being said for the second, third, etc. elements. Additionally, most of the data that we work with will be structured as a dataframe, so it is important for us to review these before jumping into more advanced data manipulation techniques. Additionally, some of the data we may encounter will be as a list, which essentially is a collection of data grouped together that is not necessarily of the same data type, but more will be discussed on this topic later in this write-up.
+
+::: learning-goals
+
+- Distinguish between matrices, dataframes, and lists in R and describe when each is appropriate.
+- Create and index two-dimensional data structures using row–column notation in addition to extracting, adding, and removing columns or rows from a dataframe.
+- Filter dataframes using logical conditions.
+- Access elements of a list using indices and names.
+:::
+
+::: {.callout-tip}
+## Supplemental Material
+<a href="Reading-Guide/L4-Reading-Guide.pdf" download>
+📄 Download the lecture's Reading Guide
+</a>
+:::
+
+## Matrices
+
+Before diving into dataframes, I wanted to give a quick run-down of matrices, as they occasionally make appearances in R (especially when doing mathematical simulations!). To create a matrix, we will first pass a vector in the `matrix()` function and specify the number of rows or columns using the `nrow` or `ncol` argument. It will fill in the matrix down each column (unless specified) until all of the elements in the vector are used. If additional elements are needed to complete the rectangular matrix then the values will be recycled from the beginning of the vector. It should be noted that all of the elements in a matrix must be of the same type, and the values are not necessarily related to each other across rows or columns as they would be for a dataframe. Examples of how the matrix will work can be seen below:
+
+```{r}
+x <- 1:12
+x
+
+matrix(x, nrow=3)
+matrix(x, nrow=3, byrow=TRUE)
+```
+
+We saw previously that vectors were an example of one-dimensional data. When we deal with matrix we are dealing with two-dimensional data, since we have rows and columns. It is important to know that R indexes two-dimensional data "Row, Column". So, if we want to look at just the first row then we can use the index selection brackets and type `"x[1,]"` while the fourth column could be found with `"x[,4]"`. Examples of this can be seen below:
+ 
+```{r}
+x_mat <- matrix(x, nrow=3, byrow=TRUE)
+
+x_mat[,1]
+x_mat[1,]
+
+x_mat[2,2]
+```
+
+
+## Dataframes
+
+Dataframes are a lot like matrices but differ in that the data does not have to be all of the same type and that every column will describe the same thing while every row will describe an observation. While we will rarely make our own dataframe in R, we can see an example of how this can be done below using the `data.frame()` function, where we pass vectors of all the same length into the function. In the example we see that the character vector and numeric vector are related to each other, so we decided to put them in a dataframe. Using the `str()` function, we can identify the structure of the dataframe and see that we have 5 observations (rows) and 2 variables (columns). Likewise, we can see that the "number" vector is a character vector and the "digit" vector is a numeric vector.
+
+```{r}
+number <- c("one", "two", "three", "four", "five")
+digit <- c(1,2,3,4,5)
+
+c(typeof(number), typeof(digit))
+df <- data.frame(number, digit)
+df
+str(df)
+```
+
+
+We can see another example of creating a dataframe below. In this example, we use the `sample()` function to randomly select different names and majors. The `rnorm()` function is also used to randomly generate the grade using a normal distribution, with the `round()` function giving us a whole number. We can then see the structure of the dataframe is what we would expect it to be. If we wanted to convert all of the strings to factors then we could use the `stringsAsFactors`. Notice how with this dataframe the first row describes Claire, who is a Computer Science student, who got a 71 in the course. Meanwhile, the first column describes all of the student's names, the second column describes all of the student's majors, and the third column describes all of the student's grades.
+
+```{r}
+students <- c("Adam", "Bianca", "Claire", "Dalton", "Emmanuel")
+majors <- c("Data Science", "Math", "Cyber", "Computer Science")
+
+set.seed(123)
+student_sample <- sample(students, 10, replace=TRUE)
+major_sample <- sample(majors, 10, replace=TRUE)
+grade_in_class <- round(rnorm(n=10, mean=70, sd=10))
+
+df <- data.frame(student_sample, major_sample, grade_in_class)
+df
+
+str(df)
+```
+
+We can use the dollar sign ($\$$) in order to reference a specific column within the dataframe. The referenced column has to be spelled exactly the same way as the column name in the data frame. Note that this result is actually a vector. We will see other methods, later on, to select certain columns and filter the dataframe based on different criteria.
+
+```{r}
+df$student_sample
+df$grade_in_class
+```
+
+
+If we wish to add on an observation then we can do so with the `rbind()` function (this stands for row bind). There are two examples below which show this being done. The first one puts all of the values in a vector and then binds it to the bottom of the dataframe. We should be cautious about doing this though, as putting all of the values into a vector first will cause the values to be coerced into a character vector, and then adding it onto the dataframe causes all of the columns to then be coerced into character vectors. This can be seen when we look at the structure of the dataframe. To get around this, we can create a new dataframe with the observation to be added using the same column names. Then we can bind this onto the end of the dataframe. This preserves all of the datatypes currently in the dataframe. Either way will work, it is just something to think about and be cautious of, and you can always use the `as.double()` or a similar function to coerce the data to be the type you need it to be.
+
+```{r}
+df <- data.frame(student_sample, major_sample, grade_in_class)
+df1 <- rbind(df, c("Franklin", "Politics", 93))
+str(df1)
+
+student_added <- data.frame(student_sample = "Franklin", 
+                            major_sample = "Politics", 
+                            grade_in_class = 93)
+
+df2 <- rbind(df, student_added)
+str(df2)
+```
+
+Additionally, we can add a column to the dataframe using the `cbind()` function in a similar way to the `rbind()` function. Or, we could use a dollar sign to reference the "new" column and then assign values to it. We can see how this happens below, with the `tail()` function being used to show the last 6 observations in the dataframe. The `head()` function could be used to show the first few observations.
+
+```{r}
+df2$is_athlete <- sample(c(T, F), 11, replace=TRUE)
+tail(df2)
+```
+
+There are a few other properties and functions relating to dataframes that we should discuss. The first is that we can quickly identify the dimensions (rows and columns) of the dataset using the `dim()` function. If we want just the number of rows or columns then the `nrow()` and `ncol()` functions would be useful. If we wish to alter the column names of the dataframe then the `names()` function can be used by assigning a new character vector of the same length to it. An example of this can be seen below:
+
+```{r}
+dim(df2)
+nrow(df2)
+ncol(df2)
+names(df2)
+
+names(df2) <- c("name", "major", "grade", "athlete")
+head(df2)
+```
+
+## Dataframe Index Selections
+
+Being able to filter your data and look at observations or values that only meet certain criteria is a powerful tool. We previously saw how to do this with one-dimensional vectors. Doing this with two-dimensional dataframes will work the exact same way, with the only difference being that we will need to specify the row and the columns. We must specify the row before the comma and the column after the comma. If no value is provided before or after the comma then it will indicate all rows and all columns being displayed. Additionally, we are also able to pass a vector into the index-selection brackets and display a number of columns or rows at a time. The negative sign ($-$) will indicate that we should **not** display those rows/columns.
+
+```{r}
+head(df, 8)
+
+df[1,]
+df[,3]
+df[2,3]
+df[c(1,4,7),]
+df[c(5,3), -2]
+
+df$grade
+df$grade[-4]
+```
+
+In addition to manually selecting the observations/columns we want to display, we can also use logical vectors to display certain values. Remember before how we were able to use logical operators to obtain a logical vector. So, essentially what we are doing in the examples below is displaying only the observations that meet the given criteria. Notice that we are passing these logical vectors in the "row" index since we only want to display certain rows (observations). Finally, in the second example, we are looking to either have a grade above 70 or be a cyber major. The logical vectors show that in order to be TRUE, either one condition or the other condition has to be met, not both.
+
+```{r}
+df$grade > 70
+df[df$grade > 70,]
+df$grade > 70
+df$major == "Cyber"
+
+df$grade > 70 | df$major == "Cyber"
+df[df$grade > 70 | df$major == "Cyber",]
+```
+
+If we wish to remove a row then we can either use the negative sign to select everything but the given row, or we could call the column using the dollar sign and assign the value NULL to it. An example of this can be seen below:
+
+```{r}
+df$major <- NULL
+head(df,4)
+```
+
+## Lists
+
+The last way we discuss how the data may look will be a list. This allows us to put related variables (matrices, vectors, dataframes, other lists, etc.) into one place even though they don't "fit together nicely". In the example below I have put three of the variables we made throughout this lecture into a list using the `list()` function. 
+
+```{r}
+list_example <- list(x_mat, major_sample, df)
+list_example
+
+str(list_example)
+```
+
+Looking at the last command above, we can see that the structure of the list is in fact a list. It shows us that we have an integer matrix, a character vector, and a dataframe. If we want to reference an item in the list then we can use the index selection brackets. Using 1 bracket as seen below does not actually give us the item, rather it still gives us a list of the item. We can see this based on the "[[1]]" at the top of the output, indicating that we are still dealing with a list. Looking at the structure also shows us that this is going on. To avoid this issue, we can use double brackets to output the item from the list. The outputs below have been slightly altered for space reasons.
+
+```{r}
+list_example[3]
+str(list_example[3])
+list_example[[3]]
+str(list_example[[3]])
+```
+
+Finally, if we are dealing with lists then we may want to have the items be called something. To give the items names or even change the names we can use the `names()` function and pass a character vector to it. This is beneficial as we will know what each item is along with being able to reference the item by name instead of using the double index selection brackets. Again, the output has been slightly altered for space reasons.
+
+```{r}
+names(list_example)
+names(list_example) <- c("x_matrix", "majors", "class_df")
+list_example
+list_example$class_df
+```
