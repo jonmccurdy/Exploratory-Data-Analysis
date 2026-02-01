@@ -179,3 +179,21 @@ names(list_example) <- c("x_matrix", "majors", "class_df")
 list_example
 list_example$class_df
 ```
+
+
+::: {.chapter-resources}
+
+<div class="chapter-resources-header">
+  <a href="https://youtu.be/Wdm6NELmHsw" target="_blank">Lecture Video</a>
+</div>
+
+<div class="chapter-resources-grid">
+  <div><a href="Assignments/L4-Inclass-Assignment.pdf" target="_blank">In-Class Exercises</a></div>
+  <div><a href="https://youtu.be/ICh5SlxK5bI" target="_blank">In-Class Exercises Video Solutions</a></div>
+</div>
+
+<div class="chapter-resources-footer">
+  <a href="Assignments/L4-Problem-Set.pdf" target="_blank">Problem Set Questions</a>
+</div>
+
+:::

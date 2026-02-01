@@ -1,3 +1,237 @@
 # Control Flow and Functions
 
-Under Construction
+In this section we move from writing expressions that return TRUE/FALSE to writing code that returns useful outputs. You will learn how to make decisions in R using conditional statements, how to build your own functions, and how to repeat a process using loops and apply-style functions. By the end, you should be able to write small R programs that take input, make choices, repeat steps when needed, and summarize results across groups in a data frame.
+
+::: learning-goals
+
+- Use `ifelse()` statements to return a character or numeric value based on a condition
+- Write your own functions using `function()` with parameters and a return value
+- Use `while()` and `for()` loops to repeat a process, and recognize how infinite loops happen
+- Use `apply()`, `lapply()`, and `sapply()` to “apply” a function across rows/columns, vectors, or lists
+- Use `tapply()` and `aggregate()` to compute summary statistics by group
+:::
+
+::: {.callout-tip}
+## Supplemental Material
+<a href="Reading-Guide/L5-Reading-Guide.pdf" download>
+📄 Download the lecture's Reading Guide
+</a>
+:::
+
+## Conditional Statements
+
+We previously discussed how to use conditional statements to identify elements that meet certain criteria, which results in a vector of TRUE and FALSEs. We can take this idea a step further and instead of outputting a logical element, we can have it output a certain character or numeric value. To do this we can use the `if()` function paired with the `else()` function. This will check if the criteria is met and if it is it will output the value in the braces, if not then it will output the value in the "else" brace. The general format could be thought of as: `if(Condition) {If TRUE do this} else {If FALSE do this}}`
+
+```{r}
+a <- 7
+a %% 2 == 0
+if (a %% 2 == 0){"even"} else {"odd"}
+
+a <- 12
+a %% 2 == 0
+if (a %% 2 == 0){"even"} else {"odd"}
+```
+
+Using this idea, we can specify multiple conditions to be checked. For instance, in the example below we first identify if the value is less than 0. If this is true then we identify the value as "negative" and if not then we identify if the value is greater than 0. If this is true then we label the value as "positive" and if neither of those conditions are met then we specify it as "neither".
+
+```{r}
+a <- -5
+if (a < 0){"negative"
+  } else if (a > 0) {"positive"
+  } else {"neither"}
+
+a <- 8
+if (a < 0){"negative"} else if (a > 0) {"positive"} else {"neither"}
+a <- 0
+if (a < 0){"negative"} else if (a > 0) {"positive"} else {"neither"}
+```
+
+While the previous examples were helpful in returning a value depending on if the criteria was met, it only works with a single element at a time. A similar vectorized version exists that collapses the `if()` and `else()` function into the `ifelse()` function. It will work in a similar way: `ifelse(Condition, If TRUE do this, If FALSE do this)`. Like the previous version, this function can also have nested conditional statements.
+
+```{r}
+a <- 7
+a %% 2 == 0
+ifelse( a %% 2 == 0, "even", "odd")
+
+a <- 12
+a %% 2 == 0
+ifelse( a %% 2 == 0, "even", "odd")
+
+a <- -7
+ifelse(a < 0, "negative", ifelse(a>0, "positive", "neither"))
+
+a <- c(-7, -0.5, 0, 0.5, 7)
+ifelse(a < 0, "negative", ifelse(a>0, "positive", "neither"))
+
+grade <- c(92, 67, 81, NA)
+
+ifelse(is.na(grade), "missing", ifelse(grade >= 70, "pass", "not pass"))
+```
+
+## Functions
+
+We have relied upon functions throughout our data science journey to calculate statistics, check criteria, and accomplish specific tasks. These were all defined functions available in either base R or a corresponding library, but we can also define our own function. To do this we will use the `function()` function. We first have to specify the function name and then use the assignment operator and point the function towards this name. We then call `function()` and define the variables that will be needed to run the function. Then in the braces, we will specify what needs to be done. We can use the `return()` statement to specify what needs to be outputted, and if we do not specify the output then it will output the last evaluated expression displayed. Examples of a function with one and two variables can be seen below (with both the `return()` statement and without it):
+
+```{r}
+multiply_by_2 <- function(a) {
+  return(a*2)
+}
+
+multiply_by_2(6)
+multiply_by_2(4.53)
+
+multiply <- function(a,b){
+  a*b
+}
+multiply(5, 3)
+multiply(-6.32, 46)
+```
+
+It should be noted that if an expression is saved to some variable then it will not be outputted automatically without a `return()` statement. But, the value will be outputted if the function is run and saved to some other variable. Additionally, if the function is not set up to output any values but is set up to save values to some variable, then running the function in parenthesis will output the value. You can see below that the first function run does not output any results (unless in parenthesis) but saving it to a variable allows you to access the results. 
+
+```{r}
+pythagorean <- function(a,b){
+  c <- sqrt(a^2 + b^2)
+}
+
+pythagorean(3,4)
+answer <- pythagorean(3,4)
+answer
+
+(pythagorean(3,4))
+
+pythagorean <- function(a,b){
+  c <- sqrt(a^2 + b^2)
+  return(c)
+}
+pythagorean(3,4)
+```
+
+## Variable Scope Environment
+
+Another thing that we should think about is the scope of our environment. This means that if we create a variable within a function's environment, then we will not necessarily be accessible in the global environment. If we want to "force" it to be available in the global environment then you can use the "$<<-$" operator, but be very careful with this operator. We will probably never need to use it in this manner, but I did want to inform you that it is a workaround to access variables outside of functions. Typically if we want to output multiple elements (or at least have them accessible outside of the function environment) then we can store the values in a list and output them that way.
+
+```{r}
+pythagorean <- function(a,b){
+  c_value <- sqrt(a^2 + b^2)
+  return(c_value)
+}
+pythagorean(3,4)
+```
+
+
+```{r}
+#| eval: FALSE
+c_value
+```
+<span style="color: red;font-size: 80%; font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;">Error: object &quot;c_value&quot; not found</span>
+
+
+```{r}
+pythagorean <- function(a,b){
+  c_value <<- sqrt(a^2 + b^2)
+  return(c_value)
+}
+pythagorean(3,4)
+c_value
+```
+
+## Iterations
+
+In addition to functions, we can also introduce the idea of iterations. While it is more common to use vectorized functions, we often find ourselves in scenarios where iterations make sense to use. These typically consist of the `while()` function and the `for()` function. The syntax for both of these is comparable to many other programming languages.
+
+The `while()` function will continue running the commands `while` the initial condition is true. We have to be very careful with this though, as it can potentially go on indefinitely if the initial condition is never false. If this ever does happen then you can "cancel" the command by hitting the red stop sign in the top right-hand portion of the console. The moral of the story though is that we want to think about (and run the function for an iteration or two in our heads) before we run the code.
+
+```{r}
+a <- 4
+while(a > 0){
+  print(a)
+  a <- a - 1
+}
+```
+
+Meanwhile, the `for()` function will allow us to iterate a loop `for` a specified number of times. To do this, we will specify the variable, and then say the indices that we want to run. Every time the command is finished it will automatically increase the value to the next index value specified. Below we can see multiple examples of this:
+
+```{r}
+for(a in 1:3){
+  print(a)
+}
+
+x <- c(6, 8, -2, 5, 2, 2, -13, -5)
+seq(from=1, to=length(x), by=2)
+for(i in seq(from=1, to=length(x), by=2)){
+  print(x[i])
+}
+
+count <- 0
+for(i in 1:length(x)){
+  count <- count + x[i]
+}
+count
+sum(x)
+```
+
+## Apply Family of Functions
+
+The `apply()` family of functions can act as a vectorized version of the iterative loops that we just learned. These will `apply` some function over the data. There are multiple different versions of the function, so we will go over each. The basic version is `apply()` which will apply a function over an array's margins. To signify the row the margin will be 1 and to signify a column the margin will be 2. In the example below I have coded it multiple ways, with the first way using for-loops, the second way using the `apply()` function, and the third way using the `colSums()` and `rowSums()` functions. 
+
+```{r}
+x <- matrix(sample(1:10, 30, replace=TRUE), nrow=3)
+x
+
+column_Sum <- c()
+for (i in 1:ncol(x)){
+  sum <- 0
+  for (j in 1:nrow(x)){
+    sum <- sum + x[j,i]
+  }
+  column_Sum[i] <- sum
+}
+
+column_Sum
+apply(x, 2, sum)
+colSums(x)
+
+row_Sum <- c()
+for (i in 1:nrow(x)){
+  row_Sum[i] <- sum(x[i,])
+}
+row_Sum
+apply(x, 1, sum)
+rowSums(x)
+```
+
+Another version is the `lapply()` function which will apply a function over a list or vector. For instance, in the code, we calculate the mean for each vector in a list and output a list in return. We can use the `unlist()` function to coerce the result to be outputted as a vector. The `sapply()` function simplifies the `lapply()` function and by default returns a vector or matrix instead of a list. There are additional functions in the `apply` family, such as the `mapply()` and `vapply()`,  but we will not go into them here.
+
+```{r}
+list_ex <- list(a=1:10, b=3:5, c=c(2:4,18:22))
+list_ex
+
+lapply(list_ex, mean)
+unlist(lapply(list_ex, mean))
+
+sapply(list_ex, mean)
+```
+
+## Grouping Functions
+
+It is beneficial in R to occasionally perform summary statistics on different groups within a table or data.frame. For instance, we may want to calculate the average height of males and females. This can be done using either the `tapply()` function or the `aggregate()` function. The `tapply()` function allows us to specify what we want to do the "math" on and then specify that category we want to divide into groups. The`aggregate()` function will work in a similar manner, the main difference being that we have to pass the arguments as a list. 
+
+```{r}
+students <- data.frame(student_num = 1:100,
+      major = sample(c("Math", "Data", "cyber"), 100, replace=TRUE),
+      gender = sample(c("Male", "Female"), 100, replace=TRUE),
+      score = rnorm(100, 70, 10))
+
+head(students)
+ 
+tapply(students$score, students$major, mean)
+aggregate(students$score, by=list(Major=students$major), mean)
+```
+
+The `aggregate()` function is a little more powerful in that we can pass in multiple grouping arguments to divide the data. For instance, in the example below we find the mean score for students by major along with their gender.
+
+```{r}
+aggregate(students$score, by=list(Major=students$major,
+                                  Gender = students$gender), mean)
+```

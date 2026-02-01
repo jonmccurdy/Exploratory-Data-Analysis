@@ -340,3 +340,21 @@ Emmit is tracking the outcome of his weekly quiz grades, but instead of using nu
 
 </details>
 :::
+
+::: {.chapter-resources}
+
+<div class="chapter-resources-header">
+  <a href="https://youtu.be/aj4CgMqjj8Y" target="_blank">Lecture Video</a>
+</div>
+
+<div class="chapter-resources-grid">
+  <div><a href="Assignments/L3-Inclass-Assignment.pdf" target="_blank">In-Class Exercises</a></div>
+  <div><a href="https://youtu.be/0VWuPJrTe8M" target="_blank">In-Class Exercises Video Solutions</a></div>
+</div>
+
+<div class="chapter-resources-footer">
+  <a href="Assignments/L3-Problem-Set.pdf" target="_blank">Problem Set Questions</a>
+</div>
+
+:::
+
