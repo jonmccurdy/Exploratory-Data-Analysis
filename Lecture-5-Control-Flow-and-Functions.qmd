@@ -235,3 +235,20 @@ The `aggregate()` function is a little more powerful in that we can pass in mult
 aggregate(students$score, by=list(Major=students$major,
                                   Gender = students$gender), mean)
 ```
+
+::: {.chapter-resources}
+
+<div class="chapter-resources-header">
+  <a href="https://youtu.be/ceeitWSSOB4" target="_blank">Lecture Video</a>
+</div>
+
+<div class="chapter-resources-grid">
+  <div><a href="Assignments/L5-Inclass-Assignment.pdf" target="_blank">In-Class Exercises</a></div>
+  <div><a href="https://youtu.be/Yjy6nEzyFHk" target="_blank">In-Class Exercises Video Solutions</a></div>
+</div>
+
+<div class="chapter-resources-footer">
+  <a href="Assignments/L5-Problem-Set.pdf" target="_blank">Problem Set Questions</a>
+</div>
+
+:::
