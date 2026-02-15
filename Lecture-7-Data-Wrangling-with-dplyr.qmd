@@ -1,3 +1,199 @@
 # Data Wrangling with dplyr
 
-Under Construction
+One of the most important processes that you will do as a data scientist is transforming (or manipulating) the data into something workable for you. Sometimes you will hear this process called data manipulation, wrangling, or munging. This process might involve only selecting certain observations, ordering the data, generating new variables, or summarizing the information. Throughout this lecture we will see how we can work with some powerful tools within the "dplyr" library to accomplish most of these tasks. 
+
+::: learning-goals
+
+- Use base R logical indexing to filter rows and select specific columns from a data frame.
+- Use the pipe operator (|>) to chain multiple steps and interpret a pipeline in plain language.
+- Use `filter()`, `arrange()`, and `select()` to subset and order data using readable code.
+- Use `rename()`, `mutate()`, and `transmute()` to rename columns and create new variables.
+:::
+
+::: {.callout-tip}
+## Supplemental Material
+<a href="Reading-Guide/L7-Reading-Guide.pdf" download>
+📄 Download the lecture's Reading Guide
+</a>
+:::
+
+## Manipulating Data in Base R
+
+To appreciate and better understand what we will be doing, we should see how we would approach a few of the problems in base R. In order to select observations that meet certain criteria we need to use logical operators and index-selection brackets. For instance, if we wanted to only view the `mpg`, `hp`, `cyl`, and `wt` of the cars which have 6 cylinders then we could do the following:
+
+```{r}
+head(mtcars)
+colnames(mtcars)
+mtcars[mtcars$cyl == 6, c("mpg", "hp", "cyl", "wt")]
+```
+
+Altering the order of how it appears in R is also a possibility. To do this, we will use the `order()` function. An example of this can be seen below where we are looking at the miles per gallon for 6-cylinder cars. Looking at the first two outputs, we can see that the `order()` function displays the indices of what order the values should be in. For instance, the 6th element (17.8) is the smallest, the 4th element (18.1) is the second smallest, and so on. 
+
+```{r}
+mtcars[mtcars$cyl == 6, ]$mpg
+order(mtcars[mtcars$cyl == 6, ]$mpg)
+mtcars[mtcars$cyl == 6, ]$mpg[c(6, 4, 5, 7, 1, 2, 3)]
+```
+
+We can then expand this idea to a two-dimensional dataframe (making sure to have two dimensions in our index-selection brackets). An example of this can be seen below:
+
+```{r}
+mtcars[mtcars$cyl == 6, ][order(mtcars[mtcars$cyl == 6, ]$mpg), ]
+```
+
+We should note that the `order()` function gives the vector indices of the correct ordering while `sort()` will physically sort the selected vector. The `sort()` function only works on vectors though, not dataframes. Running the `sort()` function does not alter the original vector, it only alters how the values are displayed.
+
+```{r}
+mtcars$cyl
+sort(mtcars$cyl)
+```
+
+All of the stuff we have done so far in base R is nice, but sometimes messy and tedious. Creating new variables is complicated and messy (especially if we are trying to keep track of them all). Additionally, it is repetitive to always have to type the dataframe and vector names into the command. In the following sections, we will see how we can make it easier on ourselves and create temporary dataframes/vectors before saving them to a variable name.
+
+## Using the pipe operator
+
+Within R, we have a symbol called the "pipe operator", represented as $|>$, and it will allow us to take an object and pass it into another function in order to perform some operation on it. The idea behind it is that we can call a dataframe, vector, etc., and pipe it into a function in R. Since we are passing the dataframe into the function, we will not need to reference it like we have had to do in the past. While this seems trivial as of right now, you will shortly see why this is beneficial as we chain multiple commands together. 
+
+An example of this can be seen below, when we take a vector and pipe it into the `mean()` function along with piping a dataframe into the `head()` function to get the first 6 observations. You may come across people using a pipe function that looks a little different ($\%>\%$) but for our purposes, it will do the exact same thing (though it does rely on the "magrittr" library).
+
+```{r}
+mean(c(2,4,5))
+c(2,4,5) |> mean()
+mtcars |> head(5)
+```
+
+## Filtering a dataset
+
+If we want to filter a dataset in base R so that only observations which meet a certain criteria are present then we would need to use our index-selection brackets and logical operators. To do this using the `dplyr` library we can simply use the `filter()` function. In the example below we pipe our dataset into the `filter()` function and specify that we only want to display the observations which have 6 cylinders. It should be noted that none of these commands will alter the original dataset unless we assign the output to some vector. If you have not already, make sure that you install the `dplyr` package and then call the `dplyr` library.
+
+```{r}
+library(dplyr)
+mtcars |> filter(cyl == 6)
+```
+
+If you want to filter a dataset based on two different criteria being true then simply pass the two conditions into the `filter()` function. Passing multiple criteria into the function and separating them with a comma will act as an "$\&$" operator. We can see this example below as we only have observations that are 6 cylinders and have an mpg greater than 19.
+
+```{r}
+mtcars |> 
+  filter(cyl == 6, mpg > 19)
+```
+
+If you want to filter based on whether an observation has met one criteria "or" another criteria then you can use the "$|$" operator to break up the criteria. Looking at the output below, we can see that 19 observations meet this criterion, but we will only display the first 6 for space reasons.
+
+```{r}
+mtcars |> filter(cyl == 6 | mpg > 19) |> nrow()
+
+mtcars |> 
+  filter(cyl == 6 | mpg > 19) |>
+  head()
+```
+
+## Ordering a dataset
+
+Ordering a dataset based on some variable is also much easier to do in `dplyr` than it is in base R. To order (arrange) a dataset we can use the `arrange()` function. By default, it will arrange the dataset from smallest to largest based on the variable provided. If we want to go from largest to smallest then we can place the `desc()` function around the variable. We can specify multiple variables in the case of ties. Two examples of this can be seen below with the second example showing some of the observations are "tied" on their gear values, so the ones that are tied are then sorted first by gear (smallest to largest), then it breaks ties by mpg (largest to smallest).
+
+```{r}
+mtcars |> 
+  filter(cyl == 6) |>
+  arrange(mpg)
+
+mtcars |> 
+  filter(cyl == 6) |>
+  arrange(gear, desc(mpg))
+```
+
+## Selecting Columns in a dataset
+
+We have seen how we are able to choose certain columns in base R using the index-selection brackets (either calling the name or the number of the column), but there is also a way to do this in `dplyr`. To do this, we can use the `select()` function and simply pass in the names of the columns that we want to keep in the dataframe. The order which we "select" the variables will determine the order in which they are displayed for us. In the example below, we decide to only select the `mpg`, `cyl`, `wt`, and `qsec` variables:
+
+```{r}
+mtcars |> 
+  filter(cyl == 6) |>
+  arrange(mpg) |> 
+  select(mpg, cyl, wt, qsec)
+```
+
+If there are multiple columns with the same pattern that we want to select (for instance: `2024_student`, `2024_grade`, `2024_cost`, etc.) then you can use the `starts_with()` command to specify what the column starts with. For instance, we might say `starts_with("2024")` in order to select all of the columns which start with that pattern. There are similar commands that allow you to select columns which `ends_with()` or `contains()` a certain pattern. Regular expressions could also be used within this command. I encourage you to read the documentation to see all of the possible commands for selecting columns. In the example below we decide to select the `mpg` variable and then all of the other variables that start with the letter "c":
+
+```{r}
+mtcars |> 
+  filter(cyl == 6) |>
+  arrange(mpg) |> 
+  select(mpg, starts_with("c"))
+```
+
+The `everything()` command will select everything for us. This is helpful if we want to specifically have one variable "at the front" of the dataframe and then everything else after it. We can also use the "minus" sign in order to prevent columns from being included. An example of this can be seen below where we specify that we want `mpg` and `hp` at the beginning of the dataframe and all of the other columns to be behind it with the `carb` and the `wt` columns being excluded:
+
+```{r}
+mtcars |> 
+  filter(cyl == 6) |>
+  arrange(mpg) |> 
+  select(mpg, hp, everything(), -carb, -wt)
+```
+
+## Renaming Columns in a dataset
+
+Sometimes columns do not have names that make sense, they may be abbreviated, or they may be overly complicated to type in every time we want to reference them. You can rename a column using the `rename()` function. After you rename a column you can reference the new name later in your chain of commands.
+
+```{r}
+mtcars |> 
+  filter(cyl == 6) |>
+  arrange(mpg) |> 
+  rename(cylinders = cyl, weight = wt) |>
+  select(mpg, cylinders, weight, qsec) 
+```
+
+## Creating new variables in a dataset
+
+In order to create a variable in base R we either had to create the vector and bind it onto the dataframe or create a new one by using the dollar sign (\$) operation. We can simplify this process by using the `mutate()` function. Here we can create a new variable and have it based on a different column. An example of this can be seen below:
+
+```{r}
+mtcars |> 
+  filter(cyl == 6) |>
+  arrange(mpg) |> 
+  select(mpg, cyl, wt, qsec) |>
+  rename(cylinders = cyl, weight = wt) |> 
+  mutate(km_per_gallon = mpg*1.60934)
+```
+
+In the example below we can see how using an `ifelse()` function will allow us to quickly check to see if the observation's variable value meets a certain criteria and then assign it some value based on if it does or not. An example of this can be seen below where we say a car is "fast" if its 1/4 mile time is less than 19 seconds and "slow" if the time is greater than 19 seconds. Notice how after we make the variable `speed` we can then reference it again by transforming it into a factor (which we could have done in a single command).
+
+```{r}
+mtcars |> 
+  filter(cyl == 6) |>
+  arrange(mpg) |> 
+  select(mpg, cyl, wt, qsec) |>
+  rename(cylinders = cyl, weight = wt) |> 
+  mutate(km_per_gallon = mpg*1.60934,
+         speed = ifelse(qsec < 19, "fast", "slow"),
+         speed = factor(speed))
+```
+
+The `transmute()` function works in a similar manner to the `mutate()` function. The only difference though is that instead of adding the mutated column(s) to the end of the dataframe, it only keeps the mutated (newly created) column(s) and nothing else. 
+
+```{r}
+mtcars |> 
+  filter(cyl == 6) |>
+  transmute(mpg = mpg, 
+            km_per_gallon = mpg*1.60934, 
+            speed = ifelse(qsec < 19, "fast", "slow")) |>
+  head(5)
+```
+
+## Ranks in R
+
+The last thing we will discuss in this write-up is how we can deal with ranking items using the `rank()` function. Looking at the output below, we might notice that it is ranking all items as either "15", "6", or "25.5". This is because by default it is averaging the ranks of the sorted list. We can see below that the first 11 observations are "4" (the mean of 1 through 11 is 6) so all cars with 4 cylinders are assigned the rank "6" and so on.
+
+```{r}
+mtcars$cyl
+rank(mtcars$cyl)
+
+sort(mtcars$cyl)
+c(mean(1:11), mean(12:18), mean(19:32))
+```
+
+We could alter what happens when there is a tie and instead of reporting the average of the ranks we could report the minimum (or maximum):
+
+```{r}
+rank(mtcars$cyl, ties.method = "min")
+```

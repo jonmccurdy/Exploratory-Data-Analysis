@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -153,13 +188,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-2-Strings-and-Text-Processing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strings and Text Processing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Text Processing and Useful R Tools</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-3-Factors-and-Dates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors and Dates</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors, Dates, and Special Values</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -245,8 +280,21 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#manipulating-data-in-base-r" id="toc-manipulating-data-in-base-r" class="nav-link active" data-scroll-target="#manipulating-data-in-base-r"><span class="header-section-number">7.1</span> Manipulating Data in Base R</a></li>
+  <li><a href="#using-the-pipe-operator" id="toc-using-the-pipe-operator" class="nav-link" data-scroll-target="#using-the-pipe-operator"><span class="header-section-number">7.2</span> Using the pipe operator</a></li>
+  <li><a href="#filtering-a-dataset" id="toc-filtering-a-dataset" class="nav-link" data-scroll-target="#filtering-a-dataset"><span class="header-section-number">7.3</span> Filtering a dataset</a></li>
+  <li><a href="#ordering-a-dataset" id="toc-ordering-a-dataset" class="nav-link" data-scroll-target="#ordering-a-dataset"><span class="header-section-number">7.4</span> Ordering a dataset</a></li>
+  <li><a href="#selecting-columns-in-a-dataset" id="toc-selecting-columns-in-a-dataset" class="nav-link" data-scroll-target="#selecting-columns-in-a-dataset"><span class="header-section-number">7.5</span> Selecting Columns in a dataset</a></li>
+  <li><a href="#renaming-columns-in-a-dataset" id="toc-renaming-columns-in-a-dataset" class="nav-link" data-scroll-target="#renaming-columns-in-a-dataset"><span class="header-section-number">7.6</span> Renaming Columns in a dataset</a></li>
+  <li><a href="#creating-new-variables-in-a-dataset" id="toc-creating-new-variables-in-a-dataset" class="nav-link" data-scroll-target="#creating-new-variables-in-a-dataset"><span class="header-section-number">7.7</span> Creating new variables in a dataset</a></li>
+  <li><a href="#ranks-in-r" id="toc-ranks-in-r" class="nav-link" data-scroll-target="#ranks-in-r"><span class="header-section-number">7.8</span> Ranks in R</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -270,10 +318,394 @@ window.Quarto = {
 </header>
 
 
-<p>Under Construction</p>
+<p>One of the most important processes that you will do as a data scientist is transforming (or manipulating) the data into something workable for you. Sometimes you will hear this process called data manipulation, wrangling, or munging. This process might involve only selecting certain observations, ordering the data, generating new variables, or summarizing the information. Throughout this lecture we will see how we can work with some powerful tools within the “dplyr” library to accomplish most of these tasks.</p>
+<div class="learning-goals">
+<ul>
+<li>Use base R logical indexing to filter rows and select specific columns from a data frame.</li>
+<li>Use the pipe operator (|&gt;) to chain multiple steps and interpret a pipeline in plain language.</li>
+<li>Use <code>filter()</code>, <code>arrange()</code>, and <code>select()</code> to subset and order data using readable code.</li>
+<li>Use <code>rename()</code>, <code>mutate()</code>, and <code>transmute()</code> to rename columns and create new variables.</li>
+</ul>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supplemental Material
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="Reading-Guide/L7-Reading-Guide.pdf" download=""> 📄 Download the lecture’s Reading Guide </a></p>
+</div>
+</div>
+<section id="manipulating-data-in-base-r" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="manipulating-data-in-base-r"><span class="header-section-number">7.1</span> Manipulating Data in Base R</h2>
+<p>To appreciate and better understand what we will be doing, we should see how we would approach a few of the problems in base R. In order to select observations that meet certain criteria we need to use logical operators and index-selection brackets. For instance, if we wanted to only view the <code>mpg</code>, <code>hp</code>, <code>cyl</code>, and <code>wt</code> of the cars which have 6 cylinders then we could do the following:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear"
+[11] "carb"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mtcars[mtcars<span class="sc">$</span>cyl <span class="sc">==</span> <span class="dv">6</span>, <span class="fu">c</span>(<span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"cyl"</span>, <span class="st">"wt"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg  hp cyl    wt
+Mazda RX4      21.0 110   6 2.620
+Mazda RX4 Wag  21.0 110   6 2.875
+Hornet 4 Drive 21.4 110   6 3.215
+Valiant        18.1 105   6 3.460
+Merc 280       19.2 123   6 3.440
+Merc 280C      17.8 123   6 3.440
+Ferrari Dino   19.7 175   6 2.770</code></pre>
+</div>
+</div>
+<p>Altering the order of how it appears in R is also a possibility. To do this, we will use the <code>order()</code> function. An example of this can be seen below where we are looking at the miles per gallon for 6-cylinder cars. Looking at the first two outputs, we can see that the <code>order()</code> function displays the indices of what order the values should be in. For instance, the 6th element (17.8) is the smallest, the 4th element (18.1) is the second smallest, and so on.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mtcars[mtcars<span class="sc">$</span>cyl <span class="sc">==</span> <span class="dv">6</span>, ]<span class="sc">$</span>mpg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 21.0 21.0 21.4 18.1 19.2 17.8 19.7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">order</span>(mtcars[mtcars<span class="sc">$</span>cyl <span class="sc">==</span> <span class="dv">6</span>, ]<span class="sc">$</span>mpg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6 4 5 7 1 2 3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mtcars[mtcars<span class="sc">$</span>cyl <span class="sc">==</span> <span class="dv">6</span>, ]<span class="sc">$</span>mpg[<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 17.8 18.1 19.2 19.7 21.0 21.0 21.4</code></pre>
+</div>
+</div>
+<p>We can then expand this idea to a two-dimensional dataframe (making sure to have two dimensions in our index-selection brackets). An example of this can be seen below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mtcars[mtcars<span class="sc">$</span>cyl <span class="sc">==</span> <span class="dv">6</span>, ][<span class="fu">order</span>(mtcars[mtcars<span class="sc">$</span>cyl <span class="sc">==</span> <span class="dv">6</span>, ]<span class="sc">$</span>mpg), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Merc 280C      17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+Valiant        18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Merc 280       19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1</code></pre>
+</div>
+</div>
+<p>We should note that the <code>order()</code> function gives the vector indices of the correct ordering while <code>sort()</code> will physically sort the selected vector. The <code>sort()</code> function only works on vectors though, not dataframes. Running the <code>sort()</code> function does not alter the original vector, it only alters how the values are displayed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>mtcars<span class="sc">$</span>cyl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 6 6 4 6 8 6 8 4 4 6 6 8 8 8 8 8 8 4 4 4 4 8 8 8 8 4 4 4 8 6 8 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(mtcars<span class="sc">$</span>cyl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 4 4 4 4 4 4 4 4 4 4 4 6 6 6 6 6 6 6 8 8 8 8 8 8 8 8 8 8 8 8 8 8</code></pre>
+</div>
+</div>
+<p>All of the stuff we have done so far in base R is nice, but sometimes messy and tedious. Creating new variables is complicated and messy (especially if we are trying to keep track of them all). Additionally, it is repetitive to always have to type the dataframe and vector names into the command. In the following sections, we will see how we can make it easier on ourselves and create temporary dataframes/vectors before saving them to a variable name.</p>
+</section>
+<section id="using-the-pipe-operator" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="using-the-pipe-operator"><span class="header-section-number">7.2</span> Using the pipe operator</h2>
+<p>Within R, we have a symbol called the “pipe operator”, represented as <span class="math inline">\(|&gt;\)</span>, and it will allow us to take an object and pass it into another function in order to perform some operation on it. The idea behind it is that we can call a dataframe, vector, etc., and pipe it into a function in R. Since we are passing the dataframe into the function, we will not need to reference it like we have had to do in the past. While this seems trivial as of right now, you will shortly see why this is beneficial as we chain multiple commands together.</p>
+<p>An example of this can be seen below, when we take a vector and pipe it into the <code>mean()</code> function along with piping a dataframe into the <code>head()</code> function to get the first 6 observations. You may come across people using a pipe function that looks a little different (<span class="math inline">\(\%&gt;\%\)</span>) but for our purposes, it will do the exact same thing (though it does rely on the “magrittr” library).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.666667</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="sc">|&gt;</span> <span class="fu">mean</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.666667</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</code></pre>
+</div>
+</div>
+</section>
+<section id="filtering-a-dataset" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="filtering-a-dataset"><span class="header-section-number">7.3</span> Filtering a dataset</h2>
+<p>If we want to filter a dataset in base R so that only observations which meet a certain criteria are present then we would need to use our index-selection brackets and logical operators. To do this using the <code>dplyr</code> library we can simply use the <code>filter()</code> function. In the example below we pipe our dataset into the <code>filter()</code> function and specify that we only want to display the observations which have 6 cylinders. It should be noted that none of these commands will alter the original dataset unless we assign the output to some vector. If you have not already, make sure that you install the <code>dplyr</code> package and then call the <code>dplyr</code> library.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.3.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> <span class="fu">filter</span>(cyl <span class="sc">==</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+Valiant        18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Merc 280       19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+Merc 280C      17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6</code></pre>
+</div>
+</div>
+<p>If you want to filter a dataset based on two different criteria being true then simply pass the two conditions into the <code>filter()</code> function. Passing multiple criteria into the function and separating them with a comma will act as an “<span class="math inline">\(\&amp;\)</span>” operator. We can see this example below as we only have observations that are 6 cylinders and have an mpg greater than 19.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cyl <span class="sc">==</span> <span class="dv">6</span>, mpg <span class="sc">&gt;</span> <span class="dv">19</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+Merc 280       19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6</code></pre>
+</div>
+</div>
+<p>If you want to filter based on whether an observation has met one criteria “or” another criteria then you can use the “<span class="math inline">\(|\)</span>” operator to break up the criteria. Looking at the output below, we can see that 19 observations meet this criterion, but we will only display the first 6 for space reasons.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> <span class="fu">filter</span>(cyl <span class="sc">==</span> <span class="dv">6</span> <span class="sc">|</span> mpg <span class="sc">&gt;</span> <span class="dv">19</span>) <span class="sc">|&gt;</span> <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 19</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cyl <span class="sc">==</span> <span class="dv">6</span> <span class="sc">|</span> mpg <span class="sc">&gt;</span> <span class="dv">19</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710     22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+Valiant        18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Merc 240D      24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2</code></pre>
+</div>
+</div>
+</section>
+<section id="ordering-a-dataset" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="ordering-a-dataset"><span class="header-section-number">7.4</span> Ordering a dataset</h2>
+<p>Ordering a dataset based on some variable is also much easier to do in <code>dplyr</code> than it is in base R. To order (arrange) a dataset we can use the <code>arrange()</code> function. By default, it will arrange the dataset from smallest to largest based on the variable provided. If we want to go from largest to smallest then we can place the <code>desc()</code> function around the variable. We can specify multiple variables in the case of ties. Two examples of this can be seen below with the second example showing some of the observations are “tied” on their gear values, so the ones that are tied are then sorted first by gear (smallest to largest), then it breaks ties by mpg (largest to smallest).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cyl <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(mpg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Merc 280C      17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+Valiant        18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Merc 280       19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cyl <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(gear, <span class="fu">desc</span>(mpg))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+Valiant        18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Merc 280       19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+Merc 280C      17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6</code></pre>
+</div>
+</div>
+</section>
+<section id="selecting-columns-in-a-dataset" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="selecting-columns-in-a-dataset"><span class="header-section-number">7.5</span> Selecting Columns in a dataset</h2>
+<p>We have seen how we are able to choose certain columns in base R using the index-selection brackets (either calling the name or the number of the column), but there is also a way to do this in <code>dplyr</code>. To do this, we can use the <code>select()</code> function and simply pass in the names of the columns that we want to keep in the dataframe. The order which we “select” the variables will determine the order in which they are displayed for us. In the example below, we decide to only select the <code>mpg</code>, <code>cyl</code>, <code>wt</code>, and <code>qsec</code> variables:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cyl <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(mpg) <span class="sc">|&gt;</span> </span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(mpg, cyl, wt, qsec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg cyl    wt  qsec
+Merc 280C      17.8   6 3.440 18.90
+Valiant        18.1   6 3.460 20.22
+Merc 280       19.2   6 3.440 18.30
+Ferrari Dino   19.7   6 2.770 15.50
+Mazda RX4      21.0   6 2.620 16.46
+Mazda RX4 Wag  21.0   6 2.875 17.02
+Hornet 4 Drive 21.4   6 3.215 19.44</code></pre>
+</div>
+</div>
+<p>If there are multiple columns with the same pattern that we want to select (for instance: <code>2024_student</code>, <code>2024_grade</code>, <code>2024_cost</code>, etc.) then you can use the <code>starts_with()</code> command to specify what the column starts with. For instance, we might say <code>starts_with("2024")</code> in order to select all of the columns which start with that pattern. There are similar commands that allow you to select columns which <code>ends_with()</code> or <code>contains()</code> a certain pattern. Regular expressions could also be used within this command. I encourage you to read the documentation to see all of the possible commands for selecting columns. In the example below we decide to select the <code>mpg</code> variable and then all of the other variables that start with the letter “c”:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cyl <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(mpg) <span class="sc">|&gt;</span> </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(mpg, <span class="fu">starts_with</span>(<span class="st">"c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg cyl carb
+Merc 280C      17.8   6    4
+Valiant        18.1   6    1
+Merc 280       19.2   6    4
+Ferrari Dino   19.7   6    6
+Mazda RX4      21.0   6    4
+Mazda RX4 Wag  21.0   6    4
+Hornet 4 Drive 21.4   6    1</code></pre>
+</div>
+</div>
+<p>The <code>everything()</code> command will select everything for us. This is helpful if we want to specifically have one variable “at the front” of the dataframe and then everything else after it. We can also use the “minus” sign in order to prevent columns from being included. An example of this can be seen below where we specify that we want <code>mpg</code> and <code>hp</code> at the beginning of the dataframe and all of the other columns to be behind it with the <code>carb</code> and the <code>wt</code> columns being excluded:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cyl <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(mpg) <span class="sc">|&gt;</span> </span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(mpg, hp, <span class="fu">everything</span>(), <span class="sc">-</span>carb, <span class="sc">-</span>wt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg  hp cyl  disp drat  qsec vs am gear
+Merc 280C      17.8 123   6 167.6 3.92 18.90  1  0    4
+Valiant        18.1 105   6 225.0 2.76 20.22  1  0    3
+Merc 280       19.2 123   6 167.6 3.92 18.30  1  0    4
+Ferrari Dino   19.7 175   6 145.0 3.62 15.50  0  1    5
+Mazda RX4      21.0 110   6 160.0 3.90 16.46  0  1    4
+Mazda RX4 Wag  21.0 110   6 160.0 3.90 17.02  0  1    4
+Hornet 4 Drive 21.4 110   6 258.0 3.08 19.44  1  0    3</code></pre>
+</div>
+</div>
+</section>
+<section id="renaming-columns-in-a-dataset" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="renaming-columns-in-a-dataset"><span class="header-section-number">7.6</span> Renaming Columns in a dataset</h2>
+<p>Sometimes columns do not have names that make sense, they may be abbreviated, or they may be overly complicated to type in every time we want to reference them. You can rename a column using the <code>rename()</code> function. After you rename a column you can reference the new name later in your chain of commands.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cyl <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(mpg) <span class="sc">|&gt;</span> </span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">cylinders =</span> cyl, <span class="at">weight =</span> wt) <span class="sc">|&gt;</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(mpg, cylinders, weight, qsec) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg cylinders weight  qsec
+Merc 280C      17.8         6  3.440 18.90
+Valiant        18.1         6  3.460 20.22
+Merc 280       19.2         6  3.440 18.30
+Ferrari Dino   19.7         6  2.770 15.50
+Mazda RX4      21.0         6  2.620 16.46
+Mazda RX4 Wag  21.0         6  2.875 17.02
+Hornet 4 Drive 21.4         6  3.215 19.44</code></pre>
+</div>
+</div>
+</section>
+<section id="creating-new-variables-in-a-dataset" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="creating-new-variables-in-a-dataset"><span class="header-section-number">7.7</span> Creating new variables in a dataset</h2>
+<p>In order to create a variable in base R we either had to create the vector and bind it onto the dataframe or create a new one by using the dollar sign ($) operation. We can simplify this process by using the <code>mutate()</code> function. Here we can create a new variable and have it based on a different column. An example of this can be seen below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cyl <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(mpg) <span class="sc">|&gt;</span> </span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(mpg, cyl, wt, qsec) <span class="sc">|&gt;</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">cylinders =</span> cyl, <span class="at">weight =</span> wt) <span class="sc">|&gt;</span> </span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">km_per_gallon =</span> mpg<span class="sc">*</span><span class="fl">1.60934</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg cylinders weight  qsec km_per_gallon
+Merc 280C      17.8         6  3.440 18.90      28.64625
+Valiant        18.1         6  3.460 20.22      29.12905
+Merc 280       19.2         6  3.440 18.30      30.89933
+Ferrari Dino   19.7         6  2.770 15.50      31.70400
+Mazda RX4      21.0         6  2.620 16.46      33.79614
+Mazda RX4 Wag  21.0         6  2.875 17.02      33.79614
+Hornet 4 Drive 21.4         6  3.215 19.44      34.43988</code></pre>
+</div>
+</div>
+<p>In the example below we can see how using an <code>ifelse()</code> function will allow us to quickly check to see if the observation’s variable value meets a certain criteria and then assign it some value based on if it does or not. An example of this can be seen below where we say a car is “fast” if its 1/4 mile time is less than 19 seconds and “slow” if the time is greater than 19 seconds. Notice how after we make the variable <code>speed</code> we can then reference it again by transforming it into a factor (which we could have done in a single command).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cyl <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(mpg) <span class="sc">|&gt;</span> </span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(mpg, cyl, wt, qsec) <span class="sc">|&gt;</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">cylinders =</span> cyl, <span class="at">weight =</span> wt) <span class="sc">|&gt;</span> </span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">km_per_gallon =</span> mpg<span class="sc">*</span><span class="fl">1.60934</span>,</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">speed =</span> <span class="fu">ifelse</span>(qsec <span class="sc">&lt;</span> <span class="dv">19</span>, <span class="st">"fast"</span>, <span class="st">"slow"</span>),</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">speed =</span> <span class="fu">factor</span>(speed))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg cylinders weight  qsec km_per_gallon speed
+Merc 280C      17.8         6  3.440 18.90      28.64625  fast
+Valiant        18.1         6  3.460 20.22      29.12905  slow
+Merc 280       19.2         6  3.440 18.30      30.89933  fast
+Ferrari Dino   19.7         6  2.770 15.50      31.70400  fast
+Mazda RX4      21.0         6  2.620 16.46      33.79614  fast
+Mazda RX4 Wag  21.0         6  2.875 17.02      33.79614  fast
+Hornet 4 Drive 21.4         6  3.215 19.44      34.43988  slow</code></pre>
+</div>
+</div>
+<p>The <code>transmute()</code> function works in a similar manner to the <code>mutate()</code> function. The only difference though is that instead of adding the mutated column(s) to the end of the dataframe, it only keeps the mutated (newly created) column(s) and nothing else.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cyl <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">mpg =</span> mpg, </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">km_per_gallon =</span> mpg<span class="sc">*</span><span class="fl">1.60934</span>, </span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">speed =</span> <span class="fu">ifelse</span>(qsec <span class="sc">&lt;</span> <span class="dv">19</span>, <span class="st">"fast"</span>, <span class="st">"slow"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                mpg km_per_gallon speed
+Mazda RX4      21.0      33.79614  fast
+Mazda RX4 Wag  21.0      33.79614  fast
+Hornet 4 Drive 21.4      34.43988  slow
+Valiant        18.1      29.12905  slow
+Merc 280       19.2      30.89933  fast</code></pre>
+</div>
+</div>
+</section>
+<section id="ranks-in-r" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="ranks-in-r"><span class="header-section-number">7.8</span> Ranks in R</h2>
+<p>The last thing we will discuss in this write-up is how we can deal with ranking items using the <code>rank()</code> function. Looking at the output below, we might notice that it is ranking all items as either “15”, “6”, or “25.5”. This is because by default it is averaging the ranks of the sorted list. We can see below that the first 11 observations are “4” (the mean of 1 through 11 is 6) so all cars with 4 cylinders are assigned the rank “6” and so on.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>mtcars<span class="sc">$</span>cyl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 6 6 4 6 8 6 8 4 4 6 6 8 8 8 8 8 8 4 4 4 4 8 8 8 8 4 4 4 8 6 8 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rank</span>(mtcars<span class="sc">$</span>cyl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 15.0 15.0  6.0 15.0 25.5 15.0 25.5  6.0  6.0 15.0 15.0 25.5 25.5 25.5 25.5
+[16] 25.5 25.5  6.0  6.0  6.0  6.0 25.5 25.5 25.5 25.5  6.0  6.0  6.0 25.5 15.0
+[31] 25.5  6.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(mtcars<span class="sc">$</span>cyl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 4 4 4 4 4 4 4 4 4 4 4 6 6 6 6 6 6 6 8 8 8 8 8 8 8 8 8 8 8 8 8 8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">mean</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>), <span class="fu">mean</span>(<span class="dv">12</span><span class="sc">:</span><span class="dv">18</span>), <span class="fu">mean</span>(<span class="dv">19</span><span class="sc">:</span><span class="dv">32</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  6.0 15.0 25.5</code></pre>
+</div>
+</div>
+<p>We could alter what happens when there is a tie and instead of reporting the average of the ranks we could report the minimum (or maximum):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rank</span>(mtcars<span class="sc">$</span>cyl, <span class="at">ties.method =</span> <span class="st">"min"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 12 12  1 12 19 12 19  1  1 12 12 19 19 19 19 19 19  1  1  1  1 19 19 19 19
+[26]  1  1  1 19 12 19  1</code></pre>
+</div>
+</div>
 
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
