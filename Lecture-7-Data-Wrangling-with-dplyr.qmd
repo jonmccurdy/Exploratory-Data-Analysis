@@ -197,3 +197,20 @@ We could alter what happens when there is a tie and instead of reporting the ave
 ```{r}
 rank(mtcars$cyl, ties.method = "min")
 ```
+
+::: {.chapter-resources}
+
+<div class="chapter-resources-header">
+  <a href="https://youtu.be/sDaUTqyhidU" target="_blank">Lecture Video</a>
+</div>
+
+<div class="chapter-resources-grid">
+  <div><a href="Assignments/L7-Inclass-Assignment.pdf" target="_blank">In-Class Exercises</a></div>
+  <div><a href="https://youtu.be/LF5htY-tbDc" target="_blank">In-Class Exercises Video Solutions</a></div>
+</div>
+
+<div class="chapter-resources-footer">
+  <a href="Assignments/L7-Problem-Set.pdf" target="_blank">Problem Set Questions</a>
+</div>
+
+:::

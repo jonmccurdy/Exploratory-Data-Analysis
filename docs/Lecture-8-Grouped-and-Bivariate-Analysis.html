@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -153,13 +188,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-2-Strings-and-Text-Processing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strings and Text Processing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Text Processing and Useful R Tools</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-3-Factors-and-Dates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors and Dates</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors, Dates, and Special Values</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -245,8 +280,23 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#grouping-and-summarizing" id="toc-grouping-and-summarizing" class="nav-link active" data-scroll-target="#grouping-and-summarizing"><span class="header-section-number">8.1</span> Grouping and Summarizing</a></li>
+  <li><a href="#counting-observations" id="toc-counting-observations" class="nav-link" data-scroll-target="#counting-observations"><span class="header-section-number">8.2</span> Counting Observations</a></li>
+  <li><a href="#the-importance-of-ungrouping" id="toc-the-importance-of-ungrouping" class="nav-link" data-scroll-target="#the-importance-of-ungrouping"><span class="header-section-number">8.3</span> The Importance of Ungrouping</a></li>
+  <li><a href="#finding-distinct-observations" id="toc-finding-distinct-observations" class="nav-link" data-scroll-target="#finding-distinct-observations"><span class="header-section-number">8.4</span> Finding Distinct Observations</a></li>
+  <li><a href="#grouping-by-multiple-variables" id="toc-grouping-by-multiple-variables" class="nav-link" data-scroll-target="#grouping-by-multiple-variables"><span class="header-section-number">8.5</span> Grouping by Multiple Variables</a></li>
+  <li><a href="#creating-a-5-number-summary" id="toc-creating-a-5-number-summary" class="nav-link" data-scroll-target="#creating-a-5-number-summary"><span class="header-section-number">8.6</span> Creating a 5 Number Summary</a></li>
+  <li><a href="#incorporating-other-dplyr-functions" id="toc-incorporating-other-dplyr-functions" class="nav-link" data-scroll-target="#incorporating-other-dplyr-functions"><span class="header-section-number">8.7</span> Incorporating other dplyr functions</a></li>
+  <li><a href="#dealing-with-rankings" id="toc-dealing-with-rankings" class="nav-link" data-scroll-target="#dealing-with-rankings"><span class="header-section-number">8.8</span> Dealing with Rankings</a></li>
+  <li><a href="#cumulative-calculations" id="toc-cumulative-calculations" class="nav-link" data-scroll-target="#cumulative-calculations"><span class="header-section-number">8.9</span> Cumulative Calculations</a></li>
+  <li><a href="#time-series-manipulation" id="toc-time-series-manipulation" class="nav-link" data-scroll-target="#time-series-manipulation"><span class="header-section-number">8.10</span> Time-Series Manipulation</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -270,10 +320,465 @@ window.Quarto = {
 </header>
 
 
-<p>Under Construction</p>
+<p>When manipulating data, it is often useful to select certain observations, order the data in a certain way, generate new variables, or summarize the information. We have previously seen how to filter, arrange, and mutate variables within our dataset using the tools available within the <code>dplyr</code> library. In this lecture, we will see how we can summarize the information we are given and calculate statistics based on a variety of groupings. To summarize our data based on multiple variables (bi-variate data) we will use the tools within the <code>dplyr</code> library to carry out this process.</p>
+<div class="learning-goals">
+<ul>
+<li>Use <code>group_by()</code> and <code>summarise()</code> to compute descriptive statistics for each category in a dataset.</li>
+<li>Use <code>n()</code>, <code>tally()</code>, and <code>count()</code> to count observations within groups and interpret those counts.</li>
+<li>Explain why <code>ungroup()</code> matters and predict how grouped vs.&nbsp;ungrouped operations change results.</li>
+<li>Group by multiple variables to create bivariate summaries and use <code>arrange()</code>/<code>filter()</code> to answer comparison questions.</li>
+<li>Use <code>n_distinct()</code>, the <code>slice()</code> family, ranking functions, and <code>lag()</code>/<code>lead()</code> for more advanced grouped analysis.</li>
+</ul>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supplemental Material
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="Reading-Guide/L8-Reading-Guide.pdf" download=""> 📄 Download the lecture’s Reading Guide </a></p>
+</div>
+</div>
+<section id="grouping-and-summarizing" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="grouping-and-summarizing"><span class="header-section-number">8.1</span> Grouping and Summarizing</h2>
+<p>Within base R we can break a dataset up by which group a variable is in and then calculate some statistic for it (like the mean, median, standard deviation, etc.). To do this, we used the <code>aggregate()</code> function and list the groups that we wanted to partition the dataset into before calculating the statistic. We can pass multiple grouping variables into the <code>list()</code> argument to break the dataset up into more specific groupings. An example of this process can be seen below where we calculate the average home price for houses with either 2, 3, etc. bedrooms.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openintro)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(duke_forest<span class="sc">$</span>price, <span class="at">by=</span><span class="fu">list</span>(<span class="at">num_beds=</span>duke_forest<span class="sc">$</span>bed), mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  num_beds         x
+1        2  349250.0
+2        3  491650.0
+3        4  570982.1
+4        5  707500.0
+5        6 1250000.0</code></pre>
+</div>
+</div>
+<p>A similar process could be carried out using the tools available in the <code>dplyr</code> library. The <code>group_by()</code> function will partition the dataset into multiple groups thus allowing us to carry out calculations on different groups. The <code>summarise()</code> function then summarizes (…who would have thought) each group based on what we tell it to do. When both functions are used together it will output 1 row for each grouped value, which is useful when calculating the descriptive statistics among groups.</p>
+<p>The <code>group_by()</code> and <code>summarise()</code> functions working together will allow us to essentially replicate the <code>aggregate()</code> and <code>apply()</code> functions in base R. Note that the <code>summarize()</code> function will do the same thing, but it is sometimes masked by another library (meaning another library has a function of the same name and it sometimes “overrides” the <code>dplyr</code> function depending on the order the libraries are loaded), so <code>summarise()</code> is preferred.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bed) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_price =</span> <span class="fu">mean</span>(price)) <span class="sc">|&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+    bed mean_price
+  &lt;dbl&gt;      &lt;dbl&gt;
+1     2    349250 
+2     3    491650 
+3     4    570982.
+4     5    707500 
+5     6   1250000 </code></pre>
+</div>
+</div>
+</section>
+<section id="counting-observations" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="counting-observations"><span class="header-section-number">8.2</span> Counting Observations</h2>
+<p>In the output above we can see that we have replicated the <code>aggregate()</code> function’s results. The way we have done it in <code>dplyr</code> allows us to have more flexibility though, as we can add more information to the output. For instance, if we want to count the number of observations in each group then within the <code>summarise()</code> function we can specify <code>n()</code>. An example of this can be seen below where we both count the number of observations for each category and calculate the mean price for each category.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bed) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>(),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_price =</span> <span class="fu">mean</span>(price)) <span class="sc">|&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+    bed     n mean_price
+  &lt;dbl&gt; &lt;int&gt;      &lt;dbl&gt;
+1     2     4    349250 
+2     3    30    491650 
+3     4    52    570982.
+4     5    11    707500 
+5     6     1   1250000 </code></pre>
+</div>
+</div>
+<p>If one wishes to just determine how many observations are in each category then the <code>tally()</code> function will do the trick if we first <code>group_by()</code> the variables we want to count the number of observations for. The <code>count()</code> function is also a possibility for a quick count and does not require us to first group by a specific variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bed) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+    bed     n
+  &lt;dbl&gt; &lt;int&gt;
+1     2     4
+2     3    30
+3     4    52
+4     5    11
+5     6     1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(bed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+    bed     n
+  &lt;dbl&gt; &lt;int&gt;
+1     2     4
+2     3    30
+3     4    52
+4     5    11
+5     6     1</code></pre>
+</div>
+</div>
+</section>
+<section id="the-importance-of-ungrouping" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="the-importance-of-ungrouping"><span class="header-section-number">8.3</span> The Importance of Ungrouping</h2>
+<p>You may have noticed that anytime we group our data by a variable then we ungroup it shortly after. Whenever we <code>group_by()</code> certain variables then any summarizing and/or mutating will only be done for each portion of the dataset and not the whole. So, we should get in the habit of ungrouping the dataset so that any other code run is applied to the whole dataset and not just within groups. An example of this can be seen below, where we first group the data by the number of bedrooms and calculate the mean price for each group. We then ungroup the data and run the same code and it calculates the overall mean price.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(duke_forest<span class="sc">$</span>price, duke_forest<span class="sc">$</span>bed, mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        2         3         4         5         6 
+ 349250.0  491650.0  570982.1  707500.0 1250000.0 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(duke_forest<span class="sc">$</span>price)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 559898.7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bed) <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">average_grouped =</span> <span class="fu">sum</span>(price) <span class="sc">/</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">average_ungrouped =</span> <span class="fu">sum</span>(price) <span class="sc">/</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(bed, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(bed, average_grouped, average_ungrouped) <span class="sc">|&gt;</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(bed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+    bed average_grouped average_ungrouped
+  &lt;dbl&gt;           &lt;dbl&gt;             &lt;dbl&gt;
+1     2         349250            559899.
+2     3         491650            559899.
+3     4         570982.           559899.
+4     5         707500            559899.
+5     6        1250000            559899.</code></pre>
+</div>
+</div>
+</section>
+<section id="finding-distinct-observations" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="finding-distinct-observations"><span class="header-section-number">8.4</span> Finding Distinct Observations</h2>
+<p>To observe how we can find the number of distinct observations, we will first manipulate the dataset to create a categorical variable with 4 levels. This could be done using the tools in <code>dplyr</code>, but using the <code>cut()</code> function is just as easy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(duke_forest<span class="sc">$</span>area)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   1094    2133    2623    2779    3254    6178 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>duke_forest<span class="sc">$</span>size <span class="ot">&lt;-</span> <span class="fu">cut</span>(duke_forest<span class="sc">$</span>area, </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2133</span>, <span class="dv">2623</span>, <span class="dv">3254</span>, <span class="dv">7000</span>),</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"small"</span>, <span class="st">"medium"</span>, <span class="st">"large"</span>, <span class="st">"huge"</span>))</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(duke_forest<span class="sc">$</span>bed, duke_forest<span class="sc">$</span>size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   
+    small medium large huge
+  2     3      1     0    0
+  3    13     13     3    1
+  4     9     10    17   16
+  5     0      0     4    7
+  6     0      0     0    1</code></pre>
+</div>
+</div>
+<p>If we notice in the table above, the 2-bedroom houses only fall into 2 distinct categories (“small” and “medium” size) while the 3-bedroom houses fall into 4 distinct categories (“small”, “medium”, “large”, and “huge” size). We can use the <code>n_distinct()</code> function to count the distinct values within groups. An example of this can be seen below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bed) <span class="sc">|&gt;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">num_size =</span> <span class="fu">n_distinct</span>(size)) <span class="sc">|&gt;</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+    bed num_size
+  &lt;dbl&gt;    &lt;int&gt;
+1     2        2
+2     3        4
+3     4        4
+4     5        2
+5     6        1</code></pre>
+</div>
+</div>
+</section>
+<section id="grouping-by-multiple-variables" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="grouping-by-multiple-variables"><span class="header-section-number">8.5</span> Grouping by Multiple Variables</h2>
+<p>Much like the aggregate function, we can group by multiple variables at the same time. For instance, in the code below we group by both the number of bedrooms a house has and the size of the house. This gives us every possible combination of bedroom and size and then calculates the number of observations in each group and the mean price for each group.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(bed <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bed, size) <span class="sc">|&gt;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>(), </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_price =</span> <span class="fu">mean</span>(price)) <span class="sc">|&gt;</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(size, <span class="fu">desc</span>(mean_price)) <span class="sc">|&gt;</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+     bed size       n mean_price
+   &lt;dbl&gt; &lt;fct&gt;  &lt;int&gt;      &lt;dbl&gt;
+ 1     4 small      9    417056.
+ 2     3 small     13    360577.
+ 3     4 medium    10    563900 
+ 4     3 medium    13    536577.
+ 5     4 large     17    596703.
+ 6     5 large      4    596250 
+ 7     3 large      3    522167.
+ 8     3 huge       1   1520000 
+ 9     5 huge       7    771071.
+10     4 huge      16    634664.</code></pre>
+</div>
+</div>
+<p>The <code>slice()</code> family of functions (<code>slice_head()</code>, <code>slice_tail()</code>, <code>slice_max()</code>, <code>slice_min()</code>, along with <code>slice_sample()</code> are included) will allow us to select entries in the dataframe or <span class="math inline">\(n\)</span> entries within groupings. The <code>slice_max()</code> function will allow us to display just the top values for each category. Notice in the code below that we group by the <code>size</code> variable right before we choose to display just the top 2 mean prices for each <code>size</code> grouping.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(bed <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bed, size) <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>(), </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_price =</span> <span class="fu">mean</span>(price)) <span class="sc">|&gt;</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(size, <span class="fu">desc</span>(mean_price)) <span class="sc">|&gt;</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(size) <span class="sc">|&gt;</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">n=</span><span class="dv">2</span>, <span class="at">order_by =</span> mean_price) <span class="sc">|&gt;</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 4
+    bed size       n mean_price
+  &lt;dbl&gt; &lt;fct&gt;  &lt;int&gt;      &lt;dbl&gt;
+1     4 small      9    417056.
+2     3 small     13    360577.
+3     4 medium    10    563900 
+4     3 medium    13    536577.
+5     4 large     17    596703.
+6     5 large      4    596250 
+7     3 huge       1   1520000 
+8     5 huge       7    771071.</code></pre>
+</div>
+</div>
+<p>In the example below we can that the <code>slice()</code> function allows us to quickly look at the second through the fifth observations. We chose the first six observations using the <code>head()</code> function to demonstrate the idea.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(price, bed, bath, area, size) <span class="sc">|&gt;</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+    price   bed  bath  area size 
+    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;
+1 1520000     3     4  6040 huge 
+2 1030000     5     4  4475 huge 
+3  420000     2     3  1745 small
+4  680000     4     3  2091 small
+5  428500     4     3  1772 small
+6  456000     3     3  1950 small</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(price, bed, bath, area, size) <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+    price   bed  bath  area size 
+    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;
+1 1030000     5     4  4475 huge 
+2  420000     2     3  1745 small
+3  680000     4     3  2091 small
+4  428500     4     3  1772 small</code></pre>
+</div>
+</div>
+</section>
+<section id="creating-a-5-number-summary" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="creating-a-5-number-summary"><span class="header-section-number">8.6</span> Creating a 5 Number Summary</h2>
+<p>The <code>summarise()</code> function is powerful in that it allows us to quickly calculate statistics for each indicated group. If we wanted to create a 5-number summary for each group in base R then we would need to use index-selection brackets and the summary function to carry out the task. As a quick reminder, the 5-number summary helps show the spread and skew of a dataset by displaying the minimum value, the first quartile, the second quartile (median), the third quartile, and the maximum value. The first quartile is the value where 25% of the data is less than it, the second quartile is where 50% of the data is less than it, and the third quartile is where 75% of the data is less than it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(duke_forest<span class="sc">$</span>price[duke_forest<span class="sc">$</span>size<span class="sc">==</span><span class="st">"small"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 105000  285000  385000  374320  456000  680000 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(duke_forest<span class="sc">$</span>price[duke_forest<span class="sc">$</span>size<span class="sc">==</span><span class="st">"medium"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 290000  478750  537500  545604  603750  801000 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(duke_forest<span class="sc">$</span>price[duke_forest<span class="sc">$</span>size<span class="sc">==</span><span class="st">"large"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 400000  519250  578000  587310  642500  900000 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(duke_forest<span class="sc">$</span>price[duke_forest<span class="sc">$</span>size<span class="sc">==</span><span class="st">"huge"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  95000  567000  650000  732885  863000 1520000 </code></pre>
+</div>
+</div>
+<p>Using the <code>group_by()</code> function and the <code>summarise()</code> function allows us to do this so all of the output is together. We just have to take it piece-by-piece within the <code>summarise()</code> function. The code below uses the <code>min()</code>, <code>quantile()</code>, <code>median()</code>, and <code>max()</code> functions to create the 5-number summary, but other functions could be used as well such as <code>first()</code> which will show the first observation, <code>last()</code> which will show the last observation, and <code>nth()</code> which will show the nth observation. These other functions would probably be most useful if you order the dataset first or else it will just select the first or last observation that it sees.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(size) <span class="sc">|&gt;</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">min =</span> <span class="fu">min</span>(price),</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">q1 =</span> <span class="fu">quantile</span>(price, <span class="fl">0.25</span>),</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">q2 =</span> <span class="fu">median</span>(price), </span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">q3 =</span> <span class="fu">quantile</span>(price, <span class="fl">0.75</span>),</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">max =</span> <span class="fu">max</span>(price)) <span class="sc">|&gt;</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 7
+  size       n    min     q1     q2     q3     max
+  &lt;fct&gt;  &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+1 small     25 105000 285000 385000 456000  680000
+2 medium    24 290000 478750 537500 603750  801000
+3 large     24 400000 519250 578000 642500  900000
+4 huge      25  95000 567000 650000 863000 1520000</code></pre>
+</div>
+</div>
+</section>
+<section id="incorporating-other-dplyr-functions" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="incorporating-other-dplyr-functions"><span class="header-section-number">8.7</span> Incorporating other dplyr functions</h2>
+<p>We have already somewhat seen this phenomenon, but it is possible to combine other <code>dplyr</code> functions while grouping the data. For instance, in the code below we first group the data based on the number of bedrooms and the size of the house. We then calculate the number of observations within each group and calculate the mean price. After that, we use the <code>filter()</code> function to only display the groupings that have more than 10 observations present. Additional functions could be chained together (such as <code>mutate()</code>, <code>select()</code>, <code>arrange()</code>, etc.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bed, size) <span class="sc">|&gt;</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>(), </span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_price =</span> <span class="fu">mean</span>(price)) <span class="sc">|&gt;</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;=</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+    bed size       n mean_price
+  &lt;dbl&gt; &lt;fct&gt;  &lt;int&gt;      &lt;dbl&gt;
+1     3 small     13    360577.
+2     3 medium    13    536577.
+3     4 medium    10    563900 
+4     4 large     17    596703.
+5     4 huge      16    634664.</code></pre>
+</div>
+</div>
+</section>
+<section id="dealing-with-rankings" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="dealing-with-rankings"><span class="header-section-number">8.8</span> Dealing with Rankings</h2>
+<p>Sometimes it is beneficial to rank the observations based on some provided variable. The <code>rank()</code> function used in conjunction with the <code>mutate()</code> function will assign a rank to each observation with ties receiving the average position. For instance, in the output below 3 observations are tied for the lowest <span class="math inline">\(n\)</span> value, so they receive the rank of 2 because the average of the ordered values <span class="math inline">\(1\)</span>, <span class="math inline">\(2\)</span>, and <span class="math inline">\(3\)</span> is 2.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bed, size) <span class="sc">|&gt;</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ordering =</span> <span class="fu">rank</span>(n)) <span class="sc">|&gt;</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(ordering)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 4
+     bed size       n ordering
+   &lt;dbl&gt; &lt;fct&gt;  &lt;int&gt;    &lt;dbl&gt;
+ 1     2 medium     1      2  
+ 2     3 huge       1      2  
+ 3     6 huge       1      2  
+ 4     2 small      3      4.5
+ 5     3 large      3      4.5
+ 6     5 large      4      6  
+ 7     5 huge       7      7  
+ 8     4 small      9      8  
+ 9     4 medium    10      9  
+10     3 small     13     10.5
+11     3 medium    13     10.5
+12     4 huge      16     12  
+13     4 large     17     13  </code></pre>
+</div>
+</div>
+<p>There is also a function called <code>min_rank()</code> which will work similarly but will instead assign every tie the same (smallest) value. We can see the difference in this in the code below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bed, size) <span class="sc">|&gt;</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ordering =</span> <span class="fu">min_rank</span>(n)) <span class="sc">|&gt;</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(ordering) <span class="sc">|&gt;</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+    bed size       n ordering
+  &lt;dbl&gt; &lt;fct&gt;  &lt;int&gt;    &lt;int&gt;
+1     2 medium     1        1
+2     3 huge       1        1
+3     6 huge       1        1
+4     2 small      3        4
+5     3 large      3        4
+6     5 large      4        6</code></pre>
+</div>
+</div>
+</section>
+<section id="cumulative-calculations" class="level2" data-number="8.9">
+<h2 data-number="8.9" class="anchored" data-anchor-id="cumulative-calculations"><span class="header-section-number">8.9</span> Cumulative Calculations</h2>
+<p>There are a variety of cumulative calculations that can be used within the <code>mutate()</code> function. These will return the cumulative statistic based on each group (if we first use the <code>group_by()</code> function). To understand this idea, we can look at the <code>cummin()</code> function which will find the cumulative minimum value. This means it will go through the list and mark down the smallest value it has seen so far for each group (3 then 2 then 1). The <code>cumsum()</code> function will calculate the sum of each value it has seen so far in each group (3, then <span class="math inline">\(3 + 2\)</span>, then <span class="math inline">\(3 + 2 + 1\)</span>). The <code>cumprod()</code> will work similarly but instead multiply the values seen (3, then <span class="math inline">\(3 \times 2\)</span>, then <span class="math inline">\(3 \times 2 \times 1\)</span>). An example of this idea can be seen below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>duke_forest <span class="sc">|&gt;</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bed) <span class="sc">|&gt;</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">min_so_far =</span> <span class="fu">cummin</span>(bath),</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">baths_sum =</span> <span class="fu">cumsum</span>(bath),</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">baths_product =</span> <span class="fu">cumprod</span>(bath)) <span class="sc">|&gt;</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(bed, bath, min_so_far, baths_sum, baths_product) <span class="sc">|&gt;</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(bed) <span class="sc">|&gt;</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 5
+    bed  bath min_so_far baths_sum baths_product
+  &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+1     2     3          3         3             3
+2     2     2          2         5             6
+3     2     1          1         6             6
+4     2     2          1         8            12
+5     3     4          4         4             4
+6     3     3          3         7            12
+7     3     2          2         9            24
+8     3     3          2        12            72</code></pre>
+</div>
+</div>
+</section>
+<section id="time-series-manipulation" class="level2" data-number="8.10">
+<h2 data-number="8.10" class="anchored" data-anchor-id="time-series-manipulation"><span class="header-section-number">8.10</span> Time-Series Manipulation</h2>
+<p>The last example we will look at deals with time series data, which means each element in the vector is measured at a set time interval. An example of this can be seen below as a single chick’s weight is measured at time 0, 2, 4, 6, etc. This allows us to see how the weight changes over time.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>ChickWeight<span class="sc">$</span>Chick <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>((ChickWeight<span class="sc">$</span>Chick)))</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ChickWeight, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  weight Time Chick Diet
+1     42    0     1    1
+2     51    2     1    1
+3     59    4     1    1
+4     64    6     1    1
+5     76    8     1    1</code></pre>
+</div>
+</div>
+<p>The <code>lag()</code> and the <code>lead()</code> function will allow us to access either the previous value or the future value respectively. The value <code>NA</code> is given if there is no previous or future value available. This process allows us to determine how much an observation changes over time. In the example below we can see how much each chick’s weight changes between readings.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>ChickWeight <span class="sc">|&gt;</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Chick) <span class="sc">|&gt;</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Time, <span class="at">.by_group =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lag_weight =</span> <span class="fu">lag</span>(weight),</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">difference =</span> weight <span class="sc">-</span> lag_weight) <span class="sc">|&gt;</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Chick, Time, weight, lag_weight, difference) <span class="sc">|&gt;</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 247 × 5
+   Chick  Time weight lag_weight difference
+   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+ 1     1     0     42         NA         NA
+ 2     1     2     51         42          9
+ 3     1     4     59         51          8
+ 4     1     6     64         59          5
+ 5     1     8     76         64         12
+ 6     2     0     40         NA         NA
+ 7     2     2     49         40          9
+ 8     2     4     58         49          9
+ 9     2     6     72         58         14
+10     2     8     84         72         12
+# ℹ 237 more rows</code></pre>
+</div>
+</div>
 
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
