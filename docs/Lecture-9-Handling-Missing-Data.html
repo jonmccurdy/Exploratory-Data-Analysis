@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -153,13 +188,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-2-Strings-and-Text-Processing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strings and Text Processing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Text Processing and Useful R Tools</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-3-Factors-and-Dates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors and Dates</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors, Dates, and Special Values</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -245,8 +280,16 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#identifying-missing-values" id="toc-identifying-missing-values" class="nav-link active" data-scroll-target="#identifying-missing-values"><span class="header-section-number">9.1</span> Identifying Missing Values</a></li>
+  <li><a href="#recoding-missing-values" id="toc-recoding-missing-values" class="nav-link" data-scroll-target="#recoding-missing-values"><span class="header-section-number">9.2</span> Recoding Missing Values</a></li>
+  <li><a href="#exporting-and-importing-data" id="toc-exporting-and-importing-data" class="nav-link" data-scroll-target="#exporting-and-importing-data"><span class="header-section-number">9.3</span> Exporting and Importing Data</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -270,10 +313,363 @@ window.Quarto = {
 </header>
 
 
-<p>Under Construction</p>
+<p>More often than not, the data that we encounter in the “real world” will be messy and incomplete. Besides just noting that NA (missing) values exist in the dataset, we will need to decide what should be done to deal with them and what impact they may have on our analysis. This is because missing values can bias our results, but so can not recognizing a value as missing. We should stress that just because a value is missing does not mean that it is unimportant. In this write-up, we will delve into how we can deal with missing values in our dataset. Essentially, we will want to know what values are missing, why they are missing, and then work to ensure that they are properly encoded in our dataset so that they do not bias the results of our analysis.</p>
+<div class="learning-goals">
+<ul>
+<li>Identify missing and suspicious values using <code>is.na()</code>, <code>complete.cases()</code>, <code>summary()</code>, <code>table()</code>, and simple plots to flag potential data quality issues.</li>
+<li>Distinguish between truly missing values and miscoded/implied missing values, and recode them properly as NA.</li>
+<li>Evaluate the impact of missing data on analysis by computing counts/proportions of missingness by row and by column, and deciding when dropping rows/columns is reasonable.</li>
+<li>Apply basic imputation strategies when appropriate and clearly document the assumptions being made.</li>
+<li>Export and re-import cleaned data with <code>write.csv()</code> and <code>read.csv()</code>, controlling for row.names, header issues, and column data types.</li>
+</ul>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supplemental Material
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="Reading-Guide/L9-Reading-Guide.pdf" download=""> 📄 Download the lecture’s Reading Guide </a></p>
+</div>
+</div>
+<section id="identifying-missing-values" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="identifying-missing-values"><span class="header-section-number">9.1</span> Identifying Missing Values</h2>
+<p>Throughout this write-up, we will use the following dataset that describes 10 different college students and the time it takes them to complete a given assessment. As we can notice, there are quite a few missing values in the dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>])</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">19</span>,<span class="dv">20</span>,<span class="dv">23</span>,<span class="dv">21</span>,<span class="dv">24</span>,<span class="dv">20</span>,<span class="dv">19</span>,<span class="dv">18</span>,<span class="dv">18</span>,<span class="sc">-</span><span class="dv">99</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>ages_in_months <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">228</span>,<span class="dv">240</span>,<span class="dv">276</span>,<span class="dv">252</span>,<span class="cn">NA</span>,<span class="dv">240</span>,<span class="dv">228</span>,<span class="dv">216</span>,<span class="dv">216</span>,<span class="cn">NA</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>weight <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">150</span>,<span class="cn">NA</span>,<span class="dv">170</span>,<span class="dv">175</span>,<span class="dv">165</span>,<span class="cn">NA</span>,<span class="dv">145</span>,<span class="dv">150</span>,<span class="cn">NA</span>,<span class="dv">140</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>height <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="dv">70</span>, <span class="dv">72</span>, <span class="dv">71</span>, <span class="cn">NA</span>, <span class="dv">63</span>, <span class="dv">70</span>, <span class="cn">NA</span>, <span class="dv">172</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>time <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"5:32"</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">"6:12"</span>, <span class="cn">NA</span>, <span class="st">"5:45"</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(names, ages, ages_in_months, weight, height, time) </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   names ages ages_in_months weight height time
+1      A   19            228    150     NA 5:32
+2      B   20            240     NA     NA &lt;NA&gt;
+3      C   23            276    170     70 &lt;NA&gt;
+4      D   21            252    175     72 &lt;NA&gt;
+5      E   24             NA    165     71 6:12
+6      F   20            240     NA     NA &lt;NA&gt;
+7      G   19            228    145     63 5:45
+8      H   18            216    150     70 &lt;NA&gt;
+9      I   18            216     NA     NA &lt;NA&gt;
+10     J  -99             NA    140    172 &lt;NA&gt;</code></pre>
+</div>
+</div>
+<p>In previous analyses, we tried omitting observations with missing values, but that is sometimes detrimental, especially when there are relatively few observations in the dataset like ours. In the example we are working with, we would only have 1 observation left if we only looked at complete cases! This is obviously not ideal and thus will need to find a way to work with the missing values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rowSums</span>(<span class="fu">is.na</span>(df)) <span class="co"># Number of missing values in each observation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 1 3 1 1 1 3 0 1 3 2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">complete.cases</span>(df),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  names ages ages_in_months weight height time
+7     G   19            228    145     63 5:45</code></pre>
+</div>
+</div>
+<p>There are several different ways we can go about identifying missing values in our dataset. The metadata will normally describe how the missing values are encoded, but, typically, they may be listed as “NA”, “N/A”, “.”, an empty string, or some other variant. Additionally, they may be intentional values outside of the reasonable range (if only positive values would make sense then they may be encoded as -999 or -1). Miscoded values should also be flagged as suspicious. For instance, if a state like Hawaii reports that 186% of its citizens live in urban areas then we will want to flag the value for further investigation as we know it is not possible to have more people living in urban areas then we have people.</p>
+<p>We can use the <code>summary()</code> function to get a glimpse of what we are working with. It allows us to quickly look at the minimum and maximum values for our quantitative data and to figure out which features may need more investigation. In the output below we can see that 9 values are inputted as NA, but other missing values are also present. For instance, when looking in the <code>ages</code> column we can see the value <span class="math inline">\(-99\)</span> which is not possible, as all values should be non-negative, and should thus should be flagged as a missing value. Another value that seems suspicious by being outside of the reasonable range is the height value of <span class="math inline">\(172\)</span> inches (or over 14 feet tall!).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df[,<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      ages        ages_in_months     weight          height      
+ Min.   :-99.00   Min.   :216    Min.   :140.0   Min.   : 63.00  
+ 1st Qu.: 18.25   1st Qu.:225    1st Qu.:147.5   1st Qu.: 70.00  
+ Median : 19.50   Median :234    Median :150.0   Median : 70.50  
+ Mean   :  8.30   Mean   :237    Mean   :156.4   Mean   : 86.33  
+ 3rd Qu.: 20.75   3rd Qu.:243    3rd Qu.:167.5   3rd Qu.: 71.75  
+ Max.   : 24.00   Max.   :276    Max.   :175.0   Max.   :172.00  
+                  NA's   :2      NA's   :3       NA's   :4       </code></pre>
+</div>
+</div>
+<p>If we are dealing with categorical data then using the <code>table()</code> or the <code>unique()</code> function may be beneficial in identifying suspicious values. When dealing with quantitative values visualizing the distribution using a <code>density()</code> curve or a <code>histogram()</code> will assist in identifying potential missing values. If no other values are near it then that may suggest the value is either miscoded or encoded as missing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>ages)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+-99  18  19  20  21  23  24 
+  1   2   2   2   1   1   1 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(df<span class="sc">$</span>height, <span class="at">na.rm=</span><span class="cn">TRUE</span>), <span class="at">main=</span><span class="st">"Density of Height"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-9-Handling-Missing-Data_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(df<span class="sc">$</span>ages, <span class="at">na.rm=</span><span class="cn">TRUE</span>), <span class="at">main=</span><span class="st">"Density of Ages"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-9-Handling-Missing-Data_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To further investigate the “unusual” and extreme values we can use index-selection brackets to take a further look at the observations. If a large number of observations have the same extreme value then we will want to then look at the other columns. If the values are distributed across the other column’s distributions (and they are reasonable) then it most likely implies that the values are implied NA in the original column. If the values cluster for other columns then that may be indicative of a systematic impact (meaning they might not be random).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df[df<span class="sc">$</span>ages <span class="sc">&lt;</span> <span class="dv">0</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   names ages ages_in_months weight height time
+10     J  -99             NA    140    172 &lt;NA&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df[df<span class="sc">$</span>height <span class="sc">==</span> <span class="dv">172</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(df<span class="sc">$</span>height),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   names ages ages_in_months weight height time
+10     J  -99             NA    140    172 &lt;NA&gt;</code></pre>
+</div>
+</div>
+<p>The code and output above show us the observation which has an encoded missing value (in <code>ages</code>) and a probable misencoded value (in <code>height</code>). When filtering the dataset to investigate unusual values in a column that contains NAs then you will either need to use the &amp; symbol or use “dplyr” functions to avoid displaying the NA values.</p>
+</section>
+<section id="recoding-missing-values" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="recoding-missing-values"><span class="header-section-number">9.2</span> Recoding Missing Values</h2>
+<p>If missing values are present, whether as implied NA or incorrectly coded quantitative values, then the values should be coded as missing. Without this being done, calculations can be incorrect, and thus analysis and models reliant on these statistics would be impacted.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(df<span class="sc">$</span>height, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 86.33333</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(df<span class="sc">$</span>height[<span class="sc">-</span><span class="dv">10</span>], <span class="at">na.rm=</span><span class="cn">TRUE</span>) <span class="co"># Removing height of 172</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 69.2</code></pre>
+</div>
+</div>
+<p>Implied missing values can be directly changed to NA, while incorrectly coded data needs a different approach. The first step would be to read the documentation for guidance and insight into the unusual values. Ideally, we would like to replace them with accurate values, but this might not always be possible. Whatever we decide to do should be well supported and documented (if no choice is obvious leave them alone).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df[df<span class="sc">$</span>ages <span class="sc">==</span> <span class="sc">-</span><span class="dv">99</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   names ages ages_in_months weight height time
+10     J  -99             NA    140    172 &lt;NA&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>ages[df<span class="sc">$</span>ages <span class="sc">==</span> <span class="sc">-</span><span class="dv">99</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>ages[df<span class="sc">$</span>height <span class="sc">==</span> <span class="dv">172</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">10</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   names ages ages_in_months weight height time
+10     J   NA             NA    140    172 &lt;NA&gt;</code></pre>
+</div>
+</div>
+<p>Another thing we should look into is the proportion of observations within the column that are missing. If a large proportion is missing then it might make sense to remove the column completely. For instance, in the output below we can see that 70% of the observations in the <code>time</code> column are missing and thus will probably not provide any statistical purpose. Because of this, we will completely remove the column, but once again the action should be backed up by logic and be well documented.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(df))<span class="sc">/</span><span class="fu">nrow</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         names           ages ages_in_months         weight         height 
+           0.0            0.1            0.2            0.3            0.4 
+          time 
+           0.7 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>time <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Removing the <code>time</code> column results in more observations being complete, but there are still improvements that we can make.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   names ages ages_in_months weight height
+1      A   19            228    150     NA
+2      B   20            240     NA     NA
+3      C   23            276    170     70
+4      D   21            252    175     72
+5      E   24             NA    165     71
+6      F   20            240     NA     NA
+7      G   19            228    145     63
+8      H   18            216    150     70
+9      I   18            216     NA     NA
+10     J   NA             NA    140    172</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">complete.cases</span>(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p>When looking at the dataset above, we can probably determine what a few of the missing values are. For instance, it appears that we have both the student’s age and then their age in months (year <span class="math inline">\(\times\)</span> 12). Because of this, since we know the <code>year</code> value we can impute the observation with the correct <code>month</code> value.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">5</span>,<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">5</span>,<span class="dv">3</span>] <span class="ot">&lt;-</span> df[<span class="dv">5</span>,<span class="dv">2</span>]<span class="sc">*</span><span class="dv">12</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">5</span>,<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 288</code></pre>
+</div>
+</div>
+<p>If values are missing completely at random (MCAR) it means that there are no obvious patterns for why or where the missing values will occur. If this is the case then we could impute the value with machine learning models such as linear regression or <span class="math inline">\(k\)</span>-Nearest Neighbors (we will learn more about these in a future course). We can also impute the value with the mean or median, but we should be careful and document everything that we do. Because the dataset we are dealing with relates to college students we might decide that it is safe to assign the mean age for the missing <code>age</code> value.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">10</span>,<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">10</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">mean</span>(df<span class="sc">$</span>ages, <span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">10</span>,<span class="dv">3</span>] <span class="ot">&lt;-</span> df[<span class="dv">10</span>,<span class="dv">2</span>]<span class="sc">*</span><span class="dv">12</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">10</span>,<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20</code></pre>
+</div>
+</div>
+<p>When we look at the dataset we might notice patterns in seeing which values are missing. For instance, we can see that both the height and weight values are both missing for 3 of our observations. This might indicate a systematic issue with the observations, so we can remove the observations after we document why we are removing them. Finally, we might decide to leave the rest of the missing values as they are since we do not have any reason to alter them.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>weight))</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>height))</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>a[a <span class="sc">%in%</span> b]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2 6 9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">6</span>,<span class="dv">9</span>),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  names ages ages_in_months weight height
+2     B   20            240     NA     NA
+6     F   20            240     NA     NA
+9     I   18            216     NA     NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">6</span>,<span class="dv">9</span>),]</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   names ages ages_in_months weight height
+1      A   19            228    150     NA
+3      C   23            276    170     70
+4      D   21            252    175     72
+5      E   24            288    165     71
+7      G   19            228    145     63
+8      H   18            216    150     70
+10     J   20            240    140    172</code></pre>
+</div>
+</div>
+<p>As we go through investigating and cleaning the dataset we might encounter values that are missing completely at random (MCAR), missing at random (MAR), or missing not at random (MNAR). Values that are missing completely at random (MCAR) have no pattern to their missingness and this trait is not related to observed or unobserved data. Values that are missing at random (MAR) have missingness which depends on another measured value (women are less likely to report weight than men). Values that are missing not at random (MNAR) have missingness which depends on unmeasured factors (high-income earners not reporting their income). For each of these types, we should approach them differently, but no matter how we approach them we should document it and support our reasoning.</p>
+</section>
+<section id="exporting-and-importing-data" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="exporting-and-importing-data"><span class="header-section-number">9.3</span> Exporting and Importing Data</h2>
+<p>Once you have cleaned your data in R you can download it to your computer and share it with friends. To do this, we will use the <code>write.csv()</code> function by first referencing the dataframe that we want to save and then giving it a file name that we want to save it to. An example of this can be seen below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(df, <span class="st">"df.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can then import the dataset into R using the <code>read.csv()</code> function. While we would expect the datasets to be the same, we notice that a new column <code>X</code> has been added to the beginning and contains the observation number. Additionally, we can notice that the <code>names</code> column is no longer a factor and has been converted to a character vector.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"df.csv"</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   X names ages ages_in_months weight height
+1  1     A   19            228    150     NA
+2  3     C   23            276    170     70
+3  4     D   21            252    175     72
+4  5     E   24            288    165     71
+5  7     G   19            228    145     63
+6  8     H   18            216    150     70
+7 10     J   20            240    140    172</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   7 obs. of  5 variables:
+ $ names         : Factor w/ 10 levels "A","B","C","D",..: 1 3 4 5 7 8 10
+ $ ages          : num  19 23 21 24 19 18 20
+ $ ages_in_months: num  228 276 252 288 228 216 240
+ $ weight        : num  150 170 175 165 145 150 140
+ $ height        : num  NA 70 72 71 63 70 172</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   7 obs. of  6 variables:
+ $ X             : int  1 3 4 5 7 8 10
+ $ names         : chr  "A" "C" "D" "E" ...
+ $ ages          : int  19 23 21 24 19 18 20
+ $ ages_in_months: int  228 276 252 288 228 216 240
+ $ weight        : int  150 170 175 165 145 150 140
+ $ height        : int  NA 70 72 71 63 70 172</code></pre>
+</div>
+</div>
+<p>The reason an extra column is being added to the dataframe is that when we wrote the csv file it assumed that each row had a name and that they should be saved to the csv file. Since this was not the case, we need to specify that <code>row.names=FALSE</code>. To see an example of what row names look like, view the <code>mtcars</code> dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(df, <span class="st">"df.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"df.csv"</span>)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>df3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  names ages ages_in_months weight height
+1     A   19            228    150     NA
+2     C   23            276    170     70
+3     D   21            252    175     72
+4     E   24            288    165     71
+5     G   19            228    145     63
+6     H   18            216    150     70
+7     J   20            240    140    172</code></pre>
+</div>
+</div>
+<p>In order to correct the dataset so the columns are the correct datatype we can manually pass in a vector of data types. This gives us a lot of control over the structure of the imported dataset. It is also possible to coerce all character vectors to be read in as strings, but this may not be recommended if we want to maintain character columns.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>col_class <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"factor"</span>, <span class="st">"numeric"</span>, <span class="st">"numeric"</span>, <span class="st">"numeric"</span>, <span class="st">"numeric"</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"df.csv"</span>, <span class="at">colClasses=</span>col_class)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   7 obs. of  5 variables:
+ $ names         : Factor w/ 7 levels "A","C","D","E",..: 1 2 3 4 5 6 7
+ $ ages          : num  19 23 21 24 19 18 20
+ $ ages_in_months: num  228 276 252 288 228 216 240
+ $ weight        : num  150 170 175 165 145 150 140
+ $ height        : num  NA 70 72 71 63 70 172</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"df.csv"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   7 obs. of  5 variables:
+ $ names         : Factor w/ 7 levels "A","C","D","E",..: 1 2 3 4 5 6 7
+ $ ages          : int  19 23 21 24 19 18 20
+ $ ages_in_months: int  228 276 252 288 228 216 240
+ $ weight        : int  150 170 175 165 145 150 140
+ $ height        : int  NA 70 72 71 63 70 172</code></pre>
+</div>
+</div>
+<p>Occasionally when we try importing data into R we have issues with our header column. This is when R does not recognize it so it lists the column names as the first observation (causing all of the columns to be a character vector) and the column names in the header as <code>V1</code>, <code>V2</code>, <code>V3</code>, etc. If this ever happens to you then you need to pause and try to re-import your data with the correct arguments chosen. An example of this can be seen below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>df5 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"~/df.csv"</span>, <span class="at">header=</span><span class="cn">FALSE</span>)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>df5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     V1   V2             V3     V4     V5
+1 names ages ages_in_months weight height
+2     A   19            228    150     86
+3     C   23            276    170     70
+4     D   21            252    175     72
+5     E   24            288    165     71
+6     G   19            228    145     63
+7     H   18            216    150     70
+8     J   20            240    140   &lt;NA&gt;</code></pre>
+</div>
+</div>
+<p>The last thing we will discuss is the possibility of altering the names of the columns as we import the dataset. This can be done in a similar fashion to how we chose the column data types when reading the csv file into R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>col_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"years"</span>, <span class="st">"months"</span>, <span class="st">"weight"</span>, <span class="st">"height"</span>)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>col_class <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"factor"</span>, <span class="st">"numeric"</span>, <span class="st">"numeric"</span>, <span class="st">"numeric"</span>, <span class="st">"numeric"</span>)</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>df6 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"df.csv"</span>, <span class="at">colClasses=</span>col_class, </span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">col.names=</span>col_names)</span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>df6</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  name years months weight height
+1    A    19    228    150     NA
+2    C    23    276    170     70
+3    D    21    252    175     72
+4    E    24    288    165     71
+5    G    19    228    145     63
+6    H    18    216    150     70
+7    J    20    240    140    172</code></pre>
+</div>
+</div>
+<p>There are many different arguments we can investigate to better import and export data, so I encourage you to look at the documentation in R to see all of the different possibilities. But remember, whenever you import data into R you want to make sure it is as close to the desired format as possible, meaning we want to minimize the number of times we need to manually alter it after we read it in.</p>
 
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

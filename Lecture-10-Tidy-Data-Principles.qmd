@@ -1,3 +1,180 @@
 # Tidy Data Principles
 
-Under Construction
+Most of the data that we have encountered so far has been relatively "tidy" data. This means that every variable is contained in exactly one column and each observation is contained in exactly one row. In the real world, this is not always the case though. Sometimes people store data in a way that makes sense for humans to read it but it is difficult for computers to read the data. So, throughout this write-up, we will look at how we might go about manipulating our data to get it into a form that makes it easier for us to work with. In order to accomplish this, we will be relying on a few functions from the `tidyr` package.
+
+::: learning-goals
+
+- Explain what it means for a dataset to be "tidy'' (one variable per column, one observation per row) and recognize common signs of untidy data.
+- Use `separate()` and `unite()` to split one column into multiple variables and combine multiple variables into one column.
+- Use `pivot_wider()` and `pivot_longer()` to reshape data.
+- Perform multi-step tidying workflows that combine pivoting and separating to extract multiple variables from column names.
+- Combine datasets using `left_join()`, `right_join()`, `inner_join()`, and `full_join()`, and explain how each join changes rows and missing values.
+:::
+
+::: {.callout-tip}
+## Supplemental Material
+<a href="Reading-Guide/L10-Reading-Guide.pdf" download>
+📄 Download the lecture's Reading Guide
+</a>
+:::
+
+## Separate and Unite functions
+
+Two functions that might assist us in cleaning up our dataset or arranging it so that it is in a workable format are the `separate()` and the `unite()` functions. Before we dive into how they work though, let's look at the following dataset below. We have the student's grade along with the date the grade was earned. 
+
+```{r}
+grade <- c("A","C","B","B","A")
+dates <- c("12/29/24","1/22/25","2/21/25","2/26/25","3/1/25")
+homework_grades <- data.frame(grade,dates)
+homework_grades
+```
+
+If we wish to break apart a variable then we can use the `separate()` function. In the example below, we indicate that we want to break apart the `dates` column into three new variables; `month`, `day`, and `year`. When we do this, we do need to specify the character we want to separate the values at (in this case the forward slash symbol is used). Additionally, we could pass a numeric value as the separator and it would break the value apart at the given numeric position. An example of the `separate()` function can be seen below:
+
+```{r}
+library(dplyr)
+library(tidyr)
+homework_grades |> 
+  separate(dates,into=c("month","day", "year"), sep="/")
+```
+
+After we have separated the `dates` column into multiple pieces, we can then alter the columns however we see fit. In the code below we mutate the `year` column so that it contains the full year designation (we added the "20" to the front of it). The opposite of the `separate()` function is the `unite()` function. This function will allow us to bring together multiple columns. In the code below we create a new variable called `dates` which combines the `month`, `day`, and `year` columns separated by a dash.
+
+```{r}
+homework_grades |> 
+  separate(dates,into=c("month","day", "year"), sep="/") |>
+  mutate(year = gsub("^", "20", year)) |>
+  unite(dates,c(month, day, year), sep="-")
+```
+
+Both the `separate()` and the `unite()` functions are helpful when we are dealing with messy data that is not formatted properly, as they allow us to break apart and combine columns. 
+
+## Pivoting Data
+
+If the data is not "tidy" then it may be difficult to work with. This may be the case when a column contains more than one variable or if an observation is spread over multiple rows. The two main ways to solve this issue is to do a combination of "pivots" on our dataset. The function `pivot_wider()` will expand two columns into multiple columns (wider across) while `pivot_longer()` will collapse several columns into two (longer down). While this may seem confusing at first, with practice it should become second nature. We will utilize these functions when we need to reorganize our data so that it is laid out differently.
+
+In the example below we have a dataframe that informs us about an individual, a color, and a count. We could argue that the data is not currently tidy as the individual is spread across multiple observations.
+
+```{r}
+person <- rep(c("A", "B"), each=3)
+color <- rep(c("Red", "Blue", "Green"), times=2)
+count <- c(12, 23, 34, 45, 56, 67)
+df <- data.frame(person, color, count)
+df
+```
+
+To fix this issue, we can use the `pivot_wider()` function. This function will convert column values into column names. Because of this, we need to specify where the column names will come from and where the values being used to fill in the columns will come from. In the example above we can see that the `color` column has "red", "blue", and "green" associated with each `person`. Because of that, it might be computationally beneficial to have "red" "blue", and "green" as columns. The code below accomplishes that task and organizes it in a way that might be easier to work with.
+
+```{r}
+df |> 
+  pivot_wider(names_from = color, values_from = count)
+```
+
+If `pivot_wider()` expands a column into multiple then `pivot_longer()` allows us to do the opposite. With the `pivot_longer()` function, we can indicate which columns we want to gather up and make into two columns. In the code below we specify that the columns "Red", "Blue", and "Green" (using the Red:Green argument) should be gathered up and places in a single column. We then specify the name of the new column holding the column headers and the name of the new column holding the associated values. We can see below how the `pivot_longer()` function is the inverse of the `pivot_wider()` function. 
+
+```{r}
+df |> 
+  pivot_wider(names_from = color, values_from = count) |>
+  pivot_longer(c(Red:Green), names_to= "color", values_to= "count")
+```
+
+Another example of data that is not considered "tidy" would be a table like the one seen below. In the table, we have 4 different cities along with their population and vote totals for three different years. While it is easy for a person to understand and interpret, the table it is not easy for a computer to do so. Additionally, the way it is currently set up makes it difficult to computationally compare values between different cities.  
+
+```{r}
+City <- c("A","B","C","D")
+pop_2020 <- c(234,358,247,237)
+pop_2022 <- c(423,432,285,204)
+pop_2024 <- c(742,532,401,243)
+votes_2020 <- c(111,222,123,94)
+votes_2022 <- c(222,298,103,85)
+votes_2024 <- c(444,333,200,100)
+
+election <- data.frame(City, pop_2020, pop_2022, pop_2024, 
+                       votes_2020, votes_2022, votes_2024)
+election
+```
+
+In order to try to improve the format of this data we can play around with the `pivot_longer()` and `pivot_wider()` functions. To start, we can gather up the 6 columns relating to population and voting totals and place them in a single column, with the numeric values assigned to a different column.
+
+```{r}
+election |> 
+  pivot_longer(pop_2020:votes_2024, 
+               names_to = "Characteristic", values_to = "Count")
+```
+
+In the output above we have a column relating to the population and voting totals but the year is attached to each of those values. Because of this, we can separate the column so that we have the year in its own column. 
+
+```{r}
+election |> 
+  pivot_longer(pop_2020:votes_2024, 
+               names_to = "Characteristic", values_to = "Count") |>
+  separate(Characteristic, into=c("Trait","Year"), sep="_")
+```
+
+You may be uncertain what `pop` stands for, so we can always substitute the value with the word `population` using the `sub()` function to make it more clear what the value represents.
+
+```{r}
+election |> 
+  pivot_longer(pop_2020:votes_2024,
+               names_to = "Characteristic", values_to = "Count") |>
+  separate(Characteristic, into=c("Trait","Year"), sep="_") |>
+  mutate(Trait=sub("pop","population", Trait)) |>
+  head(5)
+```
+
+Because there are multiple variables in a single column, with the `Trait` column containing data associated with `population` and `votes`, we can use the \textit{pivot\_wider()} function and create columns with those headers instead. This will allow us to have each population and the vote total attached to each city and year combination.
+
+```{r}
+election |> 
+  pivot_longer(pop_2020:votes_2024, 
+               names_to = "Characteristic", values_to = "Count") |>
+  separate(Characteristic, into=c("Trait","Year"), sep="_") |>
+  mutate(Trait=sub("pop","population", Trait)) |>
+  pivot_wider(names_from=Trait, values_from = Count)
+```
+
+## Joining Data
+
+Another common way that we may clean and re-format data is by "joining" multiple datasets together. In the example below we have 2 different datasets, and we will see the different ways that we can combine them together. Notice that the two datasets have different columns and observations.
+
+```{r}
+df1 <- data.frame(person = c("A", "B", "C", "D"),
+                  id = c(123, 456, 789, 555),
+                  age = c(27, 63, 42, 31))
+df2 <- data.frame(person = c("A", "B", "E"),
+                  id = c(123,456,321),
+                  gender = c("Male", "Female", "Female"))           
+df1
+df2
+```
+
+The first method that we will discuss is the `left_join()` function. To use this function we will pass in two different datasets, and it will take the values from the "left-hand" dataset and try to match them up with the values in the "right-hand" dataset. Notice that all of the values from the "right" dataset are not present as they were unable to be matched up to the "left" dataset. Missing values are present for some observations since persons "C" and "D" were not present in the "right" dataset and thus not assigned a "gender". 
+
+```{r}
+left_join(df1, df2)
+```
+
+The `right_join()` function works exactly the same as the `left_join()` but instead uses the values in the "right" dataframe and tries to match them with the "left" dataset's values. 
+
+```{r}
+right_join(df1,df2)
+```
+
+The `inner_join()` function only contains the observations present in both of the datasets while the `full_join()` function retains all of the observations and columns. 
+
+```{r}
+inner_join(df1,df2)
+full_join(df1,df2)
+```
+
+All of these functions have benefits and downsides, and it is up to you the user to determine which one to use. Occasionally you may want to have all of the information available while other times you might be working with a dataset and want to match your observations with values from a large dataset that contains more observations than you have, and thus a "left-join" might be more helpful.
+
+The examples above deal with joining columns, but we can do something similar with observations as well. In the example below the `intersect()` function outputs the rows that appear in both datasets while the `union()` function will display all of the rows that appear in either of the datasets.
+
+```{r}
+df3 <- data.frame(Person = c("A", "B", "C"), Age = c(20, 24, 25))
+df4 <- data.frame(Person = c("C", "D"), Age = c(25, 26))
+
+intersect(df3, df4)
+union(df3, df4)
+```
