@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>11&nbsp; Distributions Across Groups – Data-210-Book</title>
+<title>11&nbsp; Describing Relationships Between Two Variables – Data-210-Book</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -113,7 +148,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Lecture-11-Distributions-Across-Groups.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Distributions Across Groups</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Lecture-11-Distributions-Across-Groups.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Describing Relationships Between Two Variables</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -153,13 +188,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-2-Strings-and-Text-Processing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strings and Text Processing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Text Processing and Useful R Tools</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-3-Factors-and-Dates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors and Dates</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors, Dates, and Special Values</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -207,7 +242,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-11-Distributions-Across-Groups.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Distributions Across Groups</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Describing Relationships Between Two Variables</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -245,15 +280,44 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#two-quantitative-variables" id="toc-two-quantitative-variables" class="nav-link active" data-scroll-target="#two-quantitative-variables"><span class="header-section-number">11.1</span> Two Quantitative Variables</a>
+  <ul class="collapse">
+  <li><a href="#correlation" id="toc-correlation" class="nav-link" data-scroll-target="#correlation"><span class="header-section-number">11.1.1</span> Correlation</a></li>
+  <li><a href="#adding-a-trend-line" id="toc-adding-a-trend-line" class="nav-link" data-scroll-target="#adding-a-trend-line"><span class="header-section-number">11.1.2</span> Adding a Trend Line</a></li>
+  <li><a href="#forming-a-conclusion" id="toc-forming-a-conclusion" class="nav-link" data-scroll-target="#forming-a-conclusion"><span class="header-section-number">11.1.3</span> Forming a Conclusion</a></li>
+  </ul></li>
+  <li><a href="#one-quantitative-variable-and-one-categorical-variable" id="toc-one-quantitative-variable-and-one-categorical-variable" class="nav-link" data-scroll-target="#one-quantitative-variable-and-one-categorical-variable"><span class="header-section-number">11.2</span> One Quantitative Variable and One Categorical Variable</a>
+  <ul class="collapse">
+  <li><a href="#making-a-visualization" id="toc-making-a-visualization" class="nav-link" data-scroll-target="#making-a-visualization"><span class="header-section-number">11.2.1</span> Making a Visualization</a></li>
+  <li><a href="#interpretting-the-visualization" id="toc-interpretting-the-visualization" class="nav-link" data-scroll-target="#interpretting-the-visualization"><span class="header-section-number">11.2.2</span> Interpretting the Visualization</a></li>
+  <li><a href="#forming-a-conclusion-1" id="toc-forming-a-conclusion-1" class="nav-link" data-scroll-target="#forming-a-conclusion-1"><span class="header-section-number">11.2.3</span> Forming a Conclusion</a></li>
+  </ul></li>
+  <li><a href="#two-categorical-variables" id="toc-two-categorical-variables" class="nav-link" data-scroll-target="#two-categorical-variables"><span class="header-section-number">11.3</span> Two Categorical Variables</a>
+  <ul class="collapse">
+  <li><a href="#proportions" id="toc-proportions" class="nav-link" data-scroll-target="#proportions"><span class="header-section-number">11.3.1</span> Proportions</a></li>
+  <li><a href="#visualizing-the-relationship" id="toc-visualizing-the-relationship" class="nav-link" data-scroll-target="#visualizing-the-relationship"><span class="header-section-number">11.3.2</span> Visualizing the Relationship</a></li>
+  <li><a href="#forming-a-conclusion-2" id="toc-forming-a-conclusion-2" class="nav-link" data-scroll-target="#forming-a-conclusion-2"><span class="header-section-number">11.3.3</span> Forming a Conclusion</a></li>
+  </ul></li>
+  <li><a href="#other-considerations" id="toc-other-considerations" class="nav-link" data-scroll-target="#other-considerations"><span class="header-section-number">11.4</span> Other Considerations</a>
+  <ul class="collapse">
+  <li><a href="#association-is-not-causation" id="toc-association-is-not-causation" class="nav-link" data-scroll-target="#association-is-not-causation"><span class="header-section-number">11.4.1</span> Association Is Not Causation</a></li>
+  <li><a href="#choosing-an-appropriate-display" id="toc-choosing-an-appropriate-display" class="nav-link" data-scroll-target="#choosing-an-appropriate-display"><span class="header-section-number">11.4.2</span> Choosing an Appropriate Display</a></li>
+  <li><a href="#putting-it-all-together" id="toc-putting-it-all-together" class="nav-link" data-scroll-target="#putting-it-all-together"><span class="header-section-number">11.4.3</span> Putting It All Together</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Distributions Across Groups</span></h1>
+<h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Describing Relationships Between Two Variables</span></h1>
 </div>
 
 
@@ -270,10 +334,292 @@ window.Quarto = {
 </header>
 
 
-<p>Under Construction</p>
+<p>At this point, we have already used EDA to become familiar with a dataset. We have checked for missing values, cleaned and transformed variables when needed, and used <code>dplyr</code> and <code>ggplot</code> to begin exploring patterns in the data. We have also looked at how to describe a single variable by discussing its center, spread, and shape. The next step is to move from looking at one variable at a time to looking at how two variables behave together. This is called <strong>bivariate analysis</strong>. Instead of asking what one variable looks like by itself, we now ask questions such as: Does one variable tend to increase as another increases? Do different groups have different distributions? Are two categorical variables related? When we describe a relationship between two variables, we are usually interested in the overall pattern, the strength of the relationship, whether unusual observations are present, and how clearly we can communicate what the data suggests.</p>
+<div class="learning-goals">
+<ul>
+<li>Describe the relationship between two quantitative variables using direction, form, strength, and unusual observations.<br>
+</li>
+<li>Compare a quantitative variable across levels of a categorical variable using grouped summaries and visualizations.<br>
+</li>
+<li>Describe the association between two categorical variables using counts and conditional proportions.<br>
+</li>
+<li>Use <code>dplyr</code> and <code>ggplot</code> to summarize and visualize bivariate relationships.<br>
+</li>
+<li>Interpret correlation and grouped summaries in context and explain why association does not necessarily imply causation.<br>
+</li>
+</ul>
+</div>
+<section id="two-quantitative-variables" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="two-quantitative-variables"><span class="header-section-number">11.1</span> Two Quantitative Variables</h2>
+<p>When both variables are quantitative, we usually want to understand whether there is a relationship between them. In particular, we want to know whether larger values of one variable tend to go with larger values of the other, smaller values of the other, or neither. The most natural way to begin is with a scatterplot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x =</span> wt, <span class="at">y =</span> mpg)) <span class="sc">+</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-11-Distributions-Across-Groups_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When describing a scatterplot, we will focus on four things:</p>
+<ul>
+<li><strong>Direction</strong>: Is the relationship positive or negative</li>
+<li><strong>Form</strong>: Does the relationship look linear, curved, or is there no clear form?</li>
+<li><strong>Strength</strong>: How tightly do the points follow the overall pattern?</li>
+<li><strong>Unusual features</strong>: Are there outliers, clusters, or gaps?</li>
+</ul>
+<p>In the plot above, we would say there is a negative relationship between weight and miles per gallon because as the weight of a car increases, fuel efficiency tends to decrease. The form looks roughly linear, and the relationship appears fairly strong. A common mistake is to simply say “they are related” without being specific. We want to describe the relationship in enough detail that someone reading our analysis could picture what the plot looks like.</p>
+<section id="correlation" class="level3" data-number="11.1.1">
+<h3 data-number="11.1.1" class="anchored" data-anchor-id="correlation"><span class="header-section-number">11.1.1</span> Correlation</h3>
+<p>A numerical summary that helps describe a linear relationship (both in direction and strength) between two quantitative variables is the <strong>correlation</strong>. This can be shown mathematically as:</p>
+<p><span class="math display">\[
+r = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n (y_i-\bar{y})^2}} = \frac{\operatorname{cov}(X,Y)}{s_X s_Y}
+\]</span></p>
+<p>This formula tells us how strongly two quantitative variables move together in a linear way. The numerator, <span class="math inline">\(\operatorname{cov}(X,Y)\)</span>, measures whether the variables tend to increase together or if one tends to increase while the other decreases. The denominator, <span class="math inline">\(s_X s_Y\)</span> (the product of the standard deviations), standardizes this value by dividing by the spread of both variables. Because of this standardization, correlation is unitless and always falls between <span class="math inline">\(-1\)</span> and <span class="math inline">\(1\)</span>.</p>
+<p>If <span class="math inline">\(r\)</span> is positive, then larger values of one variable tend to be associated with larger values of the other. If <span class="math inline">\(r\)</span> is negative, then larger values of one variable tend to be associated with smaller values of the other. Values of <span class="math inline">\(r\)</span> close to <span class="math inline">\(0\)</span> indicate little to no linear relationship, while values close to <span class="math inline">\(-1\)</span> or <span class="math inline">\(1\)</span> indicate a strong linear relationship.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(mtcars<span class="sc">$</span>wt, mtcars<span class="sc">$</span>mpg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.8676594</code></pre>
+</div>
+</div>
+<p>It is important to remember that correlation only measures linear relationships. Two variables could have a strong curved relationship and still have a correlation near 0. It is also important to remember that correlation can be strongly influenced by outliers, which is why we should always pair a numerical summary with a visualization.</p>
+</section>
+<section id="adding-a-trend-line" class="level3" data-number="11.1.2">
+<h3 data-number="11.1.2" class="anchored" data-anchor-id="adding-a-trend-line"><span class="header-section-number">11.1.2</span> Adding a Trend Line</h3>
+<p>Once we have created a scatterplot, it is often helpful to add a trend line in order to better see the overall pattern in the relationship. In <code>ggplot</code>, we can do this by adding <code>geom_smooth(method = "lm", se = FALSE)</code>. The <code>method = "lm"</code> tells R to draw the least-squares regression line, and <code>se = FALSE</code> removes the shaded confidence band so that we can focus on the line itself.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x =</span> wt, <span class="at">y =</span> mpg)) <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-11-Distributions-Across-Groups_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The trend line gives us a simple summary of the direction of the relationship. In this example, the line slopes downward from left to right, which suggests a negative relationship between weight and miles per gallon. In other words, as the weight of a car increases, its fuel efficiency tends to decrease. We should be careful, however, not to over-interpret this line. Adding a regression line does not prove that the relationship is perfectly linear, nor does it prove that one variable causes the other. It is simply a helpful visual tool that summarizes the overall trend in the data.</p>
+<p>When looking at a scatterplot with a trend line, we should still ask ourselves the same questions as before:</p>
+<ul>
+<li>Is the relationship positive or negative?</li>
+<li>Does the pattern look roughly linear?</li>
+<li>How closely do the points follow the line?</li>
+<li>Are there any unusual observations that do not follow the pattern?</li>
+</ul>
+<p>In this example, the points follow a fairly clear downward trend, so the line gives a reasonable summary of the relationship.</p>
+</section>
+<section id="forming-a-conclusion" class="level3" data-number="11.1.3">
+<h3 data-number="11.1.3" class="anchored" data-anchor-id="forming-a-conclusion"><span class="header-section-number">11.1.3</span> Forming a Conclusion</h3>
+<p>After creating a visualization, the next step is to describe the relationship in words. A strong written summary should mention the direction, form, and strength of the relationship, along with any unusual features if they are present. For this scatterplot, a good summary would be:</p>
+<blockquote class="blockquote">
+<p>There is a strong negative, roughly linear relationship between car weight and miles per gallon. Heavier cars tend to get worse gas mileage, and the points follow a fairly clear downward trend with only a moderate amount of scatter.</p>
+</blockquote>
+<p>Notice that this summary does more than just say the variables are “related”. It tells us that the <strong>direction</strong> is negative, the <strong>form</strong> is roughly linear, and the <strong>strength</strong> appears fairly strong.</p>
+</section>
+</section>
+<section id="one-quantitative-variable-and-one-categorical-variable" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="one-quantitative-variable-and-one-categorical-variable"><span class="header-section-number">11.2</span> One Quantitative Variable and One Categorical Variable</h2>
+<p>Sometimes we are interested in how a quantitative variable changes across groups. In this setting, one variable is quantitative and the other is categorical. For example, we may want to compare miles per gallon across different numbers of cylinders. To start off our analysis we should first calculate summary statistics for the different groups.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(cyl) <span class="sc">|&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">mean_mpg =</span> <span class="fu">mean</span>(mpg),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">median_mpg =</span> <span class="fu">median</span>(mpg),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">sd_mpg =</span> <span class="fu">sd</span>(mpg))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+    cyl     n mean_mpg median_mpg sd_mpg
+  &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;
+1     4    11     26.7       26     4.51
+2     6     7     19.7       19.7   1.45
+3     8    14     15.1       15.2   2.56</code></pre>
+</div>
+</div>
+<p>These summaries allow us to compare the groups numerically. The mean and median give us information about the center of each group, while the standard deviation gives us a sense of the spread. The sample size is also important, since some groups may contain more observations than others. While numerical summaries are useful, they do not show the full picture by themselves. In order to better understand how the groups differ, we should also visualize the distributions.</p>
+<section id="making-a-visualization" class="level3" data-number="11.2.1">
+<h3 data-number="11.2.1" class="anchored" data-anchor-id="making-a-visualization"><span class="header-section-number">11.2.1</span> Making a Visualization</h3>
+<p>A side-by-side boxplot is often a good choice for this type of comparison. In the plot below, we also add a point for the mean of each group. This allows us to compare both the median, which is already built into the boxplot, and the mean, which is shown with the white diamond.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x =</span> mpg, <span class="at">y =</span> <span class="fu">factor</span>(cyl))) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">factor</span>(cyl))) <span class="sc">+</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> <span class="st">"mean"</span>, <span class="at">geom =</span> <span class="st">"point"</span>, <span class="at">shape =</span> <span class="dv">23</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-11-Distributions-Across-Groups_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretting-the-visualization" class="level3" data-number="11.2.2">
+<h3 data-number="11.2.2" class="anchored" data-anchor-id="interpretting-the-visualization"><span class="header-section-number">11.2.2</span> Interpretting the Visualization</h3>
+<p>Recall that a boxplot gives us several pieces of information at once:</p>
+<ul>
+<li>the line inside the box shows the median</li>
+<li>the box shows the middle 50% of the data</li>
+<li>the whiskers show the overall spread of the non-outlying values</li>
+<li>any points beyond the whiskers would be potential outliers</li>
+</ul>
+<p>By adding the mean as a point, we gain one more useful comparison. If the mean and median are close together, that suggests the group may be fairly symmetric. If the mean is noticeably different from the median, then that may suggest skewness or the presence of unusual values pulling the mean in one direction.</p>
+<p>When we describe this kind of plot, we are usually asking:</p>
+<ul>
+<li>Which group has the largest or smallest typical value?</li>
+<li>Do the groups differ a lot or only a little?</li>
+<li>Is one group more variable than another?</li>
+<li>Are there outliers in any group?</li>
+<li>Do the groups overlap a lot?</li>
+</ul>
+<p>In this example, the 4-cylinder cars tend to have the highest miles per gallon, while the 8-cylinder cars tend to have the lowest. The 6-cylinder cars fall in between. This suggests that fuel efficiency differs across cylinder groups.</p>
+<p>We can also compare the mean dots to the median lines. If the mean sits close to the median, then the distribution within that group may be fairly balanced. If the mean is noticeably to one side of the median, then the data may be skewed within that group. This gives us a little more insight than a boxplot alone.</p>
+<p>Another important thing to notice is the amount of overlap. Even though the groups have different centers, they are not completely separated. Some cars in one group may still have similar miles per gallon values to cars in another group. This is why we should be careful not to overstate the differences based only on the picture.</p>
+</section>
+<section id="forming-a-conclusion-1" class="level3" data-number="11.2.3">
+<h3 data-number="11.2.3" class="anchored" data-anchor-id="forming-a-conclusion-1"><span class="header-section-number">11.2.3</span> Forming a Conclusion</h3>
+<p>After making the plot, we want to describe what we notice in clear words. A good written summary should explain how the groups differ and whether those differences seem small or substantial. For this example, a reasonable summary would be:</p>
+<blockquote class="blockquote">
+<p>Miles per gallon differs noticeably across cylinder groups. Cars with 4 cylinders tend to have the highest fuel efficiency, while cars with 8 cylinders tend to have the lowest. The centers of the groups are clearly different, although there is still some overlap in the overall distributions.</p>
+</blockquote>
+<p>Notice that this type of summary is different from the case where both variables were quantitative. We are no longer describing the relationship using positive or negative direction. Instead, we are comparing the distributions of a quantitative variable across several groups.</p>
+</section>
+</section>
+<section id="two-categorical-variables" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="two-categorical-variables"><span class="header-section-number">11.3</span> Two Categorical Variables</h2>
+<p>When both variables are categorical, our goal is to determine whether there is an association between them. In other words, we want to know whether knowing the category of one variable gives us information about the likely category of the other variable. For example, in the <code>Titanic</code> dataset, we might ask whether passenger class is associated with survival. Since both <code>Class</code> and <code>Survived</code> are categorical variables, this is a two-categorical-variable situation.</p>
+<p>The <code>Titanic</code> dataset is a little unusual because it is already stored as a table of counts rather than as a regular data frame where each row represents one passenger. To make it easier to work with, we can first convert it to a data frame and then summarize the total number of passengers in each combination of passenger class and survival outcome, group by Class and Survived, and then add up the frequencies.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Titanic_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(Titanic)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Titanic_df <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Class, Survived) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total =</span> <span class="fu">sum</span>(Freq)) <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 3
+  Class Survived total
+  &lt;fct&gt; &lt;fct&gt;    &lt;dbl&gt;
+1 1st   No         122
+2 1st   Yes        203
+3 2nd   No         167
+4 2nd   Yes        118
+5 3rd   No         528
+6 3rd   Yes        178
+7 Crew  No         673
+8 Crew  Yes        212</code></pre>
+</div>
+</div>
+<p>These are the raw counts that are useful, but they do not tell the whole story because the classes are not all the same size. For example, there were many more crew members than first-class passengers, so we should be careful about comparing counts alone.</p>
+<section id="proportions" class="level3" data-number="11.3.1">
+<h3 data-number="11.3.1" class="anchored" data-anchor-id="proportions"><span class="header-section-number">11.3.1</span> Proportions</h3>
+<p>When the group sizes are different, proportions are often more helpful than raw counts. Instead of asking how many passengers survived in each class, we should ask what proportion of each class survived. We can calculate those proportions by first summarizing the totals and then dividing within each class.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Titanic_df <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Class, Survived) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total =</span> <span class="fu">sum</span>(Freq)) <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Class) <span class="sc">|&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prop =</span> total <span class="sc">/</span> <span class="fu">sum</span>(total))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 4
+# Groups:   Class [4]
+  Class Survived total  prop
+  &lt;fct&gt; &lt;fct&gt;    &lt;dbl&gt; &lt;dbl&gt;
+1 1st   No         122 0.375
+2 1st   Yes        203 0.625
+3 2nd   No         167 0.586
+4 2nd   Yes        118 0.414
+5 3rd   No         528 0.748
+6 3rd   Yes        178 0.252
+7 Crew  No         673 0.760
+8 Crew  Yes        212 0.240</code></pre>
+</div>
+</div>
+<p>This allows us to compare the survival rate within each class rather than just comparing the total number of survivors.</p>
+</section>
+<section id="visualizing-the-relationship" class="level3" data-number="11.3.2">
+<h3 data-number="11.3.2" class="anchored" data-anchor-id="visualizing-the-relationship"><span class="header-section-number">11.3.2</span> Visualizing the Relationship</h3>
+<p>A good graph for comparing proportions across categories is a segmented bar chart. We can create one in <code>ggplot</code> by using <code>position = "fill"</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Titanic_df <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Class, Survived) <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total =</span> <span class="fu">sum</span>(Freq)) <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Class, <span class="at">y =</span> total, <span class="at">fill =</span> Survived)) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"fill"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-11-Distributions-Across-Groups_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In this graph, each bar has the same height, so we are comparing proportions rather than counts. This makes it easier to see how survival differed across the classes.</p>
+</section>
+<section id="forming-a-conclusion-2" class="level3" data-number="11.3.3">
+<h3 data-number="11.3.3" class="anchored" data-anchor-id="forming-a-conclusion-2"><span class="header-section-number">11.3.3</span> Forming a Conclusion</h3>
+<p>When describing the relationship between two categorical variables, we should ask:</p>
+<ul>
+<li>Do the proportions differ across the groups?</li>
+<li>Are the differences small or substantial?</li>
+<li>Does one category seem much more likely in certain groups than in others?</li>
+</ul>
+<p>If the proportions are about the same across all groups, then there may be little association. If the proportions are noticeably different, then the variables appear to be related. After creating the table and graph, we want to describe the relationship clearly in words. A good summary for this example would be:</p>
+<blockquote class="blockquote">
+<p>Survival appears to be associated with passenger class. First-class passengers had a much higher proportion of survivors than third-class passengers or crew members. This suggests that survival was not distributed evenly across the different passenger classes.</p>
+</blockquote>
+<p>Notice that we are careful with our wording. We say the variables are associated, not that one directly caused the other. In most datasets, especially observational ones, we should avoid jumping straight to causal conclusions.</p>
+</section>
+</section>
+<section id="other-considerations" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="other-considerations"><span class="header-section-number">11.4</span> Other Considerations</h2>
+<section id="association-is-not-causation" class="level3" data-number="11.4.1">
+<h3 data-number="11.4.1" class="anchored" data-anchor-id="association-is-not-causation"><span class="header-section-number">11.4.1</span> Association Is Not Causation</h3>
+<p>One of the most important ideas in bivariate analysis is that a relationship in the data does not automatically imply causation. If two variables are associated, it means they move together in some way. It does not mean that one variable causes the other as there may be other variables involved, or the relationship may be observational rather than experimental.</p>
+<p>Because of this, we should be careful with our language. In most EDA settings, instead of making direct causal claims it is better to say:</p>
+<ul>
+<li>“is associated with”</li>
+<li>“tends to be related to”</li>
+<li>“differs across”</li>
+<li>“appears higher for”</li>
+</ul>
+</section>
+<section id="choosing-an-appropriate-display" class="level3" data-number="11.4.2">
+<h3 data-number="11.4.2" class="anchored" data-anchor-id="choosing-an-appropriate-display"><span class="header-section-number">11.4.2</span> Choosing an Appropriate Display</h3>
+<p>At this point, we have started building the habit of matching the visualization to the variable types:</p>
+<ul>
+<li><strong>quantitative + quantitative</strong>: scatterplot with a line of best fit</li>
+<li><strong>categorical + quantitative</strong>: boxplot, violin plot, grouped summaries, faceted histograms</li>
+<li><strong>categorical + categorical</strong>: contingency table, segmented bar chart</li>
+</ul>
+<p>The graph should make the relationship easier to interpret, not harder. Therefore, the labels should be clear, categories should be readable, and you should be able to explain why the graph is appropriate. Most people tend to skip the explanations and only look at the visualization, so we should make sure it is as informative as possible.</p>
+</section>
+<section id="putting-it-all-together" class="level3" data-number="11.4.3">
+<h3 data-number="11.4.3" class="anchored" data-anchor-id="putting-it-all-together"><span class="header-section-number">11.4.3</span> Putting It All Together</h3>
+<p>When describing a bivariate relationship, we should always begin by identifying the variable types. Once we know the variable types, we can choose an appropriate summary and visualization.</p>
+<ul>
+<li>If both variables are quantitative, describe the direction, form, strength, and unusual observations.</li>
+<li>If one variable is categorical and one is quantitative, compare the quantitative distribution across groups.</li>
+<li>If both variables are categorical, compare counts and conditional proportions to determine whether an association appears to exist.</li>
+</ul>
+<p>The goal is not just to make a plot or calculate a number. The goal is to communicate what the relationship looks like in a clear and meaningful way. As we move forward, these ideas will prepare us for more formal modeling techniques. For now, our emphasis remains on describing the relationship, identifying patterns, and supporting our conclusions with both numerical summaries and visual evidence.</p>
 
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
