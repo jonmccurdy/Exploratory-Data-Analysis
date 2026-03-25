@@ -355,30 +355,10 @@ Supplemental Material
 </div>
 <p>If we wish to break apart a variable then we can use the <code>separate()</code> function. In the example below, we indicate that we want to break apart the <code>dates</code> column into three new variables; <code>month</code>, <code>day</code>, and <code>year</code>. When we do this, we do need to specify the character we want to separate the values at (in this case the forward slash symbol is used). Additionally, we could pass a numeric value as the separator and it would break the value apart at the given numeric position. An example of the <code>separate()</code> function can be seen below:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'dplyr' was built under R version 4.3.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'tidyr' was built under R version 4.3.2</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>homework_grades <span class="sc">|&gt;</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(dates,<span class="at">into=</span><span class="fu">c</span>(<span class="st">"month"</span>,<span class="st">"day"</span>, <span class="st">"year"</span>), <span class="at">sep=</span><span class="st">"/"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>homework_grades <span class="sc">|&gt;</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(dates,<span class="at">into=</span><span class="fu">c</span>(<span class="st">"month"</span>,<span class="st">"day"</span>, <span class="st">"year"</span>), <span class="at">sep=</span><span class="st">"/"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  grade month day year
 1     A    12  29   24
@@ -390,10 +370,10 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>After we have separated the <code>dates</code> column into multiple pieces, we can then alter the columns however we see fit. In the code below we mutate the <code>year</code> column so that it contains the full year designation (we added the “20” to the front of it). The opposite of the <code>separate()</code> function is the <code>unite()</code> function. This function will allow us to bring together multiple columns. In the code below we create a new variable called <code>dates</code> which combines the <code>month</code>, <code>day</code>, and <code>year</code> columns separated by a dash.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>homework_grades <span class="sc">|&gt;</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(dates,<span class="at">into=</span><span class="fu">c</span>(<span class="st">"month"</span>,<span class="st">"day"</span>, <span class="st">"year"</span>), <span class="at">sep=</span><span class="st">"/"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">gsub</span>(<span class="st">"^"</span>, <span class="st">"20"</span>, year)) <span class="sc">|&gt;</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(dates,<span class="fu">c</span>(month, day, year), <span class="at">sep=</span><span class="st">"-"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>homework_grades <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(dates,<span class="at">into=</span><span class="fu">c</span>(<span class="st">"month"</span>,<span class="st">"day"</span>, <span class="st">"year"</span>), <span class="at">sep=</span><span class="st">"/"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">gsub</span>(<span class="st">"^"</span>, <span class="st">"20"</span>, year)) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(dates,<span class="fu">c</span>(month, day, year), <span class="at">sep=</span><span class="st">"-"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  grade      dates
 1     A 12-29-2024
@@ -410,11 +390,11 @@ Attaching package: 'dplyr'</code></pre>
 <p>If the data is not “tidy” then it may be difficult to work with. This may be the case when a column contains more than one variable or if an observation is spread over multiple rows. The two main ways to solve this issue is to do a combination of “pivots” on our dataset. The function <code>pivot_wider()</code> will expand two columns into multiple columns (wider across) while <code>pivot_longer()</code> will collapse several columns into two (longer down). While this may seem confusing at first, with practice it should become second nature. We will utilize these functions when we need to reorganize our data so that it is laid out differently.</p>
 <p>In the example below we have a dataframe that informs us about an individual, a color, and a count. We could argue that the data is not currently tidy as the individual is spread across multiple observations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>person <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>), <span class="at">each=</span><span class="dv">3</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>color <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Red"</span>, <span class="st">"Blue"</span>, <span class="st">"Green"</span>), <span class="at">times=</span><span class="dv">2</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">23</span>, <span class="dv">34</span>, <span class="dv">45</span>, <span class="dv">56</span>, <span class="dv">67</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(person, color, count)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>person <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>), <span class="at">each=</span><span class="dv">3</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>color <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Red"</span>, <span class="st">"Blue"</span>, <span class="st">"Green"</span>), <span class="at">times=</span><span class="dv">2</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">23</span>, <span class="dv">34</span>, <span class="dv">45</span>, <span class="dv">56</span>, <span class="dv">67</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(person, color, count)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  person color count
 1      A   Red    12
@@ -427,8 +407,8 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>To fix this issue, we can use the <code>pivot_wider()</code> function. This function will convert column values into column names. Because of this, we need to specify where the column names will come from and where the values being used to fill in the columns will come from. In the example above we can see that the <code>color</code> column has “red”, “blue”, and “green” associated with each <code>person</code>. Because of that, it might be computationally beneficial to have “red” “blue”, and “green” as columns. The code below accomplishes that task and organizes it in a way that might be easier to work with.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> color, <span class="at">values_from =</span> count)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> color, <span class="at">values_from =</span> count)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 4
   person   Red  Blue Green
@@ -439,9 +419,9 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>If <code>pivot_wider()</code> expands a column into multiple then <code>pivot_longer()</code> allows us to do the opposite. With the <code>pivot_longer()</code> function, we can indicate which columns we want to gather up and make into two columns. In the code below we specify that the columns “Red”, “Blue”, and “Green” (using the Red:Green argument) should be gathered up and places in a single column. We then specify the name of the new column holding the column headers and the name of the new column holding the associated values. We can see below how the <code>pivot_longer()</code> function is the inverse of the <code>pivot_wider()</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> color, <span class="at">values_from =</span> count) <span class="sc">|&gt;</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(Red<span class="sc">:</span>Green), <span class="at">names_to=</span> <span class="st">"color"</span>, <span class="at">values_to=</span> <span class="st">"count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> color, <span class="at">values_from =</span> count) <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(Red<span class="sc">:</span>Green), <span class="at">names_to=</span> <span class="st">"color"</span>, <span class="at">values_to=</span> <span class="st">"count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
   person color count
@@ -456,17 +436,17 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>Another example of data that is not considered “tidy” would be a table like the one seen below. In the table, we have 4 different cities along with their population and vote totals for three different years. While it is easy for a person to understand and interpret, the table it is not easy for a computer to do so. Additionally, the way it is currently set up makes it difficult to computationally compare values between different cities.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>City <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>,<span class="st">"C"</span>,<span class="st">"D"</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>pop_2020 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">234</span>,<span class="dv">358</span>,<span class="dv">247</span>,<span class="dv">237</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>pop_2022 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">423</span>,<span class="dv">432</span>,<span class="dv">285</span>,<span class="dv">204</span>)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>pop_2024 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">742</span>,<span class="dv">532</span>,<span class="dv">401</span>,<span class="dv">243</span>)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>votes_2020 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">111</span>,<span class="dv">222</span>,<span class="dv">123</span>,<span class="dv">94</span>)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>votes_2022 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">222</span>,<span class="dv">298</span>,<span class="dv">103</span>,<span class="dv">85</span>)</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>votes_2024 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">444</span>,<span class="dv">333</span>,<span class="dv">200</span>,<span class="dv">100</span>)</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>election <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(City, pop_2020, pop_2022, pop_2024, </span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>                       votes_2020, votes_2022, votes_2024)</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>election</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>City <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>,<span class="st">"C"</span>,<span class="st">"D"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pop_2020 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">234</span>,<span class="dv">358</span>,<span class="dv">247</span>,<span class="dv">237</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>pop_2022 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">423</span>,<span class="dv">432</span>,<span class="dv">285</span>,<span class="dv">204</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>pop_2024 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">742</span>,<span class="dv">532</span>,<span class="dv">401</span>,<span class="dv">243</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>votes_2020 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">111</span>,<span class="dv">222</span>,<span class="dv">123</span>,<span class="dv">94</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>votes_2022 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">222</span>,<span class="dv">298</span>,<span class="dv">103</span>,<span class="dv">85</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>votes_2024 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">444</span>,<span class="dv">333</span>,<span class="dv">200</span>,<span class="dv">100</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>election <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(City, pop_2020, pop_2022, pop_2024, </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>                       votes_2020, votes_2022, votes_2024)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>election</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  City pop_2020 pop_2022 pop_2024 votes_2020 votes_2022 votes_2024
 1    A      234      423      742        111        222        444
@@ -477,9 +457,9 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>In order to try to improve the format of this data we can play around with the <code>pivot_longer()</code> and <code>pivot_wider()</code> functions. To start, we can gather up the 6 columns relating to population and voting totals and place them in a single column, with the numeric values assigned to a different column.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>election <span class="sc">|&gt;</span> </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(pop_2020<span class="sc">:</span>votes_2024, </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Characteristic"</span>, <span class="at">values_to =</span> <span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>election <span class="sc">|&gt;</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(pop_2020<span class="sc">:</span>votes_2024, </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Characteristic"</span>, <span class="at">values_to =</span> <span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 24 × 3
    City  Characteristic Count
@@ -499,10 +479,10 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>In the output above we have a column relating to the population and voting totals but the year is attached to each of those values. Because of this, we can separate the column so that we have the year in its own column.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>election <span class="sc">|&gt;</span> </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(pop_2020<span class="sc">:</span>votes_2024, </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Characteristic"</span>, <span class="at">values_to =</span> <span class="st">"Count"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(Characteristic, <span class="at">into=</span><span class="fu">c</span>(<span class="st">"Trait"</span>,<span class="st">"Year"</span>), <span class="at">sep=</span><span class="st">"_"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>election <span class="sc">|&gt;</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(pop_2020<span class="sc">:</span>votes_2024, </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Characteristic"</span>, <span class="at">values_to =</span> <span class="st">"Count"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(Characteristic, <span class="at">into=</span><span class="fu">c</span>(<span class="st">"Trait"</span>,<span class="st">"Year"</span>), <span class="at">sep=</span><span class="st">"_"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 24 × 4
    City  Trait Year  Count
@@ -522,12 +502,12 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>You may be uncertain what <code>pop</code> stands for, so we can always substitute the value with the word <code>population</code> using the <code>sub()</code> function to make it more clear what the value represents.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>election <span class="sc">|&gt;</span> </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(pop_2020<span class="sc">:</span>votes_2024,</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Characteristic"</span>, <span class="at">values_to =</span> <span class="st">"Count"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(Characteristic, <span class="at">into=</span><span class="fu">c</span>(<span class="st">"Trait"</span>,<span class="st">"Year"</span>), <span class="at">sep=</span><span class="st">"_"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Trait=</span><span class="fu">sub</span>(<span class="st">"pop"</span>,<span class="st">"population"</span>, Trait)) <span class="sc">|&gt;</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>election <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(pop_2020<span class="sc">:</span>votes_2024,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Characteristic"</span>, <span class="at">values_to =</span> <span class="st">"Count"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(Characteristic, <span class="at">into=</span><span class="fu">c</span>(<span class="st">"Trait"</span>,<span class="st">"Year"</span>), <span class="at">sep=</span><span class="st">"_"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Trait=</span><span class="fu">sub</span>(<span class="st">"pop"</span>,<span class="st">"population"</span>, Trait)) <span class="sc">|&gt;</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 4
   City  Trait      Year  Count
@@ -541,12 +521,12 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>Because there are multiple variables in a single column, with the <code>Trait</code> column containing data associated with <code>population</code> and <code>votes</code>, we can use the function and create columns with those headers instead. This will allow us to have each population and the vote total attached to each city and year combination.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>election <span class="sc">|&gt;</span> </span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(pop_2020<span class="sc">:</span>votes_2024, </span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Characteristic"</span>, <span class="at">values_to =</span> <span class="st">"Count"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(Characteristic, <span class="at">into=</span><span class="fu">c</span>(<span class="st">"Trait"</span>,<span class="st">"Year"</span>), <span class="at">sep=</span><span class="st">"_"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Trait=</span><span class="fu">sub</span>(<span class="st">"pop"</span>,<span class="st">"population"</span>, Trait)) <span class="sc">|&gt;</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from=</span>Trait, <span class="at">values_from =</span> Count)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>election <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(pop_2020<span class="sc">:</span>votes_2024, </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Characteristic"</span>, <span class="at">values_to =</span> <span class="st">"Count"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(Characteristic, <span class="at">into=</span><span class="fu">c</span>(<span class="st">"Trait"</span>,<span class="st">"Year"</span>), <span class="at">sep=</span><span class="st">"_"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Trait=</span><span class="fu">sub</span>(<span class="st">"pop"</span>,<span class="st">"population"</span>, Trait)) <span class="sc">|&gt;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from=</span>Trait, <span class="at">values_from =</span> Count)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 12 × 4
    City  Year  population votes
@@ -570,13 +550,13 @@ Attaching package: 'dplyr'</code></pre>
 <h2 data-number="10.3" class="anchored" data-anchor-id="joining-data"><span class="header-section-number">10.3</span> Joining Data</h2>
 <p>Another common way that we may clean and re-format data is by “joining” multiple datasets together. In the example below we have 2 different datasets, and we will see the different ways that we can combine them together. Notice that the two datasets have different columns and observations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">person =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>),</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">id =</span> <span class="fu">c</span>(<span class="dv">123</span>, <span class="dv">456</span>, <span class="dv">789</span>, <span class="dv">555</span>),</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">age =</span> <span class="fu">c</span>(<span class="dv">27</span>, <span class="dv">63</span>, <span class="dv">42</span>, <span class="dv">31</span>))</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">person =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"E"</span>),</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">id =</span> <span class="fu">c</span>(<span class="dv">123</span>,<span class="dv">456</span>,<span class="dv">321</span>),</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">gender =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="st">"Female"</span>))           </span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>df1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">person =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>),</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">id =</span> <span class="fu">c</span>(<span class="dv">123</span>, <span class="dv">456</span>, <span class="dv">789</span>, <span class="dv">555</span>),</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">age =</span> <span class="fu">c</span>(<span class="dv">27</span>, <span class="dv">63</span>, <span class="dv">42</span>, <span class="dv">31</span>))</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">person =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"E"</span>),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">id =</span> <span class="fu">c</span>(<span class="dv">123</span>,<span class="dv">456</span>,<span class="dv">321</span>),</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">gender =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="st">"Female"</span>))           </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>df1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  person  id age
 1      A 123  27
@@ -584,7 +564,7 @@ Attaching package: 'dplyr'</code></pre>
 3      C 789  42
 4      D 555  31</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  person  id gender
 1      A 123   Male
@@ -594,7 +574,7 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>The first method that we will discuss is the <code>left_join()</code> function. To use this function we will pass in two different datasets, and it will take the values from the “left-hand” dataset and try to match them up with the values in the “right-hand” dataset. Notice that all of the values from the “right” dataset are not present as they were unable to be matched up to the “left” dataset. Missing values are present for some observations since persons “C” and “D” were not present in the “right” dataset and thus not assigned a “gender”.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">left_join</span>(df1, df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">left_join</span>(df1, df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Joining with `by = join_by(person, id)`</code></pre>
 </div>
@@ -608,7 +588,7 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>The <code>right_join()</code> function works exactly the same as the <code>left_join()</code> but instead uses the values in the “right” dataframe and tries to match them with the “left” dataset’s values.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">right_join</span>(df1,df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">right_join</span>(df1,df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Joining with `by = join_by(person, id)`</code></pre>
 </div>
@@ -621,7 +601,7 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>The <code>inner_join()</code> function only contains the observations present in both of the datasets while the <code>full_join()</code> function retains all of the observations and columns.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inner_join</span>(df1,df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inner_join</span>(df1,df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Joining with `by = join_by(person, id)`</code></pre>
 </div>
@@ -630,7 +610,7 @@ Attaching package: 'dplyr'</code></pre>
 1      A 123  27   Male
 2      B 456  63 Female</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">full_join</span>(df1,df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">full_join</span>(df1,df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Joining with `by = join_by(person, id)`</code></pre>
 </div>
@@ -646,21 +626,29 @@ Attaching package: 'dplyr'</code></pre>
 <p>All of these functions have benefits and downsides, and it is up to you the user to determine which one to use. Occasionally you may want to have all of the information available while other times you might be working with a dataset and want to match your observations with values from a large dataset that contains more observations than you have, and thus a “left-join” might be more helpful.</p>
 <p>The examples above deal with joining columns, but we can do something similar with observations as well. In the example below the <code>intersect()</code> function outputs the rows that appear in both datasets while the <code>union()</code> function will display all of the rows that appear in either of the datasets.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Person =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="at">Age =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">24</span>, <span class="dv">25</span>))</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Person =</span> <span class="fu">c</span>(<span class="st">"C"</span>, <span class="st">"D"</span>), <span class="at">Age =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">26</span>))</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="fu">intersect</span>(df3, df4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Person =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="at">Age =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">24</span>, <span class="dv">25</span>))</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Person =</span> <span class="fu">c</span>(<span class="st">"C"</span>, <span class="st">"D"</span>), <span class="at">Age =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">26</span>))</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">intersect</span>(df3, df4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Person Age
 1      C  25</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">union</span>(df3, df4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">union</span>(df3, df4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Person Age
 1      A  20
 2      B  24
 3      C  25
 4      D  26</code></pre>
+</div>
+</div>
+<div class="chapter-resources">
+<div class="chapter-resources-header">
+<p><a href="https://youtu.be/2TOdQkH9cYw" target="_blank">Lecture Video</a></p>
+</div>
+<div class="chapter-resources-footer">
+<p><a href="Assignments/L10-Problem-Set.pdf" target="_blank">Problem Set Questions</a></p>
 </div>
 </div>
 

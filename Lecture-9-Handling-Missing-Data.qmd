@@ -197,16 +197,10 @@ There are many different arguments we can investigate to better import and expor
 ::: {.chapter-resources}
 
 <div class="chapter-resources-header">
-  <a href="https://youtu.be/sDaUTqyhidU" target="_blank">Lecture Video</a>
+  <a href="https://youtu.be/uUjwlnkrS6g" target="_blank">Lecture Video</a>
 </div>
-
-<div class="chapter-resources-grid">
-  <div><a href="Assignments/L7-Inclass-Assignment.pdf" target="_blank">In-Class Exercises</a></div>
-  <div><a href="https://youtu.be/LF5htY-tbDc" target="_blank">In-Class Exercises Video Solutions</a></div>
-</div>
-
 <div class="chapter-resources-footer">
-  <a href="Assignments/L7-Problem-Set.pdf" target="_blank">Problem Set Questions</a>
+  <a href="Assignments/L9-Problem-Set.pdf" target="_blank">Problem Set Questions</a>
 </div>
 
 :::

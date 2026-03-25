@@ -266,4 +266,8 @@ ChickWeight |>
   <div><a href="Assignments/L8-Inclass-Assignment-Part-1.pdf" target="_blank">In-Class Exercises (Part 1)</a></div>
   <div><a href="https://youtu.be/6KoxCjliXLA" target="_blank">In-Class Exercises Video Solutions (Part 1)</a></div>
 </div>
+<div class="chapter-resources-footer">
+  <a href="Assignments/L8-Problem-Set.pdf" target="_blank">Problem Set Questions</a>
+</div>
+
 :::

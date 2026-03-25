@@ -32,6 +32,8 @@ homework_grades
 If we wish to break apart a variable then we can use the `separate()` function. In the example below, we indicate that we want to break apart the `dates` column into three new variables; `month`, `day`, and `year`. When we do this, we do need to specify the character we want to separate the values at (in this case the forward slash symbol is used). Additionally, we could pass a numeric value as the separator and it would break the value apart at the given numeric position. An example of the `separate()` function can be seen below:
 
 ```{r}
+#| message: false
+#| warning: false
 library(dplyr)
 library(tidyr)
 homework_grades |> 
@@ -178,3 +180,14 @@ df4 <- data.frame(Person = c("C", "D"), Age = c(25, 26))
 intersect(df3, df4)
 union(df3, df4)
 ```
+
+::: {.chapter-resources}
+
+<div class="chapter-resources-header">
+  <a href="https://youtu.be/2TOdQkH9cYw" target="_blank">Lecture Video</a>
+</div>
+<div class="chapter-resources-footer">
+  <a href="Assignments/L10-Problem-Set.pdf" target="_blank">Problem Set Questions</a>
+</div>
+
+:::

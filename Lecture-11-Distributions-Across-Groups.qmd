@@ -267,3 +267,11 @@ When describing a bivariate relationship, we should always begin by identifying 
 - If both variables are categorical, compare counts and conditional proportions to determine whether an association appears to exist.
 
 The goal is not just to make a plot or calculate a number. The goal is to communicate what the relationship looks like in a clear and meaningful way. As we move forward, these ideas will prepare us for more formal modeling techniques. For now, our emphasis remains on describing the relationship, identifying patterns, and supporting our conclusions with both numerical summaries and visual evidence.
+
+::: {.chapter-resources}
+
+<div class="chapter-resources-header">
+  <a href="https://youtu.be/yKobh1e23ek" target="_blank">Lecture Video</a>
+</div>
+
+:::
