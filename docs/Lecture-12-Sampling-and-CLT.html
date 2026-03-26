@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>12&nbsp; Sampling and CLT – Data-210-Book</title>
+<title>12&nbsp; Sampling Distributions and the Central Limit Theorem – Data-210-Book</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -113,7 +148,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Lecture-12-Sampling-and-CLT.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sampling and CLT</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Lecture-12-Sampling-and-CLT.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sampling Distributions and the Central Limit Theorem</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -153,13 +188,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-2-Strings-and-Text-Processing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strings and Text Processing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Text Processing and Useful R Tools</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-3-Factors-and-Dates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors and Dates</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors, Dates, and Special Values</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -207,13 +242,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-11-Distributions-Across-Groups.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Distributions Across Groups</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Describing Relationships Between Two Variables</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-12-Sampling-and-CLT.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sampling and CLT</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sampling Distributions and the Central Limit Theorem</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -245,15 +280,29 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sample-distribution-versus-sampling-distribution" id="toc-sample-distribution-versus-sampling-distribution" class="nav-link active" data-scroll-target="#sample-distribution-versus-sampling-distribution"><span class="header-section-number">12.1</span> Sample Distribution versus Sampling Distribution</a></li>
+  <li><a href="#the-central-limit-theorem" id="toc-the-central-limit-theorem" class="nav-link" data-scroll-target="#the-central-limit-theorem"><span class="header-section-number">12.2</span> The Central Limit Theorem</a></li>
+  <li><a href="#using-simulation-to-study-sampling-distributions" id="toc-using-simulation-to-study-sampling-distributions" class="nav-link" data-scroll-target="#using-simulation-to-study-sampling-distributions"><span class="header-section-number">12.3</span> Using Simulation to Study Sampling Distributions</a></li>
+  <li><a href="#sampling-distribution-of-the-mean" id="toc-sampling-distribution-of-the-mean" class="nav-link" data-scroll-target="#sampling-distribution-of-the-mean"><span class="header-section-number">12.4</span> Sampling Distribution of the Mean</a></li>
+  <li><a href="#how-large-does-the-sample-size-need-to-be" id="toc-how-large-does-the-sample-size-need-to-be" class="nav-link" data-scroll-target="#how-large-does-the-sample-size-need-to-be"><span class="header-section-number">12.5</span> How Large Does the Sample Size Need to Be?</a></li>
+  <li><a href="#sampling-distribution-of-the-median" id="toc-sampling-distribution-of-the-median" class="nav-link" data-scroll-target="#sampling-distribution-of-the-median"><span class="header-section-number">12.6</span> Sampling Distribution of the Median</a></li>
+  <li><a href="#sampling-distribution-of-a-sample-proportion" id="toc-sampling-distribution-of-a-sample-proportion" class="nav-link" data-scroll-target="#sampling-distribution-of-a-sample-proportion"><span class="header-section-number">12.7</span> Sampling Distribution of a Sample Proportion</a></li>
+  <li><a href="#sampling-distribution-of-a-correlation" id="toc-sampling-distribution-of-a-correlation" class="nav-link" data-scroll-target="#sampling-distribution-of-a-correlation"><span class="header-section-number">12.8</span> Sampling Distribution of a Correlation</a></li>
+  <li><a href="#comparing-several-statistics-at-once" id="toc-comparing-several-statistics-at-once" class="nav-link" data-scroll-target="#comparing-several-statistics-at-once"><span class="header-section-number">12.9</span> Comparing Several Statistics at Once</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sampling and CLT</span></h1>
+<h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sampling Distributions and the Central Limit Theorem</span></h1>
 </div>
 
 
@@ -270,10 +319,320 @@ window.Quarto = {
 </header>
 
 
-<p>Under Construction</p>
+<p>In earlier lessons, we introduced the idea that a sample gives us information about a larger population. In practice, though, one sample is only one possible set of data we could have observed. If we were to repeatedly collect new samples from the same population and compute a summary statistic each time, then those statistics would themselves form a distribution. This is called a sampling distribution, and this idea is extremely important in data science as when we compute a sample mean, sample proportion, median, or correlation, we are not just interested in the single value we got from one dataset. We also want to understand how much that value would vary from sample to sample. Sampling distributions help us answer that question.</p>
+<div class="learning-goals">
+<ul>
+<li>Distinguish between the distribution of raw sample data and the sampling distribution of a statistic.</li>
+<li>Explain the Central Limit Theorem and describe what it tells us about the sampling distribution of the sample mean.</li>
+<li>Use simulation to investigate sampling distributions for statistics such as the mean, median, proportion, and correlation.</li>
+<li>Interpret how sample size affects the center, spread, and shape of a sampling distribution.</li>
+</ul>
+</div>
+<section id="sample-distribution-versus-sampling-distribution" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="sample-distribution-versus-sampling-distribution"><span class="header-section-number">12.1</span> Sample Distribution versus Sampling Distribution</h2>
+<p>It is important to distinguish between two different ideas:</p>
+<ul>
+<li>The sample distribution describes the actual values in a single sample.</li>
+<li>The sampling distribution describes the values of a statistic computed across many different samples.</li>
+</ul>
+<p>For example, suppose we repeatedly take random samples of tree data and calculate the mean volume each time. The original sample data might be skewed or irregular, but the collection of sample means may follow a much more predictable pattern. This is the key idea behind the Central Limit Theorem and why it is so useful in statistics and data science. Your earlier notes already emphasized this difference well, and that distinction is worth keeping in the refresher.</p>
+<p>In data science, we rarely care only about the raw data values themselves. More often, we care about summaries such as:</p>
+<ul>
+<li>the average value of a variable</li>
+<li>the proportion of cases in a category</li>
+<li>the median of a skewed variable</li>
+<li>the relationship between two variables</li>
+</ul>
+<p>If we can understand the sampling distribution of these statistics, then we can better judge whether a result is stable, how much variability to expect, and how to perform inference.</p>
+</section>
+<section id="the-central-limit-theorem" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="the-central-limit-theorem"><span class="header-section-number">12.2</span> The Central Limit Theorem</h2>
+<p>The Central Limit Theorem is one of the most important results in statistics. It tells us that for a sufficiently large sample size, the sampling distribution of the sample mean tends to be approximately normal, even when the original population distribution is not normal.</p>
+<p>There are two major ideas to remember:</p>
+<ul>
+<li>The center of the sampling distribution of the sample mean is the population mean.</li>
+<li>The spread of the sampling distribution becomes smaller as the sample size gets larger.</li>
+</ul>
+<p>In symbols, we often summarize this by saying: <span class="math display">\[
+E(\bar{x}) = \mu \qquad \text{and} \qquad SD(\bar{x}) = \frac{\sigma}{\sqrt{n}}
+\]</span></p>
+<p>So, as the sample size increases, the sample means tend to cluster more tightly around the true population mean.</p>
+<p>In a traditional statistics course, the Central Limit Theorem is usually introduced only for the sample mean. In a data science course, it is helpful to think more broadly. The bigger idea is this:</p>
+<blockquote class="blockquote">
+<p>When we repeatedly sample data and compute a statistic, that statistic has a sampling distribution.</p>
+</blockquote>
+<p>The sample mean is the most famous example, but it is not the only one. We can also examine the sampling distributions of:</p>
+<ul>
+<li>sample proportions</li>
+<li>sample medians</li>
+<li>sample standard deviations</li>
+<li>sample correlations</li>
+<li>regression slopes</li>
+</ul>
+<p>Some of these have cleaner mathematical results than others, but they all reinforce the same idea: statistics vary from sample to sample, and repeated sampling helps us understand that variability.</p>
+</section>
+<section id="using-simulation-to-study-sampling-distributions" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="using-simulation-to-study-sampling-distributions"><span class="header-section-number">12.3</span> Using Simulation to Study Sampling Distributions</h2>
+<p>Because we usually do not know the exact population distribution, simulation is a powerful way to study sampling distributions. In a data science workflow, we can repeatedly sample observations from a dataset, compute a statistic each time, and then visualize the distribution of those results. For the examples below, we will use the <code>diamonds</code> dataset from the <code>ggplot2</code> library.</p>
+<p>We can see with the data that it is highly skewed and not symmetric.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(diamonds, <span class="fu">aes</span>(<span class="at">x=</span>price)) <span class="sc">+</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">30</span>, <span class="at">fill=</span><span class="st">"lightgreen"</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Histogram of Price"</span>, </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle=</span><span class="st">"Notice how the data is highly skewed"</span>) <span class="sc">+</span> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="fl">0.5</span>),</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-12-Sampling-and-CLT_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To make repeated sampling easier, we will use the following user-built functions. The first function is designed for one-variable statistics such as the mean, median, standard deviation, or interquartile range. The <code>sampling_distribution()</code> function takes a single vector of data, repeatedly samples from it with replacement, computes a summary statistic for each sample, and returns the resulting sampling distribution.</p>
+<p>The second function is designed for bivariate statistics such as correlation or regression slope. The <code>sampling_distribution_bivariate()</code> function works similarly to the first function, but instead of sampling from a single vector, it samples rows from a data frame. This allows us to preserve the pairing between two variables when calculating bivariate statistics such as correlation or regression slope.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sampling_distribution <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">sample_size=</span><span class="dv">30</span>, <span class="at">n_samples=</span><span class="dv">1000</span>, <span class="at">FUN=</span>mean){</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  sample_dist <span class="ot">&lt;-</span> <span class="fu">c</span>() </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_samples){</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    sample <span class="ot">&lt;-</span> <span class="fu">sample</span>(x, <span class="at">size=</span>sample_size, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    sample_stat <span class="ot">&lt;-</span> <span class="fu">FUN</span>(sample, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    sample_dist[i] <span class="ot">&lt;-</span> sample_stat</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">tibble</span>(<span class="at">stat=</span>sample_dist))</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>sampling_distribution_bivariate <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x, y, <span class="at">sample_size =</span> <span class="dv">30</span>, <span class="at">n_samples =</span> <span class="dv">1000</span>, <span class="at">FUN =</span> cor){</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  sample_dist <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_samples){</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    current_sample <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">slice_sample</span>(<span class="at">n =</span> sample_size, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    sample_stat <span class="ot">&lt;-</span> <span class="fu">FUN</span>(current_sample[[x]], current_sample[[y]])</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    sample_dist[i] <span class="ot">&lt;-</span> sample_stat</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">tibble</span>(<span class="at">stat=</span>sample_dist))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="sampling-distribution-of-the-mean" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="sampling-distribution-of-the-mean"><span class="header-section-number">12.4</span> Sampling Distribution of the Mean</h2>
+<p>We begin with the sample mean, since this is the statistic most directly connected to the Central Limit Theorem. The code below repeatedly takes a sample of size 30 from the dataset and calculates the mean price. It then stores the results and repeats the process 100 times, which then results in the distribution of sample means.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mean_df <span class="ot">&lt;-</span> <span class="fu">sampling_distribution</span>(diamonds<span class="sc">$</span>price, <span class="dv">30</span>, <span class="dv">1000</span>, mean)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Population mean:"</span>, <span class="fu">round</span>(<span class="fu">mean</span>(diamonds<span class="sc">$</span>price), <span class="dv">2</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sampling distribution mean:"</span>, <span class="fu">round</span>(<span class="fu">mean</span>(mean_df<span class="sc">$</span>stat), <span class="dv">2</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Population SD/sqrt(n):"</span>, <span class="fu">round</span>(<span class="fu">sd</span>(diamonds<span class="sc">$</span>price)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">30</span>), <span class="dv">2</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sampling distribution SD:"</span>, <span class="fu">round</span>(<span class="fu">sd</span>(mean_df<span class="sc">$</span>stat), <span class="dv">2</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Population mean: 3932.8 
+ Sampling distribution mean: 3943.55 
+ Population SD/sqrt(n): 728.37 
+ Sampling distribution SD: 743.99 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mean_df, <span class="fu">aes</span>(<span class="at">x =</span> stat)) <span class="sc">+</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill=</span><span class="st">"lightgreen"</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Sampling Distribution of the Sample Mean"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Sample Mean of Volume"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">+</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-12-Sampling-and-CLT_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Notice what we expect to happen:</p>
+<ul>
+<li>the distribution should be centered near the population mean</li>
+<li>the distribution should have less variability than the raw data</li>
+<li>the distribution of sample means often looks approximately bell-shaped</li>
+</ul>
+</section>
+<section id="how-large-does-the-sample-size-need-to-be" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="how-large-does-the-sample-size-need-to-be"><span class="header-section-number">12.5</span> How Large Does the Sample Size Need to Be?</h2>
+<p>One important idea behind the Central Limit Theorem is that the sample size must be large enough for the sampling distribution of the sample mean to become approximately normal. If the original population is skewed, then smaller sample sizes may still produce a sampling distribution that is somewhat skewed. As the sample size increases, the sampling distribution of the mean tends to become more symmetric and bell-shaped.</p>
+<p>To explore this idea, we will use the <code>sampling_distribution()</code> function with <code>diamonds$price</code>, which is a strongly right-skewed variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mean_n1 <span class="ot">&lt;-</span> <span class="fu">sampling_distribution</span>(diamonds<span class="sc">$</span>price, <span class="at">sample_size =</span> <span class="dv">1</span>, <span class="at">n_samples =</span> <span class="dv">1000</span>, <span class="at">FUN =</span> mean)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>mean_n5 <span class="ot">&lt;-</span> <span class="fu">sampling_distribution</span>(diamonds<span class="sc">$</span>price, <span class="at">sample_size =</span> <span class="dv">5</span>, <span class="at">n_samples =</span> <span class="dv">1000</span>, <span class="at">FUN =</span> mean)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>mean_n10 <span class="ot">&lt;-</span> <span class="fu">sampling_distribution</span>(diamonds<span class="sc">$</span>price, <span class="at">sample_size =</span> <span class="dv">10</span>, <span class="at">n_samples =</span> <span class="dv">1000</span>, <span class="at">FUN =</span> mean)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>mean_n30 <span class="ot">&lt;-</span> <span class="fu">sampling_distribution</span>(diamonds<span class="sc">$</span>price, <span class="at">sample_size =</span> <span class="dv">30</span>, <span class="at">n_samples =</span> <span class="dv">1000</span>, <span class="at">FUN =</span> mean)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>mean_compare <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">n = 1</span><span class="st">`</span> <span class="ot">=</span> mean_n1, <span class="st">`</span><span class="at">n = 5</span><span class="st">`</span> <span class="ot">=</span> mean_n5, </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                       <span class="st">`</span><span class="at">n = 10</span><span class="st">`</span> <span class="ot">=</span> mean_n10, <span class="st">`</span><span class="at">n = 30</span><span class="st">`</span> <span class="ot">=</span> mean_n30) <span class="sc">|&gt;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"sample_size"</span>, <span class="at">values_to =</span> <span class="st">"stat"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sample_size =</span> <span class="fu">factor</span>(sample_size, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"n = 1"</span>, <span class="st">"n = 5"</span>, <span class="st">"n = 10"</span>, <span class="st">"n = 30"</span>)))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mean_compare, <span class="fu">aes</span>(<span class="at">x =</span> stat<span class="sc">$</span>stat)) <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill=</span><span class="st">"lightgreen"</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> sample_size, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Sampling Distribution of the Sample Mean for Different Sample Sizes"</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Sample Mean of Price"</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">+</span> </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-12-Sampling-and-CLT_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Notice that the sampling distribution for <code>n = 5</code> may still show some skewness because the original population of diamond prices is highly skewed. By the time we reach <code>n = 10</code>, the distribution often looks more symmetric, and for <code>n = 30</code>, it tends to look even more bell-shaped. This demonstrates the main idea of the Central Limit Theorem: even when the population distribution is not normal, the sampling distribution of the sample mean becomes more nearly normal as the sample size increases. Also notice how the spread of the data becomes more compact as the sample size increases.</p>
+</section>
+<section id="sampling-distribution-of-the-median" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="sampling-distribution-of-the-median"><span class="header-section-number">12.6</span> Sampling Distribution of the Median</h2>
+<p>The mean is useful, but in data science we often work with skewed data, where the median may be a better summary of center. We should note that the median also has a sampling distribution just like the mean. It does not have a “nice” formula for us to follow like the mean does, but it still becomes more stable as the sample size increases. This is an important reminder that the idea of a sampling distribution applies to many summary statistics, not just the mean.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>median_df <span class="ot">&lt;-</span> <span class="fu">sampling_distribution</span>(diamonds<span class="sc">$</span>price, <span class="dv">100</span>, <span class="dv">1000</span>, median)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Population median:"</span>, <span class="fu">round</span>(<span class="fu">median</span>(diamonds<span class="sc">$</span>price), <span class="dv">2</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Sampling distribution median:"</span>, <span class="fu">round</span>(<span class="fu">median</span>(median_df<span class="sc">$</span>stat), <span class="dv">2</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Population IQR"</span>, <span class="fu">round</span>(<span class="fu">IQR</span>(diamonds<span class="sc">$</span>price), <span class="dv">2</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Sampling distribution IQR:"</span>, <span class="fu">round</span>(<span class="fu">IQR</span>(median_df<span class="sc">$</span>stat), <span class="dv">2</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Population median: 2401 
+ Sampling distribution median: 2407.25 
+ Population IQR 4374.25 
+ Sampling distribution IQR: 572.75 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(median_df, <span class="fu">aes</span>(<span class="at">x =</span> stat)) <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill=</span><span class="st">"lightgreen"</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Sampling Distribution of the Sample Median"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Sample Median of Volume"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">+</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-12-Sampling-and-CLT_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sampling-distribution-of-a-sample-proportion" class="level2" data-number="12.7">
+<h2 data-number="12.7" class="anchored" data-anchor-id="sampling-distribution-of-a-sample-proportion"><span class="header-section-number">12.7</span> Sampling Distribution of a Sample Proportion</h2>
+<p>Now suppose we create a binary variable indicating whether or not a diamond has an <code>Ideal</code> cut.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>diamonds2 <span class="ot">&lt;-</span> diamonds <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ideal_cut =</span> cut <span class="sc">==</span> <span class="st">"Ideal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can now repeatedly sample from this dataset and compute the proportion of diamonds in each sample that are classified as having an <code>Ideal</code> cut.</p>
+<p>For the sample proportion, the sampling distribution is centered at the true population proportion <span class="math inline">\(p\)</span>. When the observations are independent, the standard error is: <span class="math display">\[
+SE(\hat{p}) = \sqrt{\frac{p(1-p)}{n}}
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>prop_dist <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>){</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  prop_dist[i] <span class="ot">&lt;-</span> diamonds2 <span class="sc">|&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">500</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summarise</span>(<span class="at">stat =</span> <span class="fu">mean</span>(ideal_cut, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pull</span>(stat)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>prop_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">stat =</span> prop_dist)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">mean</span>(diamonds2<span class="sc">$</span>ideal_cut)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Population proportion:"</span>, <span class="fu">round</span>(<span class="fu">mean</span>(diamonds2<span class="sc">$</span>ideal_cut), <span class="dv">5</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Sampling distribution proportion:"</span>, <span class="fu">round</span>(<span class="fu">mean</span>(prop_df<span class="sc">$</span>stat), <span class="dv">5</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Population SE"</span>, <span class="fu">round</span>(<span class="fu">sqrt</span>(p<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>p)<span class="sc">/</span><span class="dv">500</span>), <span class="dv">5</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Sampling distribution SE:"</span>, <span class="fu">round</span>(<span class="fu">sd</span>(prop_df<span class="sc">$</span>stat), <span class="dv">5</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Population proportion: 0.39954 
+ Sampling distribution proportion: 0.40002 
+ Population SE 0.0219 
+ Sampling distribution SE: 0.02163 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(prop_df, <span class="fu">aes</span>(<span class="at">x =</span> stat)) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill=</span><span class="st">"lightgreen"</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Sampling Distribution of a Sample Proportion"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Sample Proportion of Ideal Cut Diamonds"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">+</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-12-Sampling-and-CLT_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is useful because many data science problems involve proportions: click-through rates, conversion rates, proportions of customers in a category, and so on. The sample proportion has its own sampling distribution, and for large enough samples it is often approximately normal as well.</p>
+</section>
+<section id="sampling-distribution-of-a-correlation" class="level2" data-number="12.8">
+<h2 data-number="12.8" class="anchored" data-anchor-id="sampling-distribution-of-a-correlation"><span class="header-section-number">12.8</span> Sampling Distribution of a Correlation</h2>
+<p>In a data science course, we are often interested in relationships between two variables. One natural extension is to look at the sampling distribution of a correlation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cor_df <span class="ot">&lt;-</span> <span class="fu">sampling_distribution_bivariate</span>(diamonds, <span class="at">x =</span> <span class="st">"depth"</span>, <span class="at">y =</span> <span class="st">"table"</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">sample_size =</span> <span class="dv">30</span>, <span class="at">n_samples =</span> <span class="dv">1000</span>, <span class="at">FUN =</span> cor)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cor_df, <span class="fu">aes</span>(<span class="at">x =</span> stat)) <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill=</span><span class="st">"lightgreen"</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Sampling Distribution of the Sample Correlation"</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Sample Correlation Between Depth and Table"</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">+</span> </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-12-Sampling-and-CLT_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This helps reinforce that bivariate summaries also vary from sample to sample. Even if the underlying relationship is strong, the exact sample correlation will change depending on which observations are included. Repeated sampling helps us understand how much variation is typical.</p>
+</section>
+<section id="comparing-several-statistics-at-once" class="level2" data-number="12.9">
+<h2 data-number="12.9" class="anchored" data-anchor-id="comparing-several-statistics-at-once"><span class="header-section-number">12.9</span> Comparing Several Statistics at Once</h2>
+<p>We can also compare multiple sampling distributions side by side.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>mean_dist <span class="ot">&lt;-</span> <span class="fu">sampling_distribution</span>(diamonds<span class="sc">$</span>price, <span class="at">sample_size =</span> <span class="dv">30</span>, <span class="at">n_samples =</span> <span class="dv">1000</span>, <span class="at">FUN =</span> mean)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>median_dist <span class="ot">&lt;-</span> <span class="fu">sampling_distribution</span>(diamonds<span class="sc">$</span>price, <span class="at">sample_size =</span> <span class="dv">30</span>, <span class="at">n_samples =</span> <span class="dv">1000</span>, <span class="at">FUN =</span> median)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>sd_dist <span class="ot">&lt;-</span> <span class="fu">sampling_distribution</span>(diamonds<span class="sc">$</span>price, <span class="at">sample_size =</span> <span class="dv">30</span>, <span class="at">n_samples =</span> <span class="dv">1000</span>, <span class="at">FUN =</span> sd)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>sim_stats <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">mean_stat =</span> mean_dist,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">median_stat =</span> median_dist,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sd_stat =</span> sd_dist) <span class="sc">|&gt;</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"stat_name"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sim_stats, <span class="fu">aes</span>(<span class="at">x =</span> value<span class="sc">$</span>stat)) <span class="sc">+</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill=</span><span class="st">"lightgreen"</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> stat_name, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Sampling Distributions of Several Statistics"</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Statistic Value"</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">+</span> </span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-12-Sampling-and-CLT_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This makes it easier to see that different statistics have different centers and different amounts of variability, even when they are all computed from the same underlying dataset.</p>
+<p>The main idea to remember is not just the Central Limit Theorem itself, but the broader concept of a sampling distribution. A sample statistic is not fixed across repeated samples. If we repeatedly draw samples and recompute the same statistic, we get a distribution of possible values. For the sample mean, the Central Limit Theorem tells us that this distribution is often approximately normal for large enough samples. But the same repeated-sampling idea also applies to proportions, medians, correlations, and many other summaries that are useful in data science. This is one of the reasons simulation is so helpful. It allows us to see these ideas directly, even when the mathematics becomes more complicated.</p>
 
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -677,8 +1036,8 @@ window.Quarto = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./Lecture-11-Distributions-Across-Groups.html" class="pagination-link" aria-label="Distributions Across Groups">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Distributions Across Groups</span></span>
+      <a href="./Lecture-11-Distributions-Across-Groups.html" class="pagination-link" aria-label="Describing Relationships Between Two Variables">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Describing Relationships Between Two Variables</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
