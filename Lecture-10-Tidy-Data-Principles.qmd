@@ -186,6 +186,10 @@ union(df3, df4)
 <div class="chapter-resources-header">
   <a href="https://youtu.be/2TOdQkH9cYw" target="_blank">Lecture Video</a>
 </div>
+<div class="chapter-resources-grid">
+  <div><a href="Assignments/L10-Inclass-Assignment.pdf" target="_blank">In-Class Exercises</a></div>
+  <div><a href="https://youtu.be/Sl5g4-OXPXc" target="_blank">In-Class Exercises Video Solutions</a></div>
+</div>
 <div class="chapter-resources-footer">
   <a href="Assignments/L10-Problem-Set.pdf" target="_blank">Problem Set Questions</a>
 </div>

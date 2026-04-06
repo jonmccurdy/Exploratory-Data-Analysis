@@ -376,11 +376,11 @@ Supplemental Material
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 48.83616</code></pre>
+<pre><code>[1] 48.06</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 48.41399</code></pre>
+<pre><code>[1] 51.78747</code></pre>
 </div>
 </div>
 <p>In both cases, the population mean used to generate the data was 50, yet the sample mean changed from sample to sample. That is not a mistake, rather is is sampling variability. Because of this variability, reporting only a point estimate is not enough. We need a way to describe how uncertain our estimate might be, and that is the role of a confidence interval.</p>
@@ -852,6 +852,19 @@ For proportions, the estimate is <span class="math inline">\(\hat{p}\)</span>.</
 <li>use the standard error <span class="math inline">\(\sqrt{\hat{p}(1-\hat{p})/n}\)</span>.</li>
 </ul>
 <p>The most important conceptual idea is that confidence intervals are based on repeated sampling. A 95% confidence interval is produced by a method that captures the true parameter about 95% of the time in the long run. Finally, confidence intervals are not limited to one overall summary. With tools like <code>dplyr</code>, we can compute them across groups and begin using them in richer, bivariate data analysis settings.</p>
+<div class="chapter-resources">
+<div class="chapter-resources-header">
+<p><a href="https://youtu.be/tsY4Oqkylhk" target="_blank">Lecture Video</a></p>
+</div>
+<div class="chapter-resources-grid">
+<div>
+<a href="Assignments/L13-Inclass-Assignment.pdf" target="_blank">In-Class Exercises</a>
+</div>
+<div>
+<a href="https://youtu.be/eocd_A-9Ycc" target="_blank">In-Class Exercises Video Solutions</a>
+</div>
+</div>
+</div>
 
 
 

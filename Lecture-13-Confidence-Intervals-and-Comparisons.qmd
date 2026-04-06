@@ -485,3 +485,15 @@ For a population proportion:
 - use the standard error $\sqrt{\hat{p}(1-\hat{p})/n}$.
 
 The most important conceptual idea is that confidence intervals are based on repeated sampling. A 95\% confidence interval is produced by a method that captures the true parameter about 95\% of the time in the long run. Finally, confidence intervals are not limited to one overall summary. With tools like `dplyr`, we can compute them across groups and begin using them in richer, bivariate data analysis settings.
+
+::: {.chapter-resources}
+
+<div class="chapter-resources-header">
+  <a href="https://youtu.be/tsY4Oqkylhk" target="_blank">Lecture Video</a>
+</div>
+<div class="chapter-resources-grid">
+  <div><a href="Assignments/L13-Inclass-Assignment.pdf" target="_blank">In-Class Exercises</a></div>
+  <div><a href="https://youtu.be/eocd_A-9Ycc" target="_blank">In-Class Exercises Video Solutions</a></div>
+</div>
+
+:::

@@ -435,9 +435,9 @@ E(\bar{x}) = \mu \qquad \text{and} \qquad SD(\bar{x}) = \frac{\sigma}{\sqrt{n}}
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Population mean: 3932.8 
- Sampling distribution mean: 3943.55 
+ Sampling distribution mean: 3926.91 
  Population SD/sqrt(n): 728.37 
- Sampling distribution SD: 743.99 </code></pre>
+ Sampling distribution SD: 718.43 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mean_df, <span class="fu">aes</span>(<span class="at">x =</span> stat)) <span class="sc">+</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill=</span><span class="st">"lightgreen"</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
@@ -506,9 +506,9 @@ E(\bar{x}) = \mu \qquad \text{and} \qquad SD(\bar{x}) = \frac{\sigma}{\sqrt{n}}
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Population median: 2401 
- Sampling distribution median: 2407.25 
+ Sampling distribution median: 2413.5 
  Population IQR 4374.25 
- Sampling distribution IQR: 572.75 </code></pre>
+ Sampling distribution IQR: 570.25 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(median_df, <span class="fu">aes</span>(<span class="at">x =</span> stat)) <span class="sc">+</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill=</span><span class="st">"lightgreen"</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
@@ -556,9 +556,9 @@ SE(\hat{p}) = \sqrt{\frac{p(1-p)}{n}}
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Population proportion: 0.39954 
- Sampling distribution proportion: 0.40002 
+ Sampling distribution proportion: 0.40025 
  Population SE 0.0219 
- Sampling distribution SE: 0.02163 </code></pre>
+ Sampling distribution SE: 0.02151 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(prop_df, <span class="fu">aes</span>(<span class="at">x =</span> stat)) <span class="sc">+</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill=</span><span class="st">"lightgreen"</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
@@ -629,6 +629,11 @@ SE(\hat{p}) = \sqrt{\frac{p(1-p)}{n}}
 </div>
 <p>This makes it easier to see that different statistics have different centers and different amounts of variability, even when they are all computed from the same underlying dataset.</p>
 <p>The main idea to remember is not just the Central Limit Theorem itself, but the broader concept of a sampling distribution. A sample statistic is not fixed across repeated samples. If we repeatedly draw samples and recompute the same statistic, we get a distribution of possible values. For the sample mean, the Central Limit Theorem tells us that this distribution is often approximately normal for large enough samples. But the same repeated-sampling idea also applies to proportions, medians, correlations, and many other summaries that are useful in data science. This is one of the reasons simulation is so helpful. It allows us to see these ideas directly, even when the mathematics becomes more complicated.</p>
+<div class="chapter-resources">
+<div class="chapter-resources-header">
+<p><a href="https://youtu.be/fw_-Uc8DtEA" target="_blank">Lecture Video</a></p>
+</div>
+</div>
 
 
 

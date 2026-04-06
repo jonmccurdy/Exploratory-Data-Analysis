@@ -273,5 +273,12 @@ The goal is not just to make a plot or calculate a number. The goal is to commun
 <div class="chapter-resources-header">
   <a href="https://youtu.be/yKobh1e23ek" target="_blank">Lecture Video</a>
 </div>
+<div class="chapter-resources-grid">
+  <div><a href="Assignments/L11-Inclass-Assignment.pdf" target="_blank">In-Class Exercises</a></div>
+  <div><a href="https://youtu.be/zn_MpHXYGx4" target="_blank">In-Class Exercises Video Solutions</a></div>
+</div>
+<div class="chapter-resources-footer">
+  <a href="Assignments/L11-Problem-Set.pdf" target="_blank">Problem Set Questions</a>
+</div>
 
 :::

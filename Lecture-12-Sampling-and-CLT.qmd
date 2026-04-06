@@ -279,3 +279,11 @@ ggplot(sim_stats, aes(x = value$stat)) +
 This makes it easier to see that different statistics have different centers and different amounts of variability, even when they are all computed from the same underlying dataset.
 
 The main idea to remember is not just the Central Limit Theorem itself, but the broader concept of a sampling distribution. A sample statistic is not fixed across repeated samples. If we repeatedly draw samples and recompute the same statistic, we get a distribution of possible values. For the sample mean, the Central Limit Theorem tells us that this distribution is often approximately normal for large enough samples. But the same repeated-sampling idea also applies to proportions, medians, correlations, and many other summaries that are useful in data science. This is one of the reasons simulation is so helpful. It allows us to see these ideas directly, even when the mathematics becomes more complicated.
+
+::: {.chapter-resources}
+
+<div class="chapter-resources-header">
+  <a href="https://youtu.be/fw_-Uc8DtEA" target="_blank">Lecture Video</a>
+</div>
+
+:::
