@@ -1,3 +1,294 @@
 # Hypothesis Testing Foundations
 
-Under Construction
+Confidence intervals and hypothesis tests both allow us to make inferences about a population using sample data. A confidence interval gives a range of plausible values for a population parameter. A hypothesis test, on the other hand, begins with a specific claim about a population parameter and asks whether the sample provides enough evidence to question that claim.
+
+This chapter serves as a refresher on the general logic of hypothesis testing. The same basic framework will be used later when we study inference for means and inference for proportions.
+
+## Hypothesis Testing
+
+A hypothesis test begins with a claim about a population parameter. This claim is written as the null hypothesis, denoted by $H_0$. The null hypothesis represents the starting assumption. The competing claim is written as the alternative hypothesis, denoted by $H_A$. The alternative hypothesis represents what we are looking for evidence to support.
+
+For example, if we want to investigate whether a population mean differs from 82.3, we would write
+
+$$
+H_0:\mu = 82.3
+\qquad \text{vs} \qquad 
+H_A:\mu \neq 82.3
+$$
+
+If we instead wanted to investigate whether a population proportion differs from 0.40, we would write
+
+$$
+H_0:p = 0.40
+\qquad \text{vs} \qquad 
+H_A:p \neq 0.40
+$$
+
+So, while the parameter may change from setting to setting, the overall logic of hypothesis testing remains the same.
+
+It is important to understand that there are only two conclusions we can make in a hypothesis test:
+
+-   Reject the null hypothesis
+-   Fail to reject the null hypothesis
+
+If we reject the null hypothesis, then the sample provides enough evidence in favor of the alternative hypothesis. If we fail to reject the null hypothesis, then the sample does not provide enough evidence against the null hypothesis. What we do not do is accept the null hypothesis. We are not proving that the null hypothesis is true; we are only deciding whether the sample gives us enough evidence to reject it.
+
+A common analogy is the judicial system in the United States. A defendant begins with the presumption of innocence. If enough evidence is presented, the jury may reject that presumption. Otherwise, the jury returns a verdict of not guilty. They do not prove innocence; they only decide whether there was enough evidence to reject the original assumption.
+
+## Key Ideas in Hypothesis Testing
+
+To carry out a hypothesis test, we compare what we observed in the sample to what we would expect if the null hypothesis were true. There are several important ideas involved in this process.
+
+### Significance Level
+
+The significance level is denoted by $\alpha$. It represents the cutoff we use when deciding whether the evidence against the null hypothesis is strong enough. In this class, we will usually use
+
+$$
+\alpha = 0.05
+$$
+
+This means that if the probability of our observed result is very small under the null hypothesis, we will reject $H_0$.
+
+### Test Statistic
+
+The test statistic measures how far the observed sample result is from the hypothesized value, relative to the amount of variability we expect from sample to sample. In general, it has the form
+
+$$
+\text{test statistic} =
+\frac{\text{observed} - \text{hypothesized}}{\text{standard error}}
+$$
+
+A large positive or large negative test statistic suggests that the observed result is far from what we would expect if the null hypothesis were true.
+
+## P-value
+
+The $p$-value is the probability of obtaining the test statistic or a more extreme test statistic, given that the null hypothesis is true.
+
+A small $p$-value means that the observed result would be unusual if the null hypothesis were true. In that case, we have evidence against $H_0$.
+
+The decision rule (typically) is:
+
+$$
+\text{If } p\text{-value} < \alpha,\text{ reject } H_0
+$$
+
+$$
+\text{If } p\text{-value} \geq \alpha,\text{ fail to reject } H_0
+$$
+
+### Rejection Region and Critical Values
+
+Another way to think about a hypothesis test is through the rejection region. The rejection region consists of test statistic values that are so extreme that they would be unlikely to occur if the null hypothesis were true.
+
+The boundary values for this region are called critical values. For a two-sided test with $\alpha=0.05$, the rejection region is split between the two tails, so there is $\alpha/2 = 0.025$ in each tail.
+
+In practice, we will often focus more on the $p$-value than on the rejection region, but both approaches lead to the same conclusion.
+
+## Two-Sided and One-Sided Tests
+
+In this class, many of our early examples will use two-sided tests. A two-sided test checks whether a parameter is different from a claimed value in either direction.
+
+For example:
+
+$$
+H_0:\mu = 50
+\qquad \text{vs} \qquad 
+H_A:\mu \neq 50
+$$
+
+A one-sided test checks only one direction. For example:
+
+$$
+H_0:\mu = 50
+\qquad \text{vs} \qquad 
+H_A:\mu > 50
+$$
+
+or
+
+$$
+H_0:\mu = 50
+\qquad \text{vs} \qquad 
+H_A:\mu < 50
+$$
+
+The form of the alternative hypothesis determines whether the test is two-sided or one-sided, and this changes how the $p$-value is calculated.
+
+## Type I and Type II Errors
+
+Because hypothesis testing is based on sample data, mistakes are possible.
+
+A Type I Error occurs when we reject the null hypothesis even though it is actually true.
+
+$$
+\text{Type I Error: Reject } H_0 \text{ when } H_0 \text{ is true}
+$$
+
+A Type II Error occurs when we fail to reject the null hypothesis even though it is actually false.
+
+$$
+\text{Type II Error: Fail to reject } H_0 \text{ when } H_0 \text{ is false}
+$$
+
+The significance level $\alpha$ is the probability of making a Type I Error.
+
+## General Steps for a Hypothesis Test
+
+No matter what parameter we are studying, the general process is the same:
+
+1. Identify the population parameter of interest
+2. State the null and alternative hypotheses
+3. Check the assumptions or conditions for the procedure
+4. Calculate the standard error
+5. Calculate the test statistic
+6. Find the $p$-value
+7. Compare the $p$-value to $\alpha$
+8. State the conclusion in context
+
+## Example: A One-Sample Test for a Mean
+
+Suppose doctors claim that the mean birth weight of babies is 7.3 pounds. We can use the `births` dataset in the `openintro` library to investigate whether the mean birth weight is different from 7.3 pounds.
+
+First, we state the hypotheses:
+
+$$ 
+H_0:\mu = 7.3
+\qquad \text{vs} \qquad 
+H_A:\mu \neq 7.3
+$$
+
+Next, we prepare the data in R.
+
+```{r}
+#| warning: false
+#| message: false
+library(dplyr)
+library(openintro)
+
+births_clean <- births |> select(weight) |> filter(!is.na(weight))
+```
+
+Now we can calculate the sample size, sample mean, sample standard deviation, and standard error.
+
+```{r}
+births_clean |>
+  summarise(
+    n = n(),
+    xbar = mean(weight),
+    s = sd(weight),
+    se = sd(weight) / sqrt(n())
+  )
+```
+
+If we want to carry out the test manually, we can calculate the test statistic using
+
+$$
+t = \frac{\bar{x} - \mu_0}{SE}
+$$
+
+where $\mu_0 = 7.3$ is the hypothesized mean.
+
+```{r}
+se <- births_clean |>
+  summarise(se = sd(weight) / sqrt(n())) |>
+  pull(se)
+
+t_stat <- births_clean |>
+  summarise(t = (mean(weight) - 7.3) / (sd(weight) / sqrt(n()))) |>
+  pull(t)
+
+t_stat
+```
+
+Once we have the test statistic, we can calculate the two-sided $p$-value using the `pt()` function.
+
+```{r}
+pt(t_stat, df = nrow(births_clean) - 1) * 2
+```
+
+If the $p$-value is less than 0.05, we reject the null hypothesis. If the $p$-value is greater than or equal to 0.05, we fail to reject the null hypothesis.
+
+We can also carry out the same test using the built-in `t.test()` function.
+
+```{r}
+t.test(births_clean$weight, mu = 7.3)
+```
+
+This built-in function gives the test statistic, degrees of freedom, $p$-value, confidence interval, and sample mean all at once. The conclusion should always be written in context. For example, if the $p$-value is less than 0.05, we would write something like:
+
+> There is enough evidence to suggest that the true mean birth weight is different from 7.3 pounds.
+
+If the $p$-value is greater than or equal to 0.05, we would write:
+
+> There is not enough evidence to suggest that the true mean birth weight is different from 7.3 pounds.
+
+## Example: A One-Sample Test for a Proportion
+
+Suppose a university claims that 30% of students attend office hours at least once during the semester. We want to investigate whether the true proportion is actually greater than 30%.
+
+A random sample of 200 students is taken, and 74 say they attended office hours at least once.
+
+First, we state the hypotheses:
+
+$$
+H_0:p = 0.30
+\qquad \text{vs} \qquad
+H_A:p < 0.30
+$$
+
+This is a right-sided test because we are investigating whether the true proportion is greater than the claimed value.
+
+Next, we record the sample information in R.
+
+```{r}
+x <- 74
+n <- 200
+p0 <- 0.30
+
+phat <- x / n
+phat
+```
+
+Next, we calculate the standard error:
+
+$$
+SE = \sqrt{\frac{p_0(1-p_0)}{n}}
+$$
+
+```{r}
+se <- sqrt(p0 * (1 - p0) / n)
+se
+```
+
+Now we calculate the test statistic:
+
+$$
+z = \frac{\hat{p} - p_0}{SE}
+$$
+```{r}
+z_stat <- (phat - p0) / se
+z_stat
+```
+
+Because this is a right-sided test, the $p$-value is 1 minus the probability of being less than the observed test statistic (this gives us the area to the right of the test statistic). We calculate this with `pnorm()`.
+
+```{r}
+1 - pnorm(z_stat)
+```
+
+If the $p$-value is less than 0.05, we reject the null hypothesis. If the $p$-value is greater than or equal to 0.05, we fail to reject the null hypothesis.
+
+We can also carry out the same test using the built-in `prop.test()` function.
+
+```{r}
+prop.test(x = x, n = n, p = p0, alternative = "greater", correct = FALSE)
+```
+
+The conclusion should always be written in context. For example, if the $p$-value is less than 0.05, we would write something like:
+
+> There is enough evidence to suggest that the true proportion of students who attend office hours at least once during the semester is greater than 30%.
+
+If the $p$-value is greater than or equal to 0.05, we would write:
+
+> There is not enough evidence to suggest that the true proportion of students who attend office hours at least once during the semester is greater than 30%.
+

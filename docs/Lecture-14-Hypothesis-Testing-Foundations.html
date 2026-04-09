@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -153,13 +188,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-2-Strings-and-Text-Processing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strings and Text Processing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Text Processing and Useful R Tools</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-3-Factors-and-Dates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors and Dates</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors, Dates, and Special Values</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -207,13 +242,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-11-Distributions-Across-Groups.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Distributions Across Groups</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Describing Relationships Between Two Variables</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-12-Sampling-and-CLT.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sampling and CLT</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sampling Distributions and the Central Limit Theorem</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -245,8 +280,28 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#hypothesis-testing" id="toc-hypothesis-testing" class="nav-link active" data-scroll-target="#hypothesis-testing"><span class="header-section-number">14.1</span> Hypothesis Testing</a></li>
+  <li><a href="#key-ideas-in-hypothesis-testing" id="toc-key-ideas-in-hypothesis-testing" class="nav-link" data-scroll-target="#key-ideas-in-hypothesis-testing"><span class="header-section-number">14.2</span> Key Ideas in Hypothesis Testing</a>
+  <ul class="collapse">
+  <li><a href="#significance-level" id="toc-significance-level" class="nav-link" data-scroll-target="#significance-level"><span class="header-section-number">14.2.1</span> Significance Level</a></li>
+  <li><a href="#test-statistic" id="toc-test-statistic" class="nav-link" data-scroll-target="#test-statistic"><span class="header-section-number">14.2.2</span> Test Statistic</a></li>
+  </ul></li>
+  <li><a href="#p-value" id="toc-p-value" class="nav-link" data-scroll-target="#p-value"><span class="header-section-number">14.3</span> P-value</a>
+  <ul class="collapse">
+  <li><a href="#rejection-region-and-critical-values" id="toc-rejection-region-and-critical-values" class="nav-link" data-scroll-target="#rejection-region-and-critical-values"><span class="header-section-number">14.3.1</span> Rejection Region and Critical Values</a></li>
+  </ul></li>
+  <li><a href="#two-sided-and-one-sided-tests" id="toc-two-sided-and-one-sided-tests" class="nav-link" data-scroll-target="#two-sided-and-one-sided-tests"><span class="header-section-number">14.4</span> Two-Sided and One-Sided Tests</a></li>
+  <li><a href="#type-i-and-type-ii-errors" id="toc-type-i-and-type-ii-errors" class="nav-link" data-scroll-target="#type-i-and-type-ii-errors"><span class="header-section-number">14.5</span> Type I and Type II Errors</a></li>
+  <li><a href="#general-steps-for-a-hypothesis-test" id="toc-general-steps-for-a-hypothesis-test" class="nav-link" data-scroll-target="#general-steps-for-a-hypothesis-test"><span class="header-section-number">14.6</span> General Steps for a Hypothesis Test</a></li>
+  <li><a href="#example-a-one-sample-test-for-a-mean" id="toc-example-a-one-sample-test-for-a-mean" class="nav-link" data-scroll-target="#example-a-one-sample-test-for-a-mean"><span class="header-section-number">14.7</span> Example: A One-Sample Test for a Mean</a></li>
+  <li><a href="#example-a-one-sample-test-for-a-proportion" id="toc-example-a-one-sample-test-for-a-proportion" class="nav-link" data-scroll-target="#example-a-one-sample-test-for-a-proportion"><span class="header-section-number">14.8</span> Example: A One-Sample Test for a Proportion</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -270,10 +325,288 @@ window.Quarto = {
 </header>
 
 
-<p>Under Construction</p>
+<p>Confidence intervals and hypothesis tests both allow us to make inferences about a population using sample data. A confidence interval gives a range of plausible values for a population parameter. A hypothesis test, on the other hand, begins with a specific claim about a population parameter and asks whether the sample provides enough evidence to question that claim.</p>
+<p>This chapter serves as a refresher on the general logic of hypothesis testing. The same basic framework will be used later when we study inference for means and inference for proportions.</p>
+<section id="hypothesis-testing" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="hypothesis-testing"><span class="header-section-number">14.1</span> Hypothesis Testing</h2>
+<p>A hypothesis test begins with a claim about a population parameter. This claim is written as the null hypothesis, denoted by <span class="math inline">\(H_0\)</span>. The null hypothesis represents the starting assumption. The competing claim is written as the alternative hypothesis, denoted by <span class="math inline">\(H_A\)</span>. The alternative hypothesis represents what we are looking for evidence to support.</p>
+<p>For example, if we want to investigate whether a population mean differs from 82.3, we would write</p>
+<p><span class="math display">\[
+H_0:\mu = 82.3
+\qquad \text{vs} \qquad
+H_A:\mu \neq 82.3
+\]</span></p>
+<p>If we instead wanted to investigate whether a population proportion differs from 0.40, we would write</p>
+<p><span class="math display">\[
+H_0:p = 0.40
+\qquad \text{vs} \qquad
+H_A:p \neq 0.40
+\]</span></p>
+<p>So, while the parameter may change from setting to setting, the overall logic of hypothesis testing remains the same.</p>
+<p>It is important to understand that there are only two conclusions we can make in a hypothesis test:</p>
+<ul>
+<li>Reject the null hypothesis</li>
+<li>Fail to reject the null hypothesis</li>
+</ul>
+<p>If we reject the null hypothesis, then the sample provides enough evidence in favor of the alternative hypothesis. If we fail to reject the null hypothesis, then the sample does not provide enough evidence against the null hypothesis. What we do not do is accept the null hypothesis. We are not proving that the null hypothesis is true; we are only deciding whether the sample gives us enough evidence to reject it.</p>
+<p>A common analogy is the judicial system in the United States. A defendant begins with the presumption of innocence. If enough evidence is presented, the jury may reject that presumption. Otherwise, the jury returns a verdict of not guilty. They do not prove innocence; they only decide whether there was enough evidence to reject the original assumption.</p>
+</section>
+<section id="key-ideas-in-hypothesis-testing" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="key-ideas-in-hypothesis-testing"><span class="header-section-number">14.2</span> Key Ideas in Hypothesis Testing</h2>
+<p>To carry out a hypothesis test, we compare what we observed in the sample to what we would expect if the null hypothesis were true. There are several important ideas involved in this process.</p>
+<section id="significance-level" class="level3" data-number="14.2.1">
+<h3 data-number="14.2.1" class="anchored" data-anchor-id="significance-level"><span class="header-section-number">14.2.1</span> Significance Level</h3>
+<p>The significance level is denoted by <span class="math inline">\(\alpha\)</span>. It represents the cutoff we use when deciding whether the evidence against the null hypothesis is strong enough. In this class, we will usually use</p>
+<p><span class="math display">\[
+\alpha = 0.05
+\]</span></p>
+<p>This means that if the probability of our observed result is very small under the null hypothesis, we will reject <span class="math inline">\(H_0\)</span>.</p>
+</section>
+<section id="test-statistic" class="level3" data-number="14.2.2">
+<h3 data-number="14.2.2" class="anchored" data-anchor-id="test-statistic"><span class="header-section-number">14.2.2</span> Test Statistic</h3>
+<p>The test statistic measures how far the observed sample result is from the hypothesized value, relative to the amount of variability we expect from sample to sample. In general, it has the form</p>
+<p><span class="math display">\[
+\text{test statistic} =
+\frac{\text{observed} - \text{hypothesized}}{\text{standard error}}
+\]</span></p>
+<p>A large positive or large negative test statistic suggests that the observed result is far from what we would expect if the null hypothesis were true.</p>
+</section>
+</section>
+<section id="p-value" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="p-value"><span class="header-section-number">14.3</span> P-value</h2>
+<p>The <span class="math inline">\(p\)</span>-value is the probability of obtaining the test statistic or a more extreme test statistic, given that the null hypothesis is true.</p>
+<p>A small <span class="math inline">\(p\)</span>-value means that the observed result would be unusual if the null hypothesis were true. In that case, we have evidence against <span class="math inline">\(H_0\)</span>.</p>
+<p>The decision rule (typically) is:</p>
+<p><span class="math display">\[
+\text{If } p\text{-value} &lt; \alpha,\text{ reject } H_0
+\]</span></p>
+<p><span class="math display">\[
+\text{If } p\text{-value} \geq \alpha,\text{ fail to reject } H_0
+\]</span></p>
+<section id="rejection-region-and-critical-values" class="level3" data-number="14.3.1">
+<h3 data-number="14.3.1" class="anchored" data-anchor-id="rejection-region-and-critical-values"><span class="header-section-number">14.3.1</span> Rejection Region and Critical Values</h3>
+<p>Another way to think about a hypothesis test is through the rejection region. The rejection region consists of test statistic values that are so extreme that they would be unlikely to occur if the null hypothesis were true.</p>
+<p>The boundary values for this region are called critical values. For a two-sided test with <span class="math inline">\(\alpha=0.05\)</span>, the rejection region is split between the two tails, so there is <span class="math inline">\(\alpha/2 = 0.025\)</span> in each tail.</p>
+<p>In practice, we will often focus more on the <span class="math inline">\(p\)</span>-value than on the rejection region, but both approaches lead to the same conclusion.</p>
+</section>
+</section>
+<section id="two-sided-and-one-sided-tests" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="two-sided-and-one-sided-tests"><span class="header-section-number">14.4</span> Two-Sided and One-Sided Tests</h2>
+<p>In this class, many of our early examples will use two-sided tests. A two-sided test checks whether a parameter is different from a claimed value in either direction.</p>
+<p>For example:</p>
+<p><span class="math display">\[
+H_0:\mu = 50
+\qquad \text{vs} \qquad
+H_A:\mu \neq 50
+\]</span></p>
+<p>A one-sided test checks only one direction. For example:</p>
+<p><span class="math display">\[
+H_0:\mu = 50
+\qquad \text{vs} \qquad
+H_A:\mu &gt; 50
+\]</span></p>
+<p>or</p>
+<p><span class="math display">\[
+H_0:\mu = 50
+\qquad \text{vs} \qquad
+H_A:\mu &lt; 50
+\]</span></p>
+<p>The form of the alternative hypothesis determines whether the test is two-sided or one-sided, and this changes how the <span class="math inline">\(p\)</span>-value is calculated.</p>
+</section>
+<section id="type-i-and-type-ii-errors" class="level2" data-number="14.5">
+<h2 data-number="14.5" class="anchored" data-anchor-id="type-i-and-type-ii-errors"><span class="header-section-number">14.5</span> Type I and Type II Errors</h2>
+<p>Because hypothesis testing is based on sample data, mistakes are possible.</p>
+<p>A Type I Error occurs when we reject the null hypothesis even though it is actually true.</p>
+<p><span class="math display">\[
+\text{Type I Error: Reject } H_0 \text{ when } H_0 \text{ is true}
+\]</span></p>
+<p>A Type II Error occurs when we fail to reject the null hypothesis even though it is actually false.</p>
+<p><span class="math display">\[
+\text{Type II Error: Fail to reject } H_0 \text{ when } H_0 \text{ is false}
+\]</span></p>
+<p>The significance level <span class="math inline">\(\alpha\)</span> is the probability of making a Type I Error.</p>
+</section>
+<section id="general-steps-for-a-hypothesis-test" class="level2" data-number="14.6">
+<h2 data-number="14.6" class="anchored" data-anchor-id="general-steps-for-a-hypothesis-test"><span class="header-section-number">14.6</span> General Steps for a Hypothesis Test</h2>
+<p>No matter what parameter we are studying, the general process is the same:</p>
+<ol type="1">
+<li>Identify the population parameter of interest</li>
+<li>State the null and alternative hypotheses</li>
+<li>Check the assumptions or conditions for the procedure</li>
+<li>Calculate the standard error</li>
+<li>Calculate the test statistic</li>
+<li>Find the <span class="math inline">\(p\)</span>-value</li>
+<li>Compare the <span class="math inline">\(p\)</span>-value to <span class="math inline">\(\alpha\)</span></li>
+<li>State the conclusion in context</li>
+</ol>
+</section>
+<section id="example-a-one-sample-test-for-a-mean" class="level2" data-number="14.7">
+<h2 data-number="14.7" class="anchored" data-anchor-id="example-a-one-sample-test-for-a-mean"><span class="header-section-number">14.7</span> Example: A One-Sample Test for a Mean</h2>
+<p>Suppose doctors claim that the mean birth weight of babies is 7.3 pounds. We can use the <code>births</code> dataset in the <code>openintro</code> library to investigate whether the mean birth weight is different from 7.3 pounds.</p>
+<p>First, we state the hypotheses:</p>
+<p><span class="math display">\[
+H_0:\mu = 7.3
+\qquad \text{vs} \qquad
+H_A:\mu \neq 7.3
+\]</span></p>
+<p>Next, we prepare the data in R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openintro)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>births_clean <span class="ot">&lt;-</span> births <span class="sc">|&gt;</span> <span class="fu">select</span>(weight) <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(weight))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can calculate the sample size, sample mean, sample standard deviation, and standard error.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>births_clean <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">xbar =</span> <span class="fu">mean</span>(weight),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">s =</span> <span class="fu">sd</span>(weight),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">se =</span> <span class="fu">sd</span>(weight) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">n</span>())</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+      n  xbar     s    se
+  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1   150  7.05  1.50 0.122</code></pre>
+</div>
+</div>
+<p>If we want to carry out the test manually, we can calculate the test statistic using</p>
+<p><span class="math display">\[
+t = \frac{\bar{x} - \mu_0}{SE}
+\]</span></p>
+<p>where <span class="math inline">\(\mu_0 = 7.3\)</span> is the hypothesized mean.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> births_clean <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">se =</span> <span class="fu">sd</span>(weight) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">n</span>())) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(se)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>t_stat <span class="ot">&lt;-</span> births_clean <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">t =</span> (<span class="fu">mean</span>(weight) <span class="sc">-</span> <span class="fl">7.3</span>) <span class="sc">/</span> (<span class="fu">sd</span>(weight) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">n</span>()))) <span class="sc">|&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(t)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>t_stat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -2.077765</code></pre>
+</div>
+</div>
+<p>Once we have the test statistic, we can calculate the two-sided <span class="math inline">\(p\)</span>-value using the <code>pt()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pt</span>(t_stat, <span class="at">df =</span> <span class="fu">nrow</span>(births_clean) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.03944668</code></pre>
+</div>
+</div>
+<p>If the <span class="math inline">\(p\)</span>-value is less than 0.05, we reject the null hypothesis. If the <span class="math inline">\(p\)</span>-value is greater than or equal to 0.05, we fail to reject the null hypothesis.</p>
+<p>We can also carry out the same test using the built-in <code>t.test()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(births_clean<span class="sc">$</span>weight, <span class="at">mu =</span> <span class="fl">7.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  births_clean$weight
+t = -2.0778, df = 149, p-value = 0.03945
+alternative hypothesis: true mean is not equal to 7.3
+95 percent confidence interval:
+ 6.804439 7.287561
+sample estimates:
+mean of x 
+    7.046 </code></pre>
+</div>
+</div>
+<p>This built-in function gives the test statistic, degrees of freedom, <span class="math inline">\(p\)</span>-value, confidence interval, and sample mean all at once. The conclusion should always be written in context. For example, if the <span class="math inline">\(p\)</span>-value is less than 0.05, we would write something like:</p>
+<blockquote class="blockquote">
+<p>There is enough evidence to suggest that the true mean birth weight is different from 7.3 pounds.</p>
+</blockquote>
+<p>If the <span class="math inline">\(p\)</span>-value is greater than or equal to 0.05, we would write:</p>
+<blockquote class="blockquote">
+<p>There is not enough evidence to suggest that the true mean birth weight is different from 7.3 pounds.</p>
+</blockquote>
+</section>
+<section id="example-a-one-sample-test-for-a-proportion" class="level2" data-number="14.8">
+<h2 data-number="14.8" class="anchored" data-anchor-id="example-a-one-sample-test-for-a-proportion"><span class="header-section-number">14.8</span> Example: A One-Sample Test for a Proportion</h2>
+<p>Suppose a university claims that 30% of students attend office hours at least once during the semester. We want to investigate whether the true proportion is actually greater than 30%.</p>
+<p>A random sample of 200 students is taken, and 74 say they attended office hours at least once.</p>
+<p>First, we state the hypotheses:</p>
+<p><span class="math display">\[
+H_0:p = 0.30
+\qquad \text{vs} \qquad
+H_A:p &lt; 0.30
+\]</span></p>
+<p>This is a right-sided test because we are investigating whether the true proportion is greater than the claimed value.</p>
+<p>Next, we record the sample information in R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">74</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>p0 <span class="ot">&lt;-</span> <span class="fl">0.30</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>phat <span class="ot">&lt;-</span> x <span class="sc">/</span> n</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>phat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.37</code></pre>
+</div>
+</div>
+<p>Next, we calculate the standard error:</p>
+<p><span class="math display">\[
+SE = \sqrt{\frac{p_0(1-p_0)}{n}}
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p0 <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p0) <span class="sc">/</span> n)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0324037</code></pre>
+</div>
+</div>
+<p>Now we calculate the test statistic:</p>
+<p><span class="math display">\[
+z = \frac{\hat{p} - p_0}{SE}
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>z_stat <span class="ot">&lt;-</span> (phat <span class="sc">-</span> p0) <span class="sc">/</span> se</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>z_stat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.160247</code></pre>
+</div>
+</div>
+<p>Because this is a right-sided test, the <span class="math inline">\(p\)</span>-value is 1 minus the probability of being less than the observed test statistic (this gives us the area to the right of the test statistic). We calculate this with <code>pnorm()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(z_stat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01537678</code></pre>
+</div>
+</div>
+<p>If the <span class="math inline">\(p\)</span>-value is less than 0.05, we reject the null hypothesis. If the <span class="math inline">\(p\)</span>-value is greater than or equal to 0.05, we fail to reject the null hypothesis.</p>
+<p>We can also carry out the same test using the built-in <code>prop.test()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="at">x =</span> x, <span class="at">n =</span> n, <span class="at">p =</span> p0, <span class="at">alternative =</span> <span class="st">"greater"</span>, <span class="at">correct =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    1-sample proportions test without continuity correction
+
+data:  x out of n, null probability p0
+X-squared = 4.6667, df = 1, p-value = 0.01538
+alternative hypothesis: true p is greater than 0.3
+95 percent confidence interval:
+ 0.3159298 1.0000000
+sample estimates:
+   p 
+0.37 </code></pre>
+</div>
+</div>
+<p>The conclusion should always be written in context. For example, if the <span class="math inline">\(p\)</span>-value is less than 0.05, we would write something like:</p>
+<blockquote class="blockquote">
+<p>There is enough evidence to suggest that the true proportion of students who attend office hours at least once during the semester is greater than 30%.</p>
+</blockquote>
+<p>If the <span class="math inline">\(p\)</span>-value is greater than or equal to 0.05, we would write:</p>
+<blockquote class="blockquote">
+<p>There is not enough evidence to suggest that the true proportion of students who attend office hours at least once during the semester is greater than 30%.</p>
+</blockquote>
 
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
