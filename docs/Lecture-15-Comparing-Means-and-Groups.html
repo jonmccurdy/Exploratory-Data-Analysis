@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -153,13 +188,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-2-Strings-and-Text-Processing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strings and Text Processing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Text Processing and Useful R Tools</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-3-Factors-and-Dates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors and Dates</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors, Dates, and Special Values</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -207,13 +242,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-11-Distributions-Across-Groups.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Distributions Across Groups</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Describing Relationships Between Two Variables</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-12-Sampling-and-CLT.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sampling and CLT</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sampling Distributions and the Central Limit Theorem</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -245,8 +280,17 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#comparing-two-groups" id="toc-comparing-two-groups" class="nav-link active" data-scroll-target="#comparing-two-groups"><span class="header-section-number">15.1</span> Comparing Two Groups</a></li>
+  <li><a href="#paired-samples" id="toc-paired-samples" class="nav-link" data-scroll-target="#paired-samples"><span class="header-section-number">15.2</span> Paired Samples</a></li>
+  <li><a href="#independent-samples" id="toc-independent-samples" class="nav-link" data-scroll-target="#independent-samples"><span class="header-section-number">15.3</span> Independent Samples</a></li>
+  <li><a href="#comparing-multiple-groups" id="toc-comparing-multiple-groups" class="nav-link" data-scroll-target="#comparing-multiple-groups"><span class="header-section-number">15.4</span> Comparing Multiple Groups</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -270,10 +314,402 @@ window.Quarto = {
 </header>
 
 
-<p>Under Construction</p>
+<p>We have seen that we can carry out hypothesis testing on uni-variate variables in order to see if the sample statistic is different (or greater/less than) a certain value. We can expand this idea in order to test if two groups are statistically different from each other as well. The same process will be applied, as we will first need to calculate the point estimate, determine the critical value and standard error, and then determine the test statistic and p-value.</p>
+<div class="learning-goals">
+<ul>
+<li>Distinguish between paired samples and independent samples and choose the appropriate procedure for comparing means.</li>
+<li>Carry out and interpret hypothesis tests for the difference between two population means using paired t-tests and two-sample t-tests.</li>
+<li>Explain when equal-variance and unequal-variance two-sample t-tests are used and how their standard errors differ.</li>
+<li>Use <code>t.test()</code>, <code>var.test()</code>, <code>aov()</code>, and <code>pairwise.t.test()</code> in R to compare two or more groups and write conclusions in context.</li>
+</ul>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supplemental Material
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="Reading-Guide/L15-Reading-Guide.pdf" download=""> 📄 Download the lecture’s Reading Guide </a></p>
+</div>
+</div>
+<section id="comparing-two-groups" class="level2" data-number="15.1">
+<h2 data-number="15.1" class="anchored" data-anchor-id="comparing-two-groups"><span class="header-section-number">15.1</span> Comparing Two Groups</h2>
+<p>If we are interested in the difference between two groups then essentially what we are interested in looking at is if the difference between the two is different than 0 (or greater/less than). This gives us a Null Hypothesis of:</p>
+<p><span class="math display">\[
+H_0: \mu_x=\mu_y \qquad \text{or essentially } \qquad H_0: \mu_x - \mu_y =0
+\]</span></p>
+<p>The test statistic can then be found in the usual way:</p>
+<p><span class="math display">\[
+\text{Test Statistic} = \frac{\text{observed}-\text{hypothesized}}{{SE_{\overline{x}-\overline{y}}}} = \frac{(\overline{x} - \overline{y}) - (\mu_x - \mu_y)}{SE_{\overline{x}-\overline{y}}}
+\]</span></p>
+<p>The difficult part will be calculating the standard error (<span class="math inline">\(SE_{\overline{x}-\overline{y}}\)</span>) depending on the scenario. We will look at three cases in this write up. The first is when we have paired data (think before and after) in that every observation from <span class="math inline">\(x\)</span> is associated with an observation from <span class="math inline">\(y\)</span>. The second is when our data is independent of each other (<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are not connected) and they have equal variance. The third is when our data is independent of each other (<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are not connected) and they have non-equal variance.</p>
+</section>
+<section id="paired-samples" class="level2" data-number="15.2">
+<h2 data-number="15.2" class="anchored" data-anchor-id="paired-samples"><span class="header-section-number">15.2</span> Paired Samples</h2>
+<p>If the data we wish to compare has some one-to-one relationship then it might be a paired sample (we have to have the same number of observations in each group!). Calculating the standard error is fairly simple as it is just the standard error if the paired difference values. It is common technique to use <span class="math inline">\(d\)</span> as a subscript to mean the difference.</p>
+<p><span class="math display">\[
+SE_{\overline{x}-\overline{y}} = s_d/\sqrt{n}
+\]</span></p>
+<p>Lets look at an example. We want to see if giving someone a piece of chocolate will increase their test scores, so we record their test scores before the chocolate is given and then again after the chocolate is given. We want to see if there is a difference in test scores.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>grade_before <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">80</span>, <span class="dv">5</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>grade_after <span class="ot">&lt;-</span> grade_before <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">2</span>, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this case, we are wanting to test:</p>
+<p><span class="math display">\[
+H_0: \overline{x} - \overline{y}= 0 \qquad \text{vs.} \qquad H_A: \overline{x} - \overline{y} \neq 0
+\]</span></p>
+<p>We can look at the point estimator of each group and see if there seems to be a difference or not (but this does not substitute our statistical analysis):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(grade_before)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 81.22599</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(grade_after)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 83.45215</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>grade_diff <span class="ot">&lt;-</span> grade_after <span class="sc">-</span> grade_before</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(grade_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.226166</code></pre>
+</div>
+</div>
+<p>Now, in order to do a paired t-test the differences should follow a normal distribution, and we can confirm this by looking at the qqnorm plot, a histogram, or carrying out a test for normality. I think “eye-balling” it will be good enough for us, but we can do a Shapiro-Wilk Normality Test as well. In this test the null hypothesis will be the values follow a normal distribution and the alternative hypothesis will be that they do not. We can use the <code>shapiro.test()</code> to carry this out:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(grade_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  grade_diff
+W = 0.98989, p-value = 0.6561</code></pre>
+</div>
+</div>
+<p>We can see based on this p-value that we will fail to reject the null hypothesis and that we do not have evidence to suggest the values are not normally distributed. So, we are good to go with our paired t-test.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fu">sd</span>(grade_diff)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">100</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>test_stat <span class="ot">&lt;-</span> <span class="fu">mean</span>(grade_diff)<span class="sc">/</span>se</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>test_stat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.40284</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">1</span><span class="sc">-</span><span class="fu">pt</span>(test_stat, <span class="at">df=</span><span class="dv">99</span>))<span class="sc">*</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.703692e-05</code></pre>
+</div>
+</div>
+<p>Based off this result, we can see that the p-value is small and thus we will reject the null hypothesis. This means we have evidence to suggest that the means are in fact not the same value. Luckily for us, R will carry this calculation out for us, I just wanted to show you that we can still do it ourselves with the exact same process as we did when we previously did hypothesis testing. To do it in R, we can use the <code>t.test()</code> function with the <code>paired</code> argument set to true.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(grade_after, grade_before, <span class="at">paired=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Paired t-test
+
+data:  grade_after and grade_before
+t = 4.4028, df = 99, p-value = 2.704e-05
+alternative hypothesis: true mean difference is not equal to 0
+95 percent confidence interval:
+ 1.222905 3.229426
+sample estimates:
+mean difference 
+       2.226166 </code></pre>
+</div>
+</div>
+<p>Note we can also pass into it a single variable which is the paired-difference between the groups and we get the same result.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(grade_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  grade_diff
+t = 4.4028, df = 99, p-value = 2.704e-05
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ 1.222905 3.229426
+sample estimates:
+mean of x 
+ 2.226166 </code></pre>
+</div>
+</div>
+</section>
+<section id="independent-samples" class="level2" data-number="15.3">
+<h2 data-number="15.3" class="anchored" data-anchor-id="independent-samples"><span class="header-section-number">15.3</span> Independent Samples</h2>
+<p>If our samples are independent of each other then we cannot carry out a paired t-test (which makes sense since our data is not paired…). But, we can still carry out a t-test. If our population standard deviations are known to us then the standard error will simply be:</p>
+<p><span class="math display">\[
+SE= \sqrt{\text{var}(\overline{x} - \overline{y})} = \sqrt{\sigma^2_x / n_x + \sigma^2_y / n_y}
+\]</span></p>
+<p>But, we rarely have this information, so we will have to estimate this using the sample standard deviations. And the way we do it will depend on whether or not our samples have an equal or unequal variance.</p>
+<p>If the samples have equal variances then the standard error can be calculated by:</p>
+<p><span class="math display">\[
+SE_{\overline{x} - \overline{y}} = \sqrt{s_p^2 \left(\frac{1}{n_x} + \frac{1}{n_y} \right)}
+\]</span> where <span class="math inline">\(s_p\)</span> is the pooled variance. This will give us a better standard deviation estimator since we assume the variance is the same and it is better to have ``more values” in order to be more accurate. This can be calculated as:</p>
+<p><span class="math display">\[
+s_p^2 = \frac{(n_x - 1)s_x^2 + (n_y-1)s^2_y}{n_x + n_y - 2}
+\]</span></p>
+<p>where the <span class="math inline">\(df=n_x + n_y - 2\)</span> since we are estimating two values (<span class="math inline">\(s_x\)</span> and <span class="math inline">\(s_y\)</span>).</p>
+<p>Once we have calculated the standard error then the process is the exact same as all of our other hypothesis testing. Below we can see an example of this using simulated data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">30</span>, <span class="dv">11</span>, <span class="dv">2</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">35</span>, <span class="fl">10.5</span>, <span class="dv">2</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10.90579</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10.66022</code></pre>
+</div>
+</div>
+<p>We will first want to see if the samples have an equal variance. We will use the <code>var.test()</code> function to do this which has a null hypothesis of equal variance and an alternative hypothesis of unequal variance. This test will rely on an F-test (along with an F-distribution), but that is not vital for us to understand. We are interested in is if the variances are equal or not.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    F test to compare two variances
+
+data:  x and y
+F = 1.3837, num df = 29, denom df = 34, p-value = 0.3614
+alternative hypothesis: true ratio of variances is not equal to 1
+95 percent confidence interval:
+ 0.6847548 2.8534854
+sample estimates:
+ratio of variances 
+          1.383669 </code></pre>
+</div>
+</div>
+<p>This indicated that we have equal variance (which is good since the simulation had equal variances). Because we have this we can continue with our calculations:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>n_x <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>n_y <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>var_x <span class="ot">&lt;-</span> <span class="fu">var</span>(x)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>var_y <span class="ot">&lt;-</span> <span class="fu">var</span>(y)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>pooled_var <span class="ot">&lt;-</span> ((n_x <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">*</span>var_x <span class="sc">+</span> (n_y<span class="dv">-1</span>)<span class="sc">*</span>var_y)<span class="sc">/</span>(n_x <span class="sc">+</span> n_y <span class="sc">-</span> <span class="dv">2</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>pooled_var </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.273598</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(pooled_var<span class="sc">*</span> (<span class="dv">1</span><span class="sc">/</span>n_x <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>n_y))</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4501681</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>test_stat <span class="ot">&lt;-</span> (<span class="fu">mean</span>(x) <span class="sc">-</span> <span class="fu">mean</span>(y))<span class="sc">/</span>se</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>test_stat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5455076</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">1</span><span class="sc">-</span><span class="fu">pt</span>(test_stat, <span class="at">df=</span>n_x <span class="sc">+</span> n_y <span class="sc">-</span> <span class="dv">2</span>))<span class="sc">*</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5873308</code></pre>
+</div>
+</div>
+<p>Based on this result, we can see that we will fail to reject the null hypothesis, meaning that we do not have evidence to suggest the mean of the two groups are difference from each other. Luckily, we can do this in R as well and we get the exact same result:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(x, y, <span class="at">var.equal =</span> <span class="cn">TRUE</span>, <span class="at">paired=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Two Sample t-test
+
+data:  x and y
+t = 0.54551, df = 63, p-value = 0.5873
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.654019  1.145159
+sample estimates:
+mean of x mean of y 
+ 10.90579  10.66022 </code></pre>
+</div>
+</div>
+<p>Now, if we were to determine that the variances were not equal to each other then we have to approach the problem a little bit differently. In this case the the standard error and the degrees of freedom can be found below:</p>
+<p><span class="math display">\[
+SE_{\overline{x} - \overline{y}} = \sqrt{\frac{s_x^2}{n_x} + \frac{s_y^2}{n_y}}
+\]</span></p>
+<p><span class="math display">\[
+df= \left( \frac{s_x^2}{n_x} + \frac{s_y^2}{n_y}\right)^2 \cdot \left( \frac{\left(\frac{s_x^2}{n_x} \right)^2}{n_x -1}+ \frac{\left(\frac{s_y^2}{n_y} \right)^2}{n_y -1} \right)^{-1}
+\]</span></p>
+<p>We do not want to calculate this in R manually, but we can see an example of this below with simulated data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">30</span>, <span class="dv">11</span>, <span class="dv">2</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">35</span>, <span class="fl">10.5</span>, <span class="dv">7</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(x,y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    F test to compare two variances
+
+data:  x and y
+F = 0.11295, num df = 29, denom df = 34, p-value = 5.188e-08
+alternative hypothesis: true ratio of variances is not equal to 1
+95 percent confidence interval:
+ 0.05589835 0.23293758
+sample estimates:
+ratio of variances 
+         0.1129526 </code></pre>
+</div>
+</div>
+<p>The variance test indicates that the variances are not equal to each other. Therefore, we cannot use the exact same set-up as we did in the previous problem. Instead we have to use the formulas directly above in order to calculate the standard error and the degrees of freedom. Note that in this method the degrees of freedom may end up being a non-integer (but the interpretation of this is beyond our scope).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>n_x <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>n_y <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>var_x <span class="ot">&lt;-</span> <span class="fu">var</span>(x)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>var_y <span class="ot">&lt;-</span> <span class="fu">var</span>(y)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(var_x<span class="sc">/</span>n_x <span class="sc">+</span> var_y<span class="sc">/</span>n_y)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.049811</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> (var_x<span class="sc">/</span>n_x <span class="sc">+</span> var_y<span class="sc">/</span>n_y)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> ((var_x<span class="sc">/</span>n_x)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(n_x <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span>  </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>                                     (var_y<span class="sc">/</span>n_y)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(n_y<span class="dv">-1</span>))<span class="sc">^-</span><span class="dv">1</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 42.68234</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>test_stat <span class="ot">&lt;-</span> (<span class="fu">mean</span>(x)<span class="sc">-</span><span class="fu">mean</span>(y))<span class="sc">/</span>se</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>test_stat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.1476322</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>(<span class="fu">pt</span>(test_stat, <span class="at">df=</span>df))<span class="sc">*</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8833282</code></pre>
+</div>
+</div>
+<p>Based on this we can see the p-value is larger than our significance level (0.05) so we will fail to reject the null hypothesis and conclude the groups have the same mean. We do not want to have to calculate everything like this in R every time, we can use the function to do it for us. Notice that we get the exact same result.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(x, y, <span class="at">var.equal =</span> <span class="cn">FALSE</span>, <span class="at">paired=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  x and y
+t = -0.14763, df = 42.682, p-value = 0.8833
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -2.272587  1.962615
+sample estimates:
+mean of x mean of y 
+ 10.90579  11.06078 </code></pre>
+</div>
+</div>
+<p>Everything we have done so far has been written as a two-sided test. You can change the alternative hypothesis to a one-sided test if you wish. The process will be the exact same, the only difference will be in calculating the p-value. This was shown in a previous lecture.</p>
+</section>
+<section id="comparing-multiple-groups" class="level2" data-number="15.4">
+<h2 data-number="15.4" class="anchored" data-anchor-id="comparing-multiple-groups"><span class="header-section-number">15.4</span> Comparing Multiple Groups</h2>
+<p>If instead of just two groups we are dealing with multiple groups then we have to approach the problem a little bit differently. The reason is because when we run a t-test, we have an <span class="math inline">\(\alpha\)</span> risk of a Type I error occurring (normally 0.05). If we were to run multiple t-tests across groupings then this increases the risks of making a Type I error. To get around this issue, we will introduce One-way ANOVA (Analysis of Variance). This will allow us to determine if there is a significant difference across any level of categorical variables. We should note that this does not tell us which levels are statistically different, it only tells us that at least one group mean differs.</p>
+<p><span class="math display">\[
+H_0: \mu_1 = \mu_2 = \dots = \mu_k \qquad \text{vs.} \qquad H_A: \text{not all group means are}
+\]</span></p>
+<p>It we determine that at least 2 are different then each other, then we can run pairwise t-tests in order to see which ones are different.</p>
+<p>To run an ANOVA model in R, we will use the <code>aov()</code> function. With this function we have to pass it in a “formula” we want evaluated. For us it will be “Quant Vector ~ Qual Group”. We will also need to save the output to a variable and then view a summary of it in order to see the p-value.</p>
+<p>In the example below, I am interested in seeing if there is a difference in Sepal Length for different iris Species. We can create a boxplot and see that it does appear there is a difference in the sepal length for each species. But, we will need to carry out an ANOVA model to see if this is actually true.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lecture-15-Comparing-Means-and-Groups_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>anova_model <span class="ot">&lt;-</span> <span class="fu">aov</span>(Sepal.Length <span class="sc">~</span> Species, <span class="at">data=</span>iris)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Df Sum Sq Mean Sq F value Pr(&gt;F)    
+Species       2  63.21  31.606   119.3 &lt;2e-16 ***
+Residuals   147  38.96   0.265                   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Since the p-value for the species is very small, we will reject the null hypothesis and claim that there is a difference between at least two groups in the data.</p>
+<p>Now that we have made this determination, we can carry out a pairwise t-test to see where there is a difference between groups. To do this we use the <code>pairwise.t.test()</code> function with a <code>p-adj="bonferroni"</code>. This will adjust the p-values slightly since we have multiple groups.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.t.test</span>(iris<span class="sc">$</span>Sepal.Length, iris<span class="sc">$</span>Species, <span class="at">p.adj =</span> <span class="st">"bonferroni"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pairwise comparisons using t tests with pooled SD 
+
+data:  iris$Sepal.Length and iris$Species 
+
+           setosa  versicolor
+versicolor 2.6e-15 -         
+virginica  &lt; 2e-16 8.3e-09   
+
+P value adjustment method: bonferroni </code></pre>
+</div>
+</div>
+<p>With this output, we can see that every group is actually different from each other. Lets look at a different example with simulated data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">10</span>, <span class="dv">2</span>)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">11</span>, <span class="dv">2</span>)</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">12</span>, <span class="dv">2</span>)</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">13</span>, <span class="dv">2</span>)</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">14</span>, <span class="dv">2</span>)</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>example_prob <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">value=</span><span class="fu">c</span>(v, w, x, y, z), </span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>                           <span class="at">category=</span><span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"V"</span>, <span class="st">"W"</span>, <span class="st">"X"</span>, <span class="st">"Y"</span>, <span class="st">"Z"</span>), <span class="at">each=</span><span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We will first run an ANOVA model. This shows us there is a difference it at least two groups. When we do a pairwise t-test we can see that some categories are statistically different then others, but are not.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>anova_model <span class="ot">&lt;-</span> <span class="fu">aov</span>(value<span class="sc">~</span>category, <span class="at">data=</span>example_prob)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Df Sum Sq Mean Sq F value Pr(&gt;F)    
+category      4   1057  264.30   69.87 &lt;2e-16 ***
+Residuals   495   1872    3.78                   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.t.test</span>(example_prob<span class="sc">$</span>value, example_prob<span class="sc">$</span>category, <span class="at">p.adj=</span><span class="st">"bonferroni"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pairwise comparisons using t tests with pooled SD 
+
+data:  example_prob$value and example_prob$category 
+
+  V       W       X       Y      
+W 0.29    -       -       -      
+X 3.2e-12 1.8e-06 -       -      
+Y &lt; 2e-16 4.0e-13 0.13    -      
+Z &lt; 2e-16 &lt; 2e-16 2.8e-11 3.9e-05
+
+P value adjustment method: bonferroni </code></pre>
+</div>
+</div>
+<p>Let us look at one final example to see this in action. This example is to show us that we should be careful with what we are doing. We will only do a pairwise t-test if ANOVA tells us that at least two groups are statistically different. In this case, the ANOVA tells us that the model is slightly significant (the p-value is pretty close to 0.05). Typically we would fail to reject the null and conclude that there is not a statistical difference between groups. But, if we were to do a pairwise t-test we would see a difference.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">11.6</span>, <span class="dv">3</span>)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">10</span>, <span class="dv">2</span>)</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">10</span>, <span class="dv">5</span>)</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">11</span>, <span class="dv">9</span>)</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">values=</span><span class="fu">c</span>(w,x,y,z), </span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type=</span><span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"W"</span>, <span class="st">"X"</span>, <span class="st">"Y"</span>, <span class="st">"Z"</span>), <span class="at">each=</span><span class="dv">100</span>))</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>anova_model <span class="ot">&lt;-</span> <span class="fu">aov</span>(values<span class="sc">~</span>type, <span class="at">data=</span>df)</span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Df Sum Sq Mean Sq F value Pr(&gt;F)  
+type          3    221   73.83   2.437 0.0643 .
+Residuals   396  11999   30.30                 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
 
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
