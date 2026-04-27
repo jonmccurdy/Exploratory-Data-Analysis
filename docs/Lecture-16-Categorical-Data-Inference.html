@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -152,13 +187,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-2-Strings-and-Text-Processing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strings and Text Processing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Text Processing and Useful R Tools</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-3-Factors-and-Dates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors and Dates</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Factors, Dates, and Special Values</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -206,13 +241,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-11-Distributions-Across-Groups.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Distributions Across Groups</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Describing Relationships Between Two Variables</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Lecture-12-Sampling-and-CLT.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sampling and CLT</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sampling Distributions and the Central Limit Theorem</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -244,8 +279,16 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#comparing-two-proportions" id="toc-comparing-two-proportions" class="nav-link active" data-scroll-target="#comparing-two-proportions"><span class="header-section-number">16.1</span> Comparing Two Proportions</a></li>
+  <li><a href="#chi-square-goodness-of-fit-test" id="toc-chi-square-goodness-of-fit-test" class="nav-link" data-scroll-target="#chi-square-goodness-of-fit-test"><span class="header-section-number">16.2</span> Chi-Square Goodness-of-Fit Test</a></li>
+  <li><a href="#chi-square-test-of-independence" id="toc-chi-square-test-of-independence" class="nav-link" data-scroll-target="#chi-square-test-of-independence"><span class="header-section-number">16.3</span> Chi-Square Test of Independence</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -269,10 +312,516 @@ window.Quarto = {
 </header>
 
 
-<p>Under Construction</p>
+<p>In the previous chapter we saw how to carr yout statistical inference for quantitative data by using t-tests and ANOVA. In this chapter, we will learn how to use hypothesis testing to analyze categorical data. We will begin by comparing two population proportions, then move into chi-square tests, which allow us to compare observed counts to expected counts and determine whether categorical variables appear to be related.</p>
+<div class="learning-goals">
+<ul>
+<li>Compare two population proportions using a hypothesis test and interpret the results in context.</li>
+<li>Determine when to use a pooled or unpooled standard error for comparing two proportions.</li>
+<li>Use a chi-square goodness-of-fit test to determine whether observed categorical counts match expected proportions.</li>
+<li>Use a chi-square test of independence to determine whether two categorical variables are associated.</li>
+</ul>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Supplemental Material
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="Reading-Guide/L16-Reading-Guide.pdf" download=""> 📄 Download the lecture’s Reading Guide </a></p>
+</div>
+</div>
+<section id="comparing-two-proportions" class="level2" data-number="16.1">
+<h2 data-number="16.1" class="anchored" data-anchor-id="comparing-two-proportions"><span class="header-section-number">16.1</span> Comparing Two Proportions</h2>
+<p>We have seen how we can carry out hypothesis testing for proportions when we are looking at a single group. But, sometimes it is helpful to determine if the population proportion is different between two or more groups (just like we saw if the mean was different between two or more groups). Therefore, we will be interested in the point estimate <span class="math inline">\(\hat{p_1} - \hat{p_2}\)</span>.</p>
+<p>The process for carrying out a hypothesis test for one or two proportions will be exactly the same, the only difference will be in how we calculate the standard error. As a refresher, when we were dealing with one group, the test statistic was calculated as:</p>
+<p><span class="math display">\[
+\text{test statistic} = \frac{\hat{p} - p_0}{SE} = \frac{\hat{p} - p_0}{\sqrt{\frac{p_0(1-p_0)}{n}}}
+\]</span></p>
+<p>After we calculate the test statistic then we can use a standard normal distribution to calculate the probability of that event or a more extreme event occurring.</p>
+<p>If we only have two proportions then there are two scenarios that we should be aware of. The first is when we are interested in is if the testing difference equals a non-zero value and the second is if the testing difference equals zero (meaning <span class="math inline">\(p_1=p_2\)</span>). The process will be the same for both of these problems, with the only difference being how we calculate the standard error.</p>
+<p>If we are wanting to test for a difference of non-zero (meaning <span class="math inline">\(p_1-p_2=0.2\)</span> or something), then our standard error will be as follows:</p>
+<p><span class="math display">\[
+SE_{\hat{p_1} - \hat{p_2}} = \sqrt{SE^2_{\hat{p_1}} + SE^2_{\hat{p_2}}} = \sqrt{\frac{\hat{p_1}(1-\hat{p_1})}{n_1} + \frac{\hat{p_2}(1-\hat{p_2})}{{n_2}}}
+\]</span></p>
+<p>This is an unpooled standard error since we come into the problem assuming the proportions are different and thus cannot ``combine” them when calculating our standard error.</p>
+<p>But, if we come into the problem assuming the difference equals 0, meaning we want to see if the proportions are different from each other (which is usually the case), then we can use a pooled standard error. This will look like the following:</p>
+<p><span class="math display">\[
+SE_{\hat{p_1} - \hat{p_2}} = \sqrt{\overline{p}(1-\overline{p})\left( \frac{1}{n_1} + \frac{1}{n_2}\right)} \qquad \text{where} \qquad \overline{p}=\frac{\hat{p_1}n_1 + \hat{p_2}n_2}{n_1 + n_2}
+\]</span></p>
+<p>The same assumptions must also be validated before proceeding with the test for two proportions. For two-proportion tests, we want each group to have enough successes and failures. A common rule of thumb is that each group should have at least 5 successes and at least 5 failures. If these conditions are not met then we might have to use other means of testing the differences.</p>
+<p>Let’s run through a problem: Working for on a political campaign, we are in-charge of choosing the online campaign ads. We randomly select the visitors who viewed an ad online and find that 50 of the 500 people who viewed ad A clicked it while 60 of the 450 people who viewed ad B clicked it. We want to see if one ad is more effective at getting a voters attention. Therefore, we are interested in testing the difference between the two ads.</p>
+<p><span class="math display">\[
+H_0: p_A = p_B \qquad \text{and} \qquad H_A: p_A \neq p_B
+\]</span></p>
+<p>Since we are testing to see if there is no difference between the proportions we will use the pooled standard error:</p>
+<p><span class="math display">\[
+SE_{\hat{p_A} - \hat{p_B}} = \sqrt{ \frac{50 + 60}{500 + 450} \left( 1- \frac{50 + 60}{500 + 450} \right)\left(\frac{1}{500} + \frac{1}{450}\right)} = 0.02079
+\]</span></p>
+<p>We can then calculate the test statistic as:</p>
+<p><span class="math display">\[
+\frac{\hat{p_B} - \hat{p_A} - (p_B - p_A)}{SE_{\hat{p_A} - \hat{p_B}}} = \frac{\frac{60}{450}-\frac{50}{500}}{0.02079} = 1.60
+\]</span></p>
+<p>Now, since our test statistic is 1.6, we can calculate the probability using a standard normal distribution and find it to be 0.1096. This will mean we fail to reject the null hypothesis, meaning we do not have enough evidence to suggest that the two ads have different levels of effectiveness.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>phat1 <span class="ot">&lt;-</span> x1<span class="sc">/</span>n1</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="dv">60</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>n2 <span class="ot">&lt;-</span> <span class="dv">450</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>phat2 <span class="ot">&lt;-</span> x2<span class="sc">/</span>n2</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>pbar <span class="ot">&lt;-</span> (x1<span class="sc">+</span>x2)<span class="sc">/</span>(n1<span class="sc">+</span>n2)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(pbar<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>pbar)<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span>n1 <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>n2))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02079136</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>test_stat <span class="ot">&lt;-</span> (phat2 <span class="sc">-</span> phat1)<span class="sc">/</span>se</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>test_stat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.60323</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">1</span><span class="sc">-</span><span class="fu">pnorm</span>(test_stat))<span class="sc">*</span><span class="dv">2</span> <span class="co"># Since it is a 2-sided test</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1088839</code></pre>
+</div>
+</div>
+<p>We can do something similar in R, but it will give us slightly different results. I have set the continuity correction to be equal to false so that the p-value will be more similar.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="at">x=</span><span class="fu">c</span>(x1,x2), <span class="at">n=</span><span class="fu">c</span>(n1,n2), <span class="at">correct =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    2-sample test for equality of proportions without continuity correction
+
+data:  c(x1, x2) out of c(n1, n2)
+X-squared = 2.5703, df = 1, p-value = 0.1089
+alternative hypothesis: two.sided
+95 percent confidence interval:
+ -0.074295649  0.007628982
+sample estimates:
+   prop 1    prop 2 
+0.1000000 0.1333333 </code></pre>
+</div>
+</div>
+<p>I just want to quickly mention that if we used the unpooled standard error, we would essentially get the same result. The pooled standard error will be more precise (when the equal proportion assumption holds) while the unpooled standard error will be more robust (more forgiveness).</p>
+</section>
+<section id="chi-square-goodness-of-fit-test" class="level2" data-number="16.2">
+<h2 data-number="16.2" class="anchored" data-anchor-id="chi-square-goodness-of-fit-test"><span class="header-section-number">16.2</span> Chi-Square Goodness-of-Fit Test</h2>
+<p>If we have more than 2 levels then we have to take a different approach in calculating if the proportions are statistically different for each level. To do this, we will not be using a normal distribution, but rather a <span class="math inline">\(\chi ^2\)</span> distribution (chi-squared). Within this section we will talk about two different tests. The first is the Goodness of fit test which will compare multiple levels within a single variable.</p>
+<p>If we have data that falls into a finite number of categories, say <span class="math inline">\(k\)</span> categories, then we might look into using the Chi-square test. Assume we have <span class="math inline">\(n\)</span> independent observations, and that these observations fall into one of <span class="math inline">\(k\)</span> categories. Then, <span class="math inline">\(E_i= \frac{n}{k}\)</span> is the theoretical frequency for the observations that will fall into category <span class="math inline">\(i\)</span>, and <span class="math inline">\(O_i\)</span> is the observed frequency for the number of observations that do fall into category <span class="math inline">\(i\)</span>. Then the test statistic will be:</p>
+<p><span class="math display">\[
+T= \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i}.
+\]</span></p>
+<p>We can then consult tables or software to determine the <span class="math inline">\(p\)</span>-value of the test statistic <span class="math inline">\(T\)</span> and then make a conclusion on whether the sample data fit the desired frequency table well.</p>
+<p>Let us look at an example. We are interested in if the proportion of people who like each of the primary colors is the same. To find this out, we sampled 50 people and got the following results (coded as 1=red, 2=blue, 3=yellow):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>            <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">2</span>, </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>            <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(colors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>colors
+ 1  2  3 
+15 25 10 </code></pre>
+</div>
+</div>
+<p>We are interested in seeing if the proportions are the same, so our hypothesis test is:</p>
+<p><span class="math display">\[
+H_0: p_r=p_b=p_y=\frac{1}{3} \qquad HA: \text{at least one is different}
+\]</span></p>
+<p>We can then calculate the test statistic by calculating the following table with <span class="math inline">\(E_i=n/k = 50/3= 16.67\)</span></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">color</th>
+<th style="text-align: center;">code</th>
+<th style="text-align: center;"><span class="math inline">\(O_i\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(E_i\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\dfrac{(O_i - E_i)^2}{E_i}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">red</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">16.67</td>
+<td style="text-align: center;">0.1667</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">blue</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">16.67</td>
+<td style="text-align: center;">4.1667</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">yellow</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">16.67</td>
+<td style="text-align: center;">2.6667</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">total</td>
+<td style="text-align: center;">7.0001</td>
+</tr>
+</tbody>
+</table>
+<p>Now that we have found our test-statistic we can evaluate the probability using a <span class="math inline">\(\chi^2\)</span> distribution with the df= # levels - 1. We can also calculate the same thing in R using the <code>chisq.test()</code> function and passing it in a table. Both results will be the same and we can see that we would reject the null hypothesis and conclude that at least one color has a different proportion then the others.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span><span class="fu">pchisq</span>(<span class="fl">7.0001</span>, <span class="at">df=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.03019587</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(<span class="at">x=</span><span class="fu">table</span>(colors))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Chi-squared test for given probabilities
+
+data:  table(colors)
+X-squared = 7, df = 2, p-value = 0.0302</code></pre>
+</div>
+</div>
+<p>If we wanted to test to see if each level was equal to a specified proportion then we could do that as well, we would just need to alter the expected value <span class="math inline">\(E_i\)</span>.</p>
+<p>Say we were interested in seeing if the proportions were actually 25% for red, 50% for blue, and 25% for yellow. Then we could make a table again and calculate the test statistic. We can also pass the probabilities into the <code>chisq.test()</code> function and will get the exact same results.</p>
+<p>This will give us the following hypothesis test and table:</p>
+<p><span class="math display">\[
+H_0: p_r=p_y=\frac{1}{4} \text{ and } p_b=\frac{1}{2} \qquad HA: \text{at least one is different}
+\]</span></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">color</th>
+<th style="text-align: center;">code</th>
+<th style="text-align: center;"><span class="math inline">\(O_i\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(E_i\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\dfrac{(O_i - E_i)^2}{E_i}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">red</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">12.5</td>
+<td style="text-align: center;">0.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">blue</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">yellow</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">12.5</td>
+<td style="text-align: center;">0.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">total</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table>
+<p>The results below will indicate that we fail to reject the null hypothesis. This means that we do not have enough evidence to suggest that the proportions are different then the null hypothesis values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span><span class="fu">pchisq</span>(<span class="dv">1</span>, <span class="at">df=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6065307</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(<span class="at">x=</span><span class="fu">table</span>(colors), <span class="at">p=</span><span class="fu">c</span>(.<span class="dv">25</span>,.<span class="dv">50</span>,.<span class="dv">25</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Chi-squared test for given probabilities
+
+data:  table(colors)
+X-squared = 1, df = 2, p-value = 0.6065</code></pre>
+</div>
+</div>
+</section>
+<section id="chi-square-test-of-independence" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="chi-square-test-of-independence"><span class="header-section-number">16.3</span> Chi-Square Test of Independence</h2>
+<p>If we want to test whether there is a relationship between frequencies in two categorical variables then we can do a test of independence. The idea is the exact same thing as above, but not instead of having one variable we will have 2 variables. Calculating the expected value in each category will be slightly different in that it will be <span class="math inline">\(E_{ij}=\frac{n_iC_j}{N}\)</span> where <span class="math inline">\(n_i\)</span> is the number of values in each row and <span class="math inline">\(C_j\)</span> is the number of values in each column. We will then calculate the test statistic by summing up the <span class="math inline">\((O_i - E_i)^2 / E_i\)</span> for each cell and use a <span class="math inline">\(\chi^2\)</span> distribution to calculate the probability. In this case the degrees of freedom will be <span class="math inline">\(df=(n_{\text{row}} - 1)(n_{\text{col}} - 1)\)</span>.</p>
+<p>Let’s look at the following problem: Two carloads of manufactured items are sampled randomly to determine if the proportion of defective items is different for the 2 carloads. Assume the carloads are independent. Determine if the loads are independent. The contingency tables can be found below:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"></th>
+<th style="text-align: center;">Defective</th>
+<th style="text-align: center;">Not Defective</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Carload 1</td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">73</td>
+<td style="text-align: center;"><span class="math inline">\(n_1 = 86\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Carload 2</td>
+<td style="text-align: center;">17</td>
+<td style="text-align: center;">57</td>
+<td style="text-align: center;"><span class="math inline">\(n_2 = 74\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Total</td>
+<td style="text-align: center;"><span class="math inline">\(c_1 = 30\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(c_2 = 130\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(N = 160\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The expected table if the carloads and product quality were independent would be:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 23%">
+<col style="width: 31%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"></th>
+<th style="text-align: center;">Defective</th>
+<th style="text-align: center;">Not Defective</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Carload 1</td>
+<td style="text-align: center;"><span class="math inline">\(\dfrac{86(30)}{160} = 16.125\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\dfrac{86(130)}{160} = 69.875\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(n_1 = 86\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Carload 2</td>
+<td style="text-align: center;"><span class="math inline">\(\dfrac{74(30)}{160} = 13.875\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\dfrac{74(130)}{160} = 60.125\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(n_2 = 74\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Total</td>
+<td style="text-align: center;"><span class="math inline">\(c_1 = 30\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(c_2 = 130\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(N = 160\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The null hypothesis would be that the loads are independent of the quality while the alternative hypothesis would be that they are not independent. We could then find the test statistic as:</p>
+<p><span class="math display">\[
+\text{Test statistic} = \frac{(13-16.125)^2}{16.125} + \frac{(73-69.875)^2}{69.875} + \frac{(17-13.875)^2}{13.875} + \frac{(57-60.125)^2}{60.125} = 1.61
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span><span class="fu">pchisq</span>(<span class="fl">1.61</span>, <span class="at">df=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2044918</code></pre>
+</div>
+</div>
+<p>Therefore, we would fail to reject the null hypothesis. We do not have enough evidence to suggest that product quality and carload are associated. In other words, the data does not provide strong evidence that the proportion of defective units differs between the two carloads. We could do this in R and get the same result if we pass it in a contingency table:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>cont.table <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">13</span>, <span class="dv">73</span>, <span class="dv">17</span>, <span class="dv">57</span>), <span class="at">ncol=</span><span class="dv">2</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(cont.table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"carload 1"</span>, <span class="st">"carload 2"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cont.table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Defective"</span>, <span class="st">"Not Defective"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>cont.table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Defective Not Defective
+carload 1        13            73
+carload 2        17            57</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(cont.table, <span class="at">correct =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  cont.table
+X-squared = 1.6116, df = 1, p-value = 0.2043</code></pre>
+</div>
+</div>
+<p>This was a relatively simple example, but we could do it with more levels in each category if we wanted to. For instance: A researcher is investigating the relationship between educational attainment and voting preference in a certain region. They collect data from a random sample of 567 individuals and record both their highest level of education completed and their preferred political party. The data is summarized in the contingency table below:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Education Level</th>
+<th style="text-align: center;">Party A</th>
+<th style="text-align: center;">Party B</th>
+<th style="text-align: center;">Party C</th>
+<th style="text-align: center;">Party D</th>
+<th style="text-align: center;">Party E</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">High School</td>
+<td style="text-align: center;">50</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">30</td>
+<td style="text-align: center;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Associate’s Degree</td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bachelor’s Degree</td>
+<td style="text-align: center;">60</td>
+<td style="text-align: center;">35</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Master’s Degree</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: center;">70</td>
+<td style="text-align: center;">30</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">20</td>
+</tr>
+</tbody>
+</table>
+<p>Using a significance level of 0.05, conduct a test of independence to determine whether there is a significant association between the highest level of education completed and the preferred political party.</p>
+<p>If degree attainment and party preference were independent we would expect the totals to be:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Education Level</th>
+<th style="text-align: center;">Party A</th>
+<th style="text-align: center;">Party B</th>
+<th style="text-align: center;">Party C</th>
+<th style="text-align: center;">Party D</th>
+<th style="text-align: center;">Party E</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">High School</td>
+<td style="text-align: center;">35.71</td>
+<td style="text-align: center;">33.07</td>
+<td style="text-align: center;">19.84</td>
+<td style="text-align: center;">25.35</td>
+<td style="text-align: center;">11.02</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Associate’s Degree</td>
+<td style="text-align: center;">29.14</td>
+<td style="text-align: center;">26.98</td>
+<td style="text-align: center;">16.19</td>
+<td style="text-align: center;">20.69</td>
+<td style="text-align: center;">8.99</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bachelor’s Degree</td>
+<td style="text-align: center;">44.29</td>
+<td style="text-align: center;">41.01</td>
+<td style="text-align: center;">24.60</td>
+<td style="text-align: center;">31.44</td>
+<td style="text-align: center;">13.67</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Master’s Degree</td>
+<td style="text-align: center;">52.86</td>
+<td style="text-align: center;">48.94</td>
+<td style="text-align: center;">29.37</td>
+<td style="text-align: center;">37.52</td>
+<td style="text-align: center;">16.31</td>
+</tr>
+</tbody>
+</table>
+<p>The test statistic is then calculated as the sum of <span class="math inline">\(\dfrac{(O_{ij}-E_{ij})^2}{E_{ij}} = 71.44589\)</span> calculated by:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>observed <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">5</span>, <span class="dv">12</span>, <span class="dv">25</span>, <span class="dv">15</span>, <span class="dv">40</span>, <span class="dv">10</span>, </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>              <span class="dv">60</span>, <span class="dv">35</span>, <span class="dv">25</span>, <span class="dv">20</span>, <span class="dv">15</span>, <span class="dv">40</span>, <span class="dv">70</span>, <span class="dv">30</span>, <span class="dv">25</span>, <span class="dv">20</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>expected <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">35.71</span>, <span class="fl">33.07</span>, <span class="fl">19.84</span>, <span class="fl">25.35</span>, <span class="fl">11.02</span>, <span class="fl">29.14</span>, <span class="fl">26.98</span>, <span class="fl">16.19</span>, </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>              <span class="fl">20.69</span>, <span class="fl">8.99</span>, <span class="fl">44.29</span>, <span class="fl">41.01</span>, <span class="fl">24.60</span>, <span class="fl">31.44</span>, <span class="fl">13.67</span>, <span class="fl">52.86</span>, </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>              <span class="fl">48.94</span>, <span class="fl">29.37</span>, <span class="fl">37.52</span>, <span class="fl">16.31</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>test_stat <span class="ot">&lt;-</span> <span class="fu">sum</span>((observed<span class="sc">-</span>expected)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> expected)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>test_stat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 71.44589</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span><span class="fu">pchisq</span>(test_stat, <span class="at">df=</span>(<span class="dv">5-1</span>)<span class="sc">*</span>(<span class="dv">4-1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.716414e-10</code></pre>
+</div>
+</div>
+<p>Therefore, we would reject the null hypothesis since the p-value is smaller then our level of significance. We would conclude that we have enough evidence to suggest that education level and party preference is not independent of each other.</p>
+<p>We can do this in R if we make ourselves a table first. We will get the same result, just note that we have a slightly different test statistic and p-value due to rounding when calculating the expected values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>cont.table <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">50</span>,<span class="dv">20</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">5</span>,</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>                       <span class="dv">12</span>,<span class="dv">25</span>,<span class="dv">15</span>,<span class="dv">40</span>,<span class="dv">10</span>,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>                       <span class="dv">60</span>,<span class="dv">35</span>,<span class="dv">25</span>,<span class="dv">20</span>,<span class="dv">15</span>,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>                       <span class="dv">40</span>,<span class="dv">70</span>,<span class="dv">30</span>,<span class="dv">25</span>,<span class="dv">20</span>),</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">nrow=</span><span class="dv">4</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(cont.table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"High School"</span>, <span class="st">"Associate's"</span>, </span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"Bachelor's"</span>, <span class="st">"Master's"</span>)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cont.table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Party A"</span>, <span class="st">"Party B"</span>, <span class="st">"Party C"</span>, </span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Party D"</span>, <span class="st">"Party E"</span>)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>cont.table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Party A Party B Party C Party D Party E
+High School      50      20      20      30       5
+Associate's      12      25      15      40      10
+Bachelor's       60      35      25      20      15
+Master's         40      70      30      25      20</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(cont.table, <span class="at">correct =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  cont.table
+X-squared = 71.447, df = 12, p-value = 1.715e-10</code></pre>
+</div>
+</div>
 
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
